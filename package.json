@@ -1,0 +1,33 @@
+{
+  "name": "web-scraping-express",
+  "version": "1.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon node src/",
+    "start-with-swagger": "NODE_ENV=development nodemon --watch src/ node ./swagger.js",
+    "run": "NODE_ENV=development node src/",
+    "run-with-swagger": "NODE_ENV=development node swagger",
+    "NOswagger-autogen": "node swagger",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Marco Solari <marcosolari@gmail.com>",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^5.0.0",
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "express-jwt": "^6.0.0",
+    "helmet": "^4.1.1",
+    "jwks-rsa": "^1.9.0",
+    "language-list": "^0.0.3",
+    "mongoose": "^5.10.5",
+    "morgan": "^1.10.0",
+    "nodemon": "^2.0.4",
+    "swagger-jsdoc": "^6.0.0",
+    "swagger-ui-express": "^4.1.6"
+  }
+}
