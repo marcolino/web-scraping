@@ -4,12 +4,14 @@ const { public, private } = require('../auth');
 const itemsController = require('../controllers/items');
 
 // endpoint to get items
-router.get('/', public, async (req, res, next) => {
-  const filter = req.params.filter;
-  const items = await itemsController.getItems(filter);
-console.log('get items:', items)
-  res.send({ status: true, message: `${items.length} items found`, items});
-});
+router.get('/', public, async (args) => get(...args));
+
+// router.get('/', public, async (req, res, next) => {
+//   const filter = req.params.filter;
+//   const items = await itemsController.getItems(filter);
+// console.log('get items:', items)
+//   res.send({ status: true, message: `${items.length} items found`, items});
+// });
 
 // endpoint to get items
 router.get('/mainImages', public, async (req, res, next) => {
