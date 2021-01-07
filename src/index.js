@@ -7,9 +7,11 @@ const morgan = require('morgan');
 const swaggerUi = require('swagger-ui-express');
 const swaggerSpec = require('../swagger');
 
-const { startDatabase } = require('./controllers/db');
-const users = require('./routes/users');
-const items = require('./routes/items');
+//const { startDatabase } = require('./controllers/db');
+const { startDatabase } = require('./utils/db');
+const usersRoutes = require('./routes/users');
+const itemsRoutes = require('./routes/items');
+const providersRoutes = require('./routes/providers');
 const config = require('./config');
 
 
@@ -34,13 +36,14 @@ app.use(morgan((process.env.NODE_ENV !== 'production') ? 'dev' : 'TODO, low prod
 app.use(morgan('combined'));
 
 // adding routes
-app.use(`/${config.apiVersion}/users`, users);
-app.use(`/${config.apiVersion}/items`, items);
+app.use(`/${config.apiVersion}/users`, usersRoutes);
+app.use(`/${config.apiVersion}/items`, itemsRoutes);
+app.use(`/${config.apiVersion}/providers`, providersRoutes);
 app.use(`/${config.apiVersion}/doc`, swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // default root route
 app.get(`/${config.apiVersion}/`, (req, res) => {
-  res.json('REST API to scrape the web');
+  res.json({ message: `REST API to scrape the web` });
 });
 
 app.get('/favicon.ico', (req, res) => {
@@ -49,7 +52,7 @@ app.get('/favicon.ico', (req, res) => {
 
 // handle default requests with 404
 app.use((req, res) => {
-  res.status(404).json({ message: "not found" });
+  res.status(404).json({ message: `uh uh... not found` });
 });
 
 // error handler middleware
@@ -62,6 +65,6 @@ app.use((error, req, res, next) => {
 startDatabase().then(async () => {
   // start the server
   app.listen(config.serverPort, async () => {
-    console.log('listening on port 3001');
+    console.log(`listening on port ${config.serverPort}`);
   });
 });

@@ -24,9 +24,13 @@
     "helmet": "^4.1.1",
     "jwks-rsa": "^1.9.0",
     "language-list": "^0.0.3",
+    "libphonenumber-js": "^1.9.7",
     "mongoose": "^5.10.5",
     "morgan": "^1.10.0",
+    "node-cron": "^2.0.3",
+    "node-fetch": "^2.6.1",
     "nodemon": "^2.0.4",
+    "puppeteer": "^5.5.0",
     "swagger-jsdoc": "^6.0.0",
     "swagger-ui-express": "^4.1.6"
   }

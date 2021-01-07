@@ -10,7 +10,7 @@ const schema = new Schema({
   },
   provider: {
     type: String,
-    //enum: process.env.PROVIDERS, // TODO: what is this ???
+    enum: process.env.PROVIDERS, // TODO: what is this ???
     required: true
   },
   book: {

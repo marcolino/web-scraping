@@ -24,7 +24,7 @@ function private(req, res, next) {
   const token = (req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer') ?
     req.headers.authorization.split(' ')[1] :
     req.headers['x-access-token']
-    ;
+  ;
   const secret = process.env.JWT_SECRET_TOKEN;
 
   jwt.verify(token, secret, function(err, decoded) {

@@ -1,50 +1,90 @@
-const { getDatabase } = require('./db');
 const { ObjectID } = require('mongodb');
-const items = require('../models/Items.' + 'people');
-
-//const collectionName = 'items';
-const collectionName = 'items.people';
+const items = require('../models/Items.' + 'persons'); // TODO: make persons a variable...
 
 async function getItems(req, res, next) {
-  const filter = req.params.filter;
-  const items = await items.find(filter);//.toArray();
-console.log('get items:', items)
-  res.status(200).json({ message: `${items.length} items found`, data: items });
-
-  // const database = await getDatabase();
-  // return await database.collection(collectionName).find(filter).toArray();
+  try {
+    const filter = req.body.filter;
+    const itemsList = await items.find(filter);
+    res.status(200).json({ message: `${itemsList.length} items found`, data: itemsList });
+  } catch (err) {
+    res.status(500).json({ message: `can't get items: ${err}` });
+  }
 }
 
-async function insertItem(item) {
-  const database = await getDatabase();
-  database = null; // TO DEBUG ERRORS
-  const { insertedId } = await database.collection(collectionName).insertOne(item);
-  return insertedId;
+async function insertItem(req, res, next) {
+  try {
+    const item = req.body.item;
+    const { insertedId } = await items.insertOne(item);
+    res.status(200).json({ message: `item inserted`, data: { id: insertedId } });
+  } catch (err) {
+    res.status(500).json({ message: `can't insert item: ${err}` });
+  }
 }
 
-async function deleteItem(id) {
-  const database = await getDatabase();
-  await database.collection(collectionName).deleteOne({
-    _id: new ObjectID(id),
-  });
+async function deleteItem(req, res, next) {
+  try {
+    const item = req.body.item;
+    await item.deleteOne({
+      provider: item.provider, id: item.id
+    });
+    res.status(200).json({ message: `item deleted` });
+  } catch (err) {
+    res.status(500).json({ message: `can't delete item: ${err}` });
+  }
 }
 
-async function updateItem(id, item) {
-  const database = await getDatabase();
-  delete item._id;
-  await database.collection(collectionName).update(
-    { _id: new ObjectID(id), },
-    {
-      $set: {
-        ...item,
+async function deleteItemById(req, res, next) {
+  try {
+    const id = req.body.id;
+    await item.deleteOne({
+      _id: new ObjectID(id),
+    });
+    res.status(200).json({ message: `item deleted by id` });
+  } catch (err) {
+    res.status(500).json({ message: `can't delete item by id: ${err}` });
+  }
+}
+
+async function updateItem(req, res, next) {
+  try {
+    const item = req.body.item;
+    await items.updateOne(
+      { provider: item.provider, id: item.id },
+      {
+        $set: {
+          ...item,
+        },
       },
-    },
-  );
+    );
+    res.status(200).json({ message: `item updated` });
+  } catch (err) {
+    res.status(500).json({ message: `can't update item: ${err}` });
+  }
+}
+
+async function updateItemById(id) {
+  try {
+    const id = req.body.id;
+    const item = req.body.item;
+    await item.updateOne(
+      { _id: new ObjectID(id), },
+      {
+        $set: {
+          ...item,
+        },
+      },
+    );
+    res.status(200).json({ message: `item updated by id` });
+  } catch (err) {
+    res.status(500).json({ message: `can't update item by id: ${err}` });
+  }
 }
 
 module.exports = {
-  insertItem,
   getItems,
+  insertItem,
   deleteItem,
+  deleteItemById,
   updateItem,
+  updateItemById,
 };
