@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-const mongooseHistory = require('mongoose-history');
 const Schema = mongoose.Schema;
 const name = "Items.audiobook";
 
@@ -53,11 +52,5 @@ const schema = new Schema({
 }, { timestamps: {createdAt: 'dateCreated', updatedAt: 'dateUpdated'} }); // timestamps option: automatically add 'createdAt' and 'updatedAt' timestamps
 
 schema.index({ id: 1, provider: 1 }, { unique: true });
-
-schema.plugin(mongooseHistory, {
-  customCollectionName: name + "." + "history",
-  indexes: [{ 't': -1, 'd._id': 1 }],
-  //historyConnection: mongoose.createConnection('mongodb://localhost/another_conn'),
-}); // add support for history of changes
 
 module.exports = mongoose.model(name, schema);

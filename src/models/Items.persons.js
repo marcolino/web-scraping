@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-//const mongooseHistory = require('mongoose-history');
 const Schema = mongoose.Schema;
 const name = "Items.persons";
 const Globals = require("../models/Globals");
@@ -218,11 +217,5 @@ schemaPersons.virtual('image').get(function() {
     ''
   );
 });
-
-// // plugins
-// schemaPersons.plugin(mongooseHistory, {
-//   customCollectionName: name + "History",
-//   indexes: [{ 't': -1, 'd._id': 1 }],
-// }); // add support for history of changes
 
 module.exports = mongoose.model(name, schemaPersons);

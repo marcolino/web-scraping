@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const helmet = require('helmet');
 const morgan = require('morgan');
+
 const swaggerUi = require('swagger-ui-express');
 const swaggerSpec = require('../swagger');
 
@@ -12,10 +13,10 @@ const { dbConnect } = require('./utils/db');
 const usersRoutes = require('./routes/users');
 const itemsRoutes = require('./routes/items');
 const providersRoutes = require('./routes/providers');
+const logger = require('./logger');
 const config = require('./config');
 
-
-// defining the Express app
+// initialize the express app
 const app = express();
 
 //app.set('secretKey', process.env.JWT_SECRET_TOKEN); // jwt secret token
@@ -30,10 +31,7 @@ app.use(bodyParser.json());
 app.use(cors());
 
 // set logging level depending on environment
-app.use(morgan((process.env.NODE_ENV !== 'production') ? 'dev' : 'TODO, low prod level...'));
-
-// adding morgan to log HTTP requests
-app.use(morgan('combined'));
+app.use(morgan((process.env.NODE_ENV !== 'production') ? 'dev' : 'combined'));
 
 // adding routes
 app.use(`/users`, usersRoutes);

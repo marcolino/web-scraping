@@ -12,23 +12,29 @@ const { browserLaunch, browserPageNew, browserPageClose, browserClose } = requir
 const { mimeImage } = require('../utils/misc');
 //const { register, login } = require('./user');
 const globals = require('../models/Globals');
+const logger = require('../logger');
 const config = require('../config');
 
 // TODO: const Items = require("../models/Items");
 
-scrapeProviders = async(req, res, next) => {
+exports.scrapeProviders = async(req) => {
+  logger.info(`providers.scrapeProviders.starting.${req.id}`);
   try {
     const regionDescriptor = req.body.regionDescriptor || '*';
-console.log('regionDescriptor:', regionDescriptor);
+//logger.debug('regionDescriptor:', regionDescriptor);
     const providers = getProvidersByRegion(regionDescriptor);
-console.log('providers keys:', Object.keys(providers));
+//logger.debug('providers keys:', Object.keys(providers));
     const data = (await Promise.all(
-      Object.keys(providers).filter(index => !providers[index].info.disableScraping).map(async index => {
+      Object.keys(providers)
+      .filter(index => providers[index].info.type === config.type)
+      .filter(index => !providers[index].info.disableScraping)
+      .map(async index => {
         const provider = providers[index];
         const regions = getProviderRegions(provider, regionDescriptor);
+//logger.debug('regions:', regions);
         let results = [];
         for (let r = 0; r < regions.length; r++) { // loop on all regions
-console.log('region:', r);
+//logger.debug('region:', r);
           const result = await scrapeProvider(provider, regions[r])
           results = results.concat(result);
         }
@@ -37,36 +43,15 @@ console.log('region:', r);
         return results;
       })
     )).flat(); // we flat-out due to Promise.All
-    res.status(200).json({ message: `${data.length} providers scraped`, data });
+    //console.log(`Request ${req.id} successful: ${data.length} providers scraped`); // TODO
+    logger.info(`providers.scrapeProviders.finishing.${req.id}.success`);
   } catch (err) {
-    res.status(500).json({ message: `can't scrape providers: ${err}` });
+    //console.log(`Request ${req.id} unsuccessful: ${err}`); // TODO
+    logger.error(`providers.scrapeProviders.finishing.${req.id}.error`);
   }
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
-
-// scrapeProviders = async (providers, regionDescriptor, user) => {
-//   try {
-//     const data = (await Promise.all(
-//       Object.keys(providers).filter(index => !providers[index].info.disableScraping).map(async index => {
-//         const provider = providers[index];
-//         const regions = getProviderRegions(provider, regionDescriptor);
-//         let results = [];
-//         for (let r = 0; r < regions.length; r++) { // loop on all regions!
-//           const result = await scrapeProvider(provider, regions[r], user)
-//           results = results.concat(result);
-//         }
-//         // save last scrape timestamp in globals
-//         await globalsSet(`lastScrapeTimestamp-${provider.info.key}`, new Date().toISOString());
-//         return results;
-//       })
-//     )).flat(); // we flat-out due to Promise.All
-//     console.log(`all providers data scraped, found ${data.length} items`);
-//     return data;
-//   } catch(err) {
-//     throw(`error scraping providers: ${err}`);
-//   }
-// }
 
 scrapeProvidersPersonsImages = async (providers, regionDescriptor, user) => {
   try {
