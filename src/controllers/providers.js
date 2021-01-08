@@ -7,24 +7,29 @@ const fs = require('fs');
 const mime = require('mime-types');
 const crypto = require('crypto');
 const { phoneNormalize } = require('../utils/providers');
-const { dbConnect, dbClose } = require('../utils/db');
+//const { dbConnect, dbClose } = require('../utils/db');
 const { browserLaunch, browserPageNew, browserPageClose, browserClose } = require('../utils/browser');
 const { mimeImage } = require('../utils/misc');
-const { register, login } = require('./user');
-const globals = require('./models/Globals');
-const config = require('./config');
+//const { register, login } = require('./user');
+const globals = require('../models/Globals');
+const config = require('../config');
 
-exports.scrapeProviders = async(req, res, next) => {
+// TODO: const Items = require("../models/Items");
+
+scrapeProviders = async(req, res, next) => {
   try {
-    const providers = req.body.providers;
-    const regionDescriptor = req.body.regionDescriptor;
+    const regionDescriptor = req.body.regionDescriptor || '*';
+console.log('regionDescriptor:', regionDescriptor);
+    const providers = getProvidersByRegion(regionDescriptor);
+console.log('providers keys:', Object.keys(providers));
     const data = (await Promise.all(
       Object.keys(providers).filter(index => !providers[index].info.disableScraping).map(async index => {
         const provider = providers[index];
         const regions = getProviderRegions(provider, regionDescriptor);
         let results = [];
         for (let r = 0; r < regions.length; r++) { // loop on all regions
-          const result = await exports.scrapeProvider(provider, regions[r], user)
+console.log('region:', r);
+          const result = await scrapeProvider(provider, regions[r])
           results = results.concat(result);
         }
         // save last scrape timestamp in globals
@@ -40,28 +45,28 @@ exports.scrapeProviders = async(req, res, next) => {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
 
-scrapeProviders = async (providers, regionDescriptor, user) => {
-  try {
-    const data = (await Promise.all(
-      Object.keys(providers).filter(index => !providers[index].info.disableScraping).map(async index => {
-        const provider = providers[index];
-        const regions = getProviderRegions(provider, regionDescriptor);
-        let results = [];
-        for (let r = 0; r < regions.length; r++) { // loop on all regions!
-          const result = await scrapeProvider(provider, regions[r], user)
-          results = results.concat(result);
-        }
-        // save last scrape timestamp in globals
-        await globalsSet(`lastScrapeTimestamp-${provider.info.key}`, new Date().toISOString());
-        return results;
-      })
-    )).flat(); // we flat-out due to Promise.All
-    console.log(`all providers data scraped, found ${data.length} items`);
-    return data;
-  } catch(err) {
-    throw(`error scraping providers: ${err}`);
-  }
-}
+// scrapeProviders = async (providers, regionDescriptor, user) => {
+//   try {
+//     const data = (await Promise.all(
+//       Object.keys(providers).filter(index => !providers[index].info.disableScraping).map(async index => {
+//         const provider = providers[index];
+//         const regions = getProviderRegions(provider, regionDescriptor);
+//         let results = [];
+//         for (let r = 0; r < regions.length; r++) { // loop on all regions!
+//           const result = await scrapeProvider(provider, regions[r], user)
+//           results = results.concat(result);
+//         }
+//         // save last scrape timestamp in globals
+//         await globalsSet(`lastScrapeTimestamp-${provider.info.key}`, new Date().toISOString());
+//         return results;
+//       })
+//     )).flat(); // we flat-out due to Promise.All
+//     console.log(`all providers data scraped, found ${data.length} items`);
+//     return data;
+//   } catch(err) {
+//     throw(`error scraping providers: ${err}`);
+//   }
+// }
 
 scrapeProvidersPersonsImages = async (providers, regionDescriptor, user) => {
   try {
@@ -84,7 +89,7 @@ scrapeProvidersPersonsImages = async (providers, regionDescriptor, user) => {
     console.log(`all providers persons images scraped, found ${sum} images`);
     return sum;
   } catch(err) {
-    throw(`error scraping providers: ${err}`);
+    throw(`error scraping providers persons images: ${err}`);
   }
 }
 
@@ -182,7 +187,7 @@ const scrapeItems = async (provider, region, page, list) => {
 scrapeProviderPersonsImages = async (provider, region, user) => {
   try {
     const type = "persons";
-    const Items = require("./models/Items" + "." + type);
+    const Items = require("../models/Items" + "." + type);
 
     const items = await Items.find({
       provider: provider.info.key,
@@ -302,7 +307,7 @@ downloadImage = async (provider, region, item, image) => {
 
 const itemExists = async(item) => {
   try {
-    const Items = require("./models/Items" + "." + item.type);
+    const Items = require("../models/Items" + "." + item.type);
     const retval = await Items.exists({
       id: item.id,
       provider: item.provider,
@@ -316,7 +321,7 @@ const itemExists = async(item) => {
 
 const saveItem = async(item) => {
   try {
-    const Items = require("./models/Items" + "." + item.type);
+    const Items = require("../models/Items" + "." + item.type);
     const retval = await Items.updateOne(
       { id: item.id, provider: item.provider },
       { ...item, __v: 0 },
@@ -333,7 +338,7 @@ const saveItemImage = async(item, imageDownloaded) => {
   delete imageDownloaded.success;
   //console.log('saveItemImage - imageDownloaded:', imageDownloaded);
   try {
-    const Items = require("./models/Items" + "." + item.type);
+    const Items = require("../models/Items" + "." + item.type);
     const retval = await Items.updateOne(
       { id: item.id, provider: item.provider, "images": { "$elemMatch": { "url": imageDownloaded.url } }  },
       { $set: { "images.$": imageDownloaded } },
@@ -354,7 +359,7 @@ const saveItemImage = async(item, imageDownloaded) => {
 updateUserStatus = async (user) => { // TODO: DEBUG ME !
   try {
     const UserStatuses = require("./models/UserStatuses");
-    const Items = require("./models/Items");
+    const Items = require("../models/Items");
 console.log('updateUserStatus started for user:', user.name, user.role);
     const items = await Items.find({}).exec();
 
@@ -376,7 +381,7 @@ updateUserProps = async (user, item, props) => { // TODO: DEBUG ME !
   process.exit();
   try {
     const UserStatuses = require("./models/UserStatuses");
-    const Items = require("./models/Items");
+    const Items = require("../models/Items");
 
     const userDoc = await login(user.email, user.password);
     if (userDoc.role !== 'user' && userDoc.role != 'admin') {
@@ -409,10 +414,10 @@ updateUserProps = async (user, item, props) => { // TODO: DEBUG ME !
 
 scrapeProvidersSchedule = async(providers, region, user) => {
   try {
-    const user = await login(user);
-    if (user.role !== 'engine') {
-      throw('user is not enabled for this action');
-    }
+    // const user = await login(user);
+    // if (user.role !== 'engine') {
+    //   throw('user is not enabled for this action');
+    // }
     cron.schedule(config.schedule, () => {
       console.log('running on', new Date().toUTCString());
       const result = scrapeProviders(providers, region, user);
@@ -422,28 +427,28 @@ scrapeProvidersSchedule = async(providers, region, user) => {
   }
 }
 
-const _register = async (email, password, name, phone, role) => {
-  try {
-    console.info('register:', await register(email, password, name, phone, role));
-  } catch(err) {
-    throw(`error registering user: ${err}`);
-  }
-}
+// const _register = async (email, password, name, phone, role) => {
+//   try {
+//     console.info('register:', await register(email, password, name, phone, role));
+//   } catch(err) {
+//     throw(`error registering user: ${err}`);
+//   }
+// }
 
-const _login = async (email, password) => {
-  try {
-    console.info('login:', await login(email, password));
-  } catch(err) {
-    throw(`error logging user: ${err}`);
-  }
-}
+// const _login = async (email, password) => {
+//   try {
+//     console.info('login:', await login(email, password));
+//   } catch(err) {
+//     throw(`error logging user: ${err}`);
+//   }
+// }
 
 const _updateUserStatus = async () => {
   try {
-    const user = await login('marcosolari+1@gmail.com', 'password');
-    if (user.role !== 'user' && user.role != 'admin') {
-      throw('user is not enabled for this action');
-    }
+    // const user = await login('marcosolari+1@gmail.com', 'password');
+    // if (user.role !== 'user' && user.role != 'admin') {
+    //   throw('user is not enabled for this action');
+    // }
     const item = {vote: 0.7, note: 'nice'};
     console.info('updateUserStatus:', await updateUserStatus(user));
   } catch(err) {
@@ -586,11 +591,10 @@ const getProviderRegions = (provider, regionDescriptor) => {
 
 const test = async(item) => {
   try {
-    const Items = require("./models/Items" + "." + item.type);
+    const Items = require("../models/Items" + "." + item.type);
     const person = await Items.findOne({
       provider: item.provider,
       id: '396863',
-      title: 'Cristal',
     });
     //console.log('person date updated:', person.dateUpdated);
     return await person.isPresent();
@@ -605,77 +609,59 @@ globalsSet = async(key, value) => {
 
 
 
-(async() => {
-  try {
-    await dbConnect().then(async() => {
-      const args = process.argv.slice(2);
-      const command = args[0];
-      //let email, password, name, phone, role;
-      switch (command) {
-        case "scrapeProviders":
-          regionDescriptor = args[1] || '*';
-          providersByRegion = getProvidersByRegion(regionDescriptor);
-          await scrapeProviders(providersByRegion, regionDescriptor, {email: 'marco.solari@gmail.com', password: 'password'}, );
-          break;
-        case "scrapeProvidersPersonsImages":
-          regionDescriptor = args[1] || '*';
-          providersByRegion = getProvidersByRegion(regionDescriptor);
-          await scrapeProvidersPersonsImages(providersByRegion, regionDescriptor, {email: 'marco.solari@gmail.com', password: 'password'}, );
-          break;
-        case "scrapeProvidersSchedule":
-          regionDescriptor = args[1] || '*';
-          providersByRegion = getProvidersByRegion(regionDescriptor);
-          await scrapeProvidersSchedule(providersByRegion, regionDescriptor, {email: 'marco.solari@gmail.com', password: 'password'}, );
-          break;
-        // case "scrapeProvidersByRegion":
-        //   region = args[1];
-        //   providersByRegion = getProvidersByRegion(region);
-        //   await scrapeProviders({email: 'marco.solari@gmail.com', password: 'password'}, providersByRegion, region);
-        //   break;
-        case "updateUserStatus":
-          await _updateUserStatus();
-          break;
-        case "updateUserProps":
-          itemId = args[1];
-          itemProvider = args[2];
-          key1 = args[3];
-          val1 = args[4];
-          key2 = args[5];
-          val2 = args[6];
-          item = itemId && itemProvider ? {id: itemId, provider: itemProvider} : null;
-          props = key1 && val1 && key2 && val2 ? {[key1]: val1, [key2]: val2} : null;
-          await _updateUserProps({item, props});
-          break;
-        case "register":
-          email = args[1];
-          password = args[2];
-          name = args[3];
-          phone = args[4];
-          role = args[5];
-          await _register(email, password, name, phone, role);
-          break;
-        case "login":
-          email = args[1];
-          password = args[2];
-          await _login(email, password);
-          break;
-        case "test":
-          //provider = args[1];
-          const list = await test({type: 'persons', provider: 'pf'});
-          //console.log(list);
-          // const output = fs.createWriteStream('./stdout.log');
-          // const errorOutput = fs.createWriteStream('./stderr.log');
-          // const logger = new Console(output, errorOutput);
-          console.log(JSON.stringify(list));
-          break;
-        default:
-          console.error("unforeseen command", command);
-          break;
-      }
-    });
-  } catch(err) {
-    console.error(err);
-  } finally {
-    dbClose();
-  }
-})();
+// (async() => {
+//   try {
+//     await dbConnect().then(async() => {
+//       const args = process.argv.slice(2);
+//       const command = args[0];
+//       //let email, password, name, phone, role;
+//       switch (command) {
+//         case "scrapeProviders":
+//           regionDescriptor = args[1] || '*';
+//           providersByRegion = getProvidersByRegion(regionDescriptor);
+//           await scrapeProviders(providersByRegion, regionDescriptor, {email: 'marco.solari@gmail.com', password: 'password'}, );
+//           break;
+//         case "scrapeProvidersPersonsImages":
+//           regionDescriptor = args[1] || '*';
+//           providersByRegion = getProvidersByRegion(regionDescriptor);
+//           await scrapeProvidersPersonsImages(providersByRegion, regionDescriptor, {email: 'marco.solari@gmail.com', password: 'password'}, );
+//           break;
+//         case "scrapeProvidersSchedule":
+//           regionDescriptor = args[1] || '*';
+//           providersByRegion = getProvidersByRegion(regionDescriptor);
+//           await scrapeProvidersSchedule(providersByRegion, regionDescriptor, {email: 'marco.solari@gmail.com', password: 'password'}, );
+//           break;
+//         // case "scrapeProvidersByRegion":
+//         //   region = args[1];
+//         //   providersByRegion = getProvidersByRegion(region);
+//         //   await scrapeProviders({email: 'marco.solari@gmail.com', password: 'password'}, providersByRegion, region);
+//         //   break;
+//         case "updateUserStatus":
+//           await _updateUserStatus();
+//           break;
+//         case "updateUserProps":
+//           itemId = args[1];
+//           itemProvider = args[2];
+//           key1 = args[3];
+//           val1 = args[4];
+//           key2 = args[5];
+//           val2 = args[6];
+//           item = itemId && itemProvider ? {id: itemId, provider: itemProvider} : null;
+//           props = key1 && val1 && key2 && val2 ? {[key1]: val1, [key2]: val2} : null;
+//           await _updateUserProps({item, props});
+//           break;
+//         case "test":
+//           const list = await test({type: 'persons', provider: 'pf'});
+//           console.log(JSON.stringify(list));
+//           break;
+//         default:
+//           console.error("unforeseen command", command);
+//           break;
+//       }
+//     });
+//   } catch(err) {
+//     console.error(err);
+//   } finally {
+//     dbClose();
+//   }
+// })();

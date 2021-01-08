@@ -2,6 +2,7 @@ require("dotenv").config();
 const config = require("../config");
 const mongoose = require("mongoose");
 const bcrypt = require('bcrypt');
+const languages = require('language-list')().getLanguageCodes(); // ISO 639-1 languages list
 const saltRounds = 10;
 
 const Schema = mongoose.Schema;
@@ -25,7 +26,7 @@ const schema = new Schema({
   },
   language: {
     type: String,
-    enum: config.languages, // ISO 639-1
+    enum: languages,
   }
 }, { timestamps: {createdAt: 'dateCreated', updatedAt: 'dateUpdated'} }); // timestamps option: automatically add "createdAt" and "updatedAt" timestamps
 

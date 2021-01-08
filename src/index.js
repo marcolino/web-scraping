@@ -8,7 +8,7 @@ const swaggerUi = require('swagger-ui-express');
 const swaggerSpec = require('../swagger');
 
 //const { startDatabase } = require('./controllers/db');
-const { startDatabase } = require('./utils/db');
+const { dbConnect } = require('./utils/db');
 const usersRoutes = require('./routes/users');
 const itemsRoutes = require('./routes/items');
 const providersRoutes = require('./routes/providers');
@@ -36,13 +36,13 @@ app.use(morgan((process.env.NODE_ENV !== 'production') ? 'dev' : 'TODO, low prod
 app.use(morgan('combined'));
 
 // adding routes
-app.use(`/${config.apiVersion}/users`, usersRoutes);
-app.use(`/${config.apiVersion}/items`, itemsRoutes);
-app.use(`/${config.apiVersion}/providers`, providersRoutes);
-app.use(`/${config.apiVersion}/doc`, swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+app.use(`/users`, usersRoutes);
+app.use(`/items`, itemsRoutes);
+app.use(`/providers`, providersRoutes);
+app.use(`/doc`, swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // default root route
-app.get(`/${config.apiVersion}/`, (req, res) => {
+app.get(`/`, (req, res) => {
   res.json({ message: `REST API to scrape the web` });
 });
 
@@ -61,8 +61,8 @@ app.use((error, req, res, next) => {
   res.status(500).json({ message: `internal server error: ${error}`, stack: error.stack }); // error.stack is available only if dev
  })
 
-// start the database instance
-startDatabase().then(async () => {
+// connect to the database instance
+dbConnect().then(async () => {
   // start the server
   app.listen(config.serverPort, async () => {
     console.log(`listening on port ${config.serverPort}`);

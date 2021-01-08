@@ -10,7 +10,7 @@ exports.browserLaunch = async () => {
 
 exports.browserPageNew = async (browser) => {
   const page = await browser.newPage();
-  await page.setDefaultNavigationTimeout(config.navigationTimeout);
+  await page.setDefaultNavigationTimeout(config.networkTimeout);
   //await page.setViewport({'width': 800, 'height': 600});
   //await page.setUserAgent('Firefox');
 

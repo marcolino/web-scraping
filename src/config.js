@@ -1,10 +1,6 @@
-//require("dotenv").config();
-const languages = require('language-list')();
- 
-exports.serverPort = 3001;
-exports.apiVersion = "v1";
-exports.jwtTokenExpiresIn = "6h";
+exports.type = "persons"; // type of objects we treat
+exports.serverPort = 3001; // the server port we listen on
+exports.jwtTokenExpiresIn = "6h"; // token expiration time
 exports.schedule = "*/5 * * * *"; // run every 5 minutes
-exports.navigationTimeout = 60 * 1000;
-exports.roles = [ "admin", "engine", "user", "guest" ];
-exports.languages = languages.getLanguageCodes();
+exports.networkTimeout = 60 * 1000; // network fetch timeout
+exports.roles = [ "admin", "engine", "user", "guest" ]; // roles we recognize

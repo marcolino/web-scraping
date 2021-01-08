@@ -29,7 +29,7 @@ function private(req, res, next) {
 
   jwt.verify(token, secret, function(err, decoded) {
     if (err) {
-      return res.json({ status: "error", message: err.message, data: null });
+      return res.status(401).json({ message: `this is a private route (${err.message})` });
     }
     // add user id to request
     req.body.userId = decoded.id;
