@@ -1,28 +1,8 @@
 const mongoose = require("mongoose");
+const logger = require("../logger");
 const Schema = mongoose.Schema;
 const name = "Items.persons";
 const Globals = require("../models/Globals");
-
-const schemaImage = new Schema({
-  url: {
-    type: String
-  },
-  category: {
-    type: String,
-  },
-  date: {
-    type: Date
-  },
-  etag: {
-    type: String
-  },
-  localPath: {
-    type: String
-  },
-},
-{
-  _id : false }
-);
 
 const schemaPersons = new Schema({
   id: {
@@ -129,6 +109,9 @@ const schemaPersons = new Schema({
       type: String
     },
   }],
+  imagesCount: {
+    type: Number,
+  },
   adClass: {
     type: String,
   },
@@ -172,6 +155,9 @@ const schemaPersons = new Schema({
       },
     }
   ],
+  commentsCount: {
+    type: Number,
+  },
   adUrlReferences: [
     {
       type: String,
@@ -184,6 +170,13 @@ const schemaPersons = new Schema({
 
 // indexes
 schemaPersons.index({ id: 1, provider: 1, region: 1 }, { unique: true });
+
+schemaPersons.pre('validate', (next) => {
+  this.imagesCount = this.images.length;
+  this.commentsCount = this.comments.length;
+  logger.warn(`*********************** PRE VALIDATE:, ${this.images.length}, ${this.imagesCount}, ${this.commentsCount}`);
+  next();
+});
 
 // // static class (model) methods
 // schemaPersons.statics.isPresent = async function(item) {
@@ -201,21 +194,12 @@ schemaPersons.index({ id: 1, provider: 1, region: 1 }, { unique: true });
 // object (instance) methods
 schemaPersons.methods.isPresent = async function() {
   try {
-    const result = await mongoose.model('Globals').findOne({ key: `lastScrapeTimestamp-${this.provider}` }).exec();
-    return result.value <= this.dateUpdated;
+    const lastScrapeTimestamp = await mongoose.model('Globals').findOne({ key: `lastScrapeTimestamp-${this.provider}` }).exec();
+    //logger.debug(`lastScrapeTimestamp: ${lastScrapeTimestamp.value} <= this.dateUpdated: ${this.dateUpdated}`);
+    return lastScrapeTimestamp.value <= this.dateUpdated;
   } catch (err) {
     throw(new Error(`error in schemaPersons.methods.isPresent: ${err}`));
   }
 };
-
-// virtual properties
-schemaPersons.virtual('image').get(function() {
-  return (
-    this.imageUrl ? this.imageUrl :
-    this.imageUrls && this.imageUrls.length ? this.imageUrls[0] :
-    this.imageFullSizeUrls && this.imageFullSizeUrls.length ? this.imageFullSizeUrls[0] :
-    ''
-  );
-});
 
 module.exports = mongoose.model(name, schemaPersons);

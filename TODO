@@ -1,1 +1,3 @@
  V remove mongodb-memory-server
+  - handle missing persons items, comparing date of last update and date of last scrape (use a virtual method)
+  - protect system from multiple scrape requests (I think it's a good thing...)

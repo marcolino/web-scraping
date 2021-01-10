@@ -24,8 +24,10 @@ const info = {
     passwordSelector: "[name='password']",
     submitSelector: "[type='submit']",
   },
-  disableScraping: true,
+  //disableScraping: true,
 };
+
+const logger = require('../logger');
 
 async function listPageEvaluate(region, page, nextListPage) {
   return new Promise(async (resolve, reject) => {
@@ -34,7 +36,7 @@ async function listPageEvaluate(region, page, nextListPage) {
     if (!url) {
       throw(`region ${region} for provider ${info.key} has no list url`);
     }
-console.log('listPageEvaluate provider:', info.key, url);
+    logger.info(`listPageEvaluate.provider.${info.key} ${url}`);
     try {
       await page.goto(url);
     } catch (err) {
@@ -95,7 +97,7 @@ console.log('listPageEvaluate provider:', info.key, url);
 
           if (data.title) { // a real element
             list.push(data);
-          } //else console.log('NOT pushing data title and phone:', JSON.stringify(data));
+          } //else logger.warn('NOT pushing data title and phone:', JSON.stringify(data));
         });
 
         // get next page link url
@@ -121,7 +123,7 @@ const itemPageEvaluate = async (region, page, item) => {
       throw(new Error(`url not defined for provider ${info.key} at region region ${region}`));
     }
     const url = baseUrl + itemUrl;
-console.log('itemPageEvaluate url:', url);
+    logger.info(`itemPageEvaluate.provider.${info.key} ${url}`);
     try {
       await page.goto(url);
     } catch (err) {
@@ -134,7 +136,7 @@ console.log('itemPageEvaluate url:', url);
         if (info.login) {
           const loginRequestTag = new RegExp(info.login.loginRequestTag);
           if (document.querySelector("body").innerText.match(loginRequestTag)) {
-            console.log('ANONYMOUS LIMIT REACHED');
+            console.info('ANONYMOUS LIMIT REACHED');
             return {loginRequested: true};
           }
         }

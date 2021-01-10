@@ -1,7 +1,301 @@
-{"message":"providers.scrapeProviders.starting.0cc5463a-9843-4072-9a90-df929105f244","level":"info"}
-{"message":"providers.scrapeProviders.starting.13efdcb1-66c5-473d-b776-dbf08fd6535a","level":"warn"}
-{"message":"providers.scrapeProviders.starting.d2e523fb-910d-44b4-8a59-7a050b6fd19a","level":"warn"}
-{"message":"providers.scrapeProviders.starting.fb438534-4b1d-4e5e-985c-196a2fafc5b0","level":"info"}
-{"message":"providers.scrapeProviders.starting.6256100a-956b-448d-b58e-71155f2e316d","level":"info"}
-{"message":"providers.scrapeProviders.starting.b81bf82e-878d-4faa-a2a2-11296c363d7e","level":"info"}
-{"message":"providers.scrapeProviders.starting.969a92c4-6061-4d54-9e2d-e6ac0e362a9d","level":"info"}
+2021-01-10 12:34:42.033 error: unhandled exception TypeError: Cannot read property 'id' of undefined
+    at /home/marco/apps/web-scraping/src/auth.js:56:26
+    at /home/marco/apps/web-scraping/node_modules/jsonwebtoken/verify.js:152:16
+    at getSecret (/home/marco/apps/web-scraping/node_modules/jsonwebtoken/verify.js:90:14)
+    at Object.module.exports [as verify] (/home/marco/apps/web-scraping/node_modules/jsonwebtoken/verify.js:94:10)
+    at private (/home/marco/apps/web-scraping/src/auth.js:45:7)
+    at Layer.handle [as handle_request] (/home/marco/apps/web-scraping/node_modules/express/lib/router/layer.js:95:5)
+    at next (/home/marco/apps/web-scraping/node_modules/express/lib/router/route.js:137:13)
+    at Route.dispatch (/home/marco/apps/web-scraping/node_modules/express/lib/router/route.js:112:3)
+    at Layer.handle [as handle_request] (/home/marco/apps/web-scraping/node_modules/express/lib/router/layer.js:95:5)
+    at /home/marco/apps/web-scraping/node_modules/express/lib/router/index.js:281:22
+    at Function.process_params (/home/marco/apps/web-scraping/node_modules/express/lib/router/index.js:335:12)
+    at next (/home/marco/apps/web-scraping/node_modules/express/lib/router/index.js:275:10)
+    at Function.handle (/home/marco/apps/web-scraping/node_modules/express/lib/router/index.js:174:3)
+    at router (/home/marco/apps/web-scraping/node_modules/express/lib/router/index.js:47:12)
+    at Layer.handle [as handle_request] (/home/marco/apps/web-scraping/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/home/marco/apps/web-scraping/node_modules/express/lib/router/index.js:317:13)
+2021-01-10 14:46:42.655 error: uncaughtException: missing ) after argument list
+/home/marco/apps/web-scraping/src/models/Items.persons.js:197
+logger.debug(`lastScrapeTimestamp: ${lastScrapeTimestamp.value} <= this.dateUpdated: ${this.dateUpdated};
+                                                                                                       ^^
+
+SyntaxError: missing ) after argument list
+    at wrapSafe (internal/modules/cjs/loader.js:979:16)
+    at Module._compile (internal/modules/cjs/loader.js:1027:27)
+    at Object.Module._extensions..js (internal/modules/cjs/loader.js:1092:10)
+    at Module.load (internal/modules/cjs/loader.js:928:32)
+    at Function.Module._load (internal/modules/cjs/loader.js:769:14)
+    at Module.require (internal/modules/cjs/loader.js:952:19)
+    at require (internal/modules/cjs/helpers.js:88:18)
+    at Object.<anonymous> (/home/marco/apps/web-scraping/src/controllers/items.js:2:15)
+    at Module._compile (internal/modules/cjs/loader.js:1063:30)
+    at Object.Module._extensions..js (internal/modules/cjs/loader.js:1092:10)
+    at Module.load (internal/modules/cjs/loader.js:928:32)
+    at Function.Module._load (internal/modules/cjs/loader.js:769:14)
+    at Module.require (internal/modules/cjs/loader.js:952:19)
+    at require (internal/modules/cjs/helpers.js:88:18)
+    at Object.<anonymous> (/home/marco/apps/web-scraping/src/routes/items.js:4:73)
+    at Module._compile (internal/modules/cjs/loader.js:1063:30)
+2021-01-10 14:46:42.658 error: uncaught exception /home/marco/apps/web-scraping/src/models/Items.persons.js:197
+logger.debug(`lastScrapeTimestamp: ${lastScrapeTimestamp.value} <= this.dateUpdated: ${this.dateUpdated};
+                                                                                                       ^^
+
+SyntaxError: missing ) after argument list
+    at wrapSafe (internal/modules/cjs/loader.js:979:16)
+    at Module._compile (internal/modules/cjs/loader.js:1027:27)
+    at Object.Module._extensions..js (internal/modules/cjs/loader.js:1092:10)
+    at Module.load (internal/modules/cjs/loader.js:928:32)
+    at Function.Module._load (internal/modules/cjs/loader.js:769:14)
+    at Module.require (internal/modules/cjs/loader.js:952:19)
+    at require (internal/modules/cjs/helpers.js:88:18)
+    at Object.<anonymous> (/home/marco/apps/web-scraping/src/controllers/items.js:2:15)
+    at Module._compile (internal/modules/cjs/loader.js:1063:30)
+    at Object.Module._extensions..js (internal/modules/cjs/loader.js:1092:10)
+    at Module.load (internal/modules/cjs/loader.js:928:32)
+    at Function.Module._load (internal/modules/cjs/loader.js:769:14)
+    at Module.require (internal/modules/cjs/loader.js:952:19)
+    at require (internal/modules/cjs/helpers.js:88:18)
+    at Object.<anonymous> (/home/marco/apps/web-scraping/src/routes/items.js:4:73)
+    at Module._compile (internal/modules/cjs/loader.js:1063:30)
+2021-01-10 14:48:05.118 error: uncaughtException: missing ) after argument list
+/home/marco/apps/web-scraping/src/models/Items.persons.js:198
+logger.debug(`lastScrapeTimestamp: ${lastScrapeTimestamp.value} <= this.dateUpdated: ${this.dateUpdated}`;
+                                                                                                       ^^
+
+SyntaxError: missing ) after argument list
+    at wrapSafe (internal/modules/cjs/loader.js:979:16)
+    at Module._compile (internal/modules/cjs/loader.js:1027:27)
+    at Object.Module._extensions..js (internal/modules/cjs/loader.js:1092:10)
+    at Module.load (internal/modules/cjs/loader.js:928:32)
+    at Function.Module._load (internal/modules/cjs/loader.js:769:14)
+    at Module.require (internal/modules/cjs/loader.js:952:19)
+    at require (internal/modules/cjs/helpers.js:88:18)
+    at Object.<anonymous> (/home/marco/apps/web-scraping/src/controllers/items.js:2:15)
+    at Module._compile (internal/modules/cjs/loader.js:1063:30)
+    at Object.Module._extensions..js (internal/modules/cjs/loader.js:1092:10)
+    at Module.load (internal/modules/cjs/loader.js:928:32)
+    at Function.Module._load (internal/modules/cjs/loader.js:769:14)
+    at Module.require (internal/modules/cjs/loader.js:952:19)
+    at require (internal/modules/cjs/helpers.js:88:18)
+    at Object.<anonymous> (/home/marco/apps/web-scraping/src/routes/items.js:4:73)
+    at Module._compile (internal/modules/cjs/loader.js:1063:30)
+2021-01-10 14:48:05.121 error: uncaught exception /home/marco/apps/web-scraping/src/models/Items.persons.js:198
+logger.debug(`lastScrapeTimestamp: ${lastScrapeTimestamp.value} <= this.dateUpdated: ${this.dateUpdated}`;
+                                                                                                       ^^
+
+SyntaxError: missing ) after argument list
+    at wrapSafe (internal/modules/cjs/loader.js:979:16)
+    at Module._compile (internal/modules/cjs/loader.js:1027:27)
+    at Object.Module._extensions..js (internal/modules/cjs/loader.js:1092:10)
+    at Module.load (internal/modules/cjs/loader.js:928:32)
+    at Function.Module._load (internal/modules/cjs/loader.js:769:14)
+    at Module.require (internal/modules/cjs/loader.js:952:19)
+    at require (internal/modules/cjs/helpers.js:88:18)
+    at Object.<anonymous> (/home/marco/apps/web-scraping/src/controllers/items.js:2:15)
+    at Module._compile (internal/modules/cjs/loader.js:1063:30)
+    at Object.Module._extensions..js (internal/modules/cjs/loader.js:1092:10)
+    at Module.load (internal/modules/cjs/loader.js:928:32)
+    at Function.Module._load (internal/modules/cjs/loader.js:769:14)
+    at Module.require (internal/modules/cjs/loader.js:952:19)
+    at require (internal/modules/cjs/helpers.js:88:18)
+    at Object.<anonymous> (/home/marco/apps/web-scraping/src/routes/items.js:4:73)
+    at Module._compile (internal/modules/cjs/loader.js:1063:30)
+2021-01-10 14:48:15.467 error: uncaughtException: missing ) after argument list
+/home/marco/apps/web-scraping/src/models/Items.persons.js:198
+logger.debug(`lastScrapeTimestamp: ${lastScrapeTimestamp.value} <= this.dateUpdated: ${this.dateUpdated}`;
+                                                                                                       ^^
+
+SyntaxError: missing ) after argument list
+    at wrapSafe (internal/modules/cjs/loader.js:979:16)
+    at Module._compile (internal/modules/cjs/loader.js:1027:27)
+    at Object.Module._extensions..js (internal/modules/cjs/loader.js:1092:10)
+    at Module.load (internal/modules/cjs/loader.js:928:32)
+    at Function.Module._load (internal/modules/cjs/loader.js:769:14)
+    at Module.require (internal/modules/cjs/loader.js:952:19)
+    at require (internal/modules/cjs/helpers.js:88:18)
+    at Object.<anonymous> (/home/marco/apps/web-scraping/src/controllers/items.js:2:15)
+    at Module._compile (internal/modules/cjs/loader.js:1063:30)
+    at Object.Module._extensions..js (internal/modules/cjs/loader.js:1092:10)
+    at Module.load (internal/modules/cjs/loader.js:928:32)
+    at Function.Module._load (internal/modules/cjs/loader.js:769:14)
+    at Module.require (internal/modules/cjs/loader.js:952:19)
+    at require (internal/modules/cjs/helpers.js:88:18)
+    at Object.<anonymous> (/home/marco/apps/web-scraping/src/routes/items.js:4:73)
+    at Module._compile (internal/modules/cjs/loader.js:1063:30)
+2021-01-10 14:48:15.470 error: uncaught exception /home/marco/apps/web-scraping/src/models/Items.persons.js:198
+logger.debug(`lastScrapeTimestamp: ${lastScrapeTimestamp.value} <= this.dateUpdated: ${this.dateUpdated}`;
+                                                                                                       ^^
+
+SyntaxError: missing ) after argument list
+    at wrapSafe (internal/modules/cjs/loader.js:979:16)
+    at Module._compile (internal/modules/cjs/loader.js:1027:27)
+    at Object.Module._extensions..js (internal/modules/cjs/loader.js:1092:10)
+    at Module.load (internal/modules/cjs/loader.js:928:32)
+    at Function.Module._load (internal/modules/cjs/loader.js:769:14)
+    at Module.require (internal/modules/cjs/loader.js:952:19)
+    at require (internal/modules/cjs/helpers.js:88:18)
+    at Object.<anonymous> (/home/marco/apps/web-scraping/src/controllers/items.js:2:15)
+    at Module._compile (internal/modules/cjs/loader.js:1063:30)
+    at Object.Module._extensions..js (internal/modules/cjs/loader.js:1092:10)
+    at Module.load (internal/modules/cjs/loader.js:928:32)
+    at Function.Module._load (internal/modules/cjs/loader.js:769:14)
+    at Module.require (internal/modules/cjs/loader.js:952:19)
+    at require (internal/modules/cjs/helpers.js:88:18)
+    at Object.<anonymous> (/home/marco/apps/web-scraping/src/routes/items.js:4:73)
+    at Module._compile (internal/modules/cjs/loader.js:1063:30)
+2021-01-10 15:02:17.194 error: unhandled exception TypeError: test is not a function
+    at /home/marco/apps/web-scraping/src/routes/items.js:22:48
+    at Layer.handle [as handle_request] (/home/marco/apps/web-scraping/node_modules/express/lib/router/layer.js:95:5)
+    at next (/home/marco/apps/web-scraping/node_modules/express/lib/router/route.js:137:13)
+    at public (/home/marco/apps/web-scraping/src/auth.js:31:3)
+    at Layer.handle [as handle_request] (/home/marco/apps/web-scraping/node_modules/express/lib/router/layer.js:95:5)
+    at next (/home/marco/apps/web-scraping/node_modules/express/lib/router/route.js:137:13)
+    at Route.dispatch (/home/marco/apps/web-scraping/node_modules/express/lib/router/route.js:112:3)
+    at Layer.handle [as handle_request] (/home/marco/apps/web-scraping/node_modules/express/lib/router/layer.js:95:5)
+    at /home/marco/apps/web-scraping/node_modules/express/lib/router/index.js:281:22
+    at Function.process_params (/home/marco/apps/web-scraping/node_modules/express/lib/router/index.js:335:12)
+    at next (/home/marco/apps/web-scraping/node_modules/express/lib/router/index.js:275:10)
+    at Function.handle (/home/marco/apps/web-scraping/node_modules/express/lib/router/index.js:174:3)
+    at router (/home/marco/apps/web-scraping/node_modules/express/lib/router/index.js:47:12)
+    at Layer.handle [as handle_request] (/home/marco/apps/web-scraping/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/home/marco/apps/web-scraping/node_modules/express/lib/router/index.js:317:13)
+    at /home/marco/apps/web-scraping/node_modules/express/lib/router/index.js:284:7
+2021-01-10 15:03:18.121 error: uncaughtException: test is not defined
+ReferenceError: test is not defined
+    at Object.<anonymous> (/home/marco/apps/web-scraping/src/controllers/items.js:114:3)
+    at Module._compile (internal/modules/cjs/loader.js:1063:30)
+    at Object.Module._extensions..js (internal/modules/cjs/loader.js:1092:10)
+    at Module.load (internal/modules/cjs/loader.js:928:32)
+    at Function.Module._load (internal/modules/cjs/loader.js:769:14)
+    at Module.require (internal/modules/cjs/loader.js:952:19)
+    at require (internal/modules/cjs/helpers.js:88:18)
+    at Object.<anonymous> (/home/marco/apps/web-scraping/src/routes/items.js:4:79)
+    at Module._compile (internal/modules/cjs/loader.js:1063:30)
+    at Object.Module._extensions..js (internal/modules/cjs/loader.js:1092:10)
+    at Module.load (internal/modules/cjs/loader.js:928:32)
+    at Function.Module._load (internal/modules/cjs/loader.js:769:14)
+    at Module.require (internal/modules/cjs/loader.js:952:19)
+    at require (internal/modules/cjs/helpers.js:88:18)
+    at Object.<anonymous> (/home/marco/apps/web-scraping/src/index.js:14:21)
+    at Module._compile (internal/modules/cjs/loader.js:1063:30)
+2021-01-10 15:03:18.125 error: uncaught exception ReferenceError: test is not defined
+    at Object.<anonymous> (/home/marco/apps/web-scraping/src/controllers/items.js:114:3)
+    at Module._compile (internal/modules/cjs/loader.js:1063:30)
+    at Object.Module._extensions..js (internal/modules/cjs/loader.js:1092:10)
+    at Module.load (internal/modules/cjs/loader.js:928:32)
+    at Function.Module._load (internal/modules/cjs/loader.js:769:14)
+    at Module.require (internal/modules/cjs/loader.js:952:19)
+    at require (internal/modules/cjs/helpers.js:88:18)
+    at Object.<anonymous> (/home/marco/apps/web-scraping/src/routes/items.js:4:79)
+    at Module._compile (internal/modules/cjs/loader.js:1063:30)
+    at Object.Module._extensions..js (internal/modules/cjs/loader.js:1092:10)
+    at Module.load (internal/modules/cjs/loader.js:928:32)
+    at Function.Module._load (internal/modules/cjs/loader.js:769:14)
+    at Module.require (internal/modules/cjs/loader.js:952:19)
+    at require (internal/modules/cjs/helpers.js:88:18)
+    at Object.<anonymous> (/home/marco/apps/web-scraping/src/index.js:14:21)
+    at Module._compile (internal/modules/cjs/loader.js:1063:30)
+2021-01-10 15:03:38.573 error: unhandled exception TypeError: test is not a function
+    at /home/marco/apps/web-scraping/src/routes/items.js:22:48
+    at Layer.handle [as handle_request] (/home/marco/apps/web-scraping/node_modules/express/lib/router/layer.js:95:5)
+    at next (/home/marco/apps/web-scraping/node_modules/express/lib/router/route.js:137:13)
+    at public (/home/marco/apps/web-scraping/src/auth.js:31:3)
+    at Layer.handle [as handle_request] (/home/marco/apps/web-scraping/node_modules/express/lib/router/layer.js:95:5)
+    at next (/home/marco/apps/web-scraping/node_modules/express/lib/router/route.js:137:13)
+    at Route.dispatch (/home/marco/apps/web-scraping/node_modules/express/lib/router/route.js:112:3)
+    at Layer.handle [as handle_request] (/home/marco/apps/web-scraping/node_modules/express/lib/router/layer.js:95:5)
+    at /home/marco/apps/web-scraping/node_modules/express/lib/router/index.js:281:22
+    at Function.process_params (/home/marco/apps/web-scraping/node_modules/express/lib/router/index.js:335:12)
+    at next (/home/marco/apps/web-scraping/node_modules/express/lib/router/index.js:275:10)
+    at Function.handle (/home/marco/apps/web-scraping/node_modules/express/lib/router/index.js:174:3)
+    at router (/home/marco/apps/web-scraping/node_modules/express/lib/router/index.js:47:12)
+    at Layer.handle [as handle_request] (/home/marco/apps/web-scraping/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/home/marco/apps/web-scraping/node_modules/express/lib/router/index.js:317:13)
+    at /home/marco/apps/web-scraping/node_modules/express/lib/router/index.js:284:7
+2021-01-10 15:04:20.372 error: uncaughtException: Unexpected token '=>'
+/home/marco/apps/web-scraping/src/controllers/items.js:92
+async function test(req) => {
+                         ^^
+
+SyntaxError: Unexpected token '=>'
+    at wrapSafe (internal/modules/cjs/loader.js:979:16)
+    at Module._compile (internal/modules/cjs/loader.js:1027:27)
+    at Object.Module._extensions..js (internal/modules/cjs/loader.js:1092:10)
+    at Module.load (internal/modules/cjs/loader.js:928:32)
+    at Function.Module._load (internal/modules/cjs/loader.js:769:14)
+    at Module.require (internal/modules/cjs/loader.js:952:19)
+    at require (internal/modules/cjs/helpers.js:88:18)
+    at Object.<anonymous> (/home/marco/apps/web-scraping/src/routes/items.js:4:79)
+    at Module._compile (internal/modules/cjs/loader.js:1063:30)
+    at Object.Module._extensions..js (internal/modules/cjs/loader.js:1092:10)
+    at Module.load (internal/modules/cjs/loader.js:928:32)
+    at Function.Module._load (internal/modules/cjs/loader.js:769:14)
+    at Module.require (internal/modules/cjs/loader.js:952:19)
+    at require (internal/modules/cjs/helpers.js:88:18)
+    at Object.<anonymous> (/home/marco/apps/web-scraping/src/index.js:14:21)
+    at Module._compile (internal/modules/cjs/loader.js:1063:30)
+2021-01-10 15:04:20.375 error: uncaught exception /home/marco/apps/web-scraping/src/controllers/items.js:92
+async function test(req) => {
+                         ^^
+
+SyntaxError: Unexpected token '=>'
+    at wrapSafe (internal/modules/cjs/loader.js:979:16)
+    at Module._compile (internal/modules/cjs/loader.js:1027:27)
+    at Object.Module._extensions..js (internal/modules/cjs/loader.js:1092:10)
+    at Module.load (internal/modules/cjs/loader.js:928:32)
+    at Function.Module._load (internal/modules/cjs/loader.js:769:14)
+    at Module.require (internal/modules/cjs/loader.js:952:19)
+    at require (internal/modules/cjs/helpers.js:88:18)
+    at Object.<anonymous> (/home/marco/apps/web-scraping/src/routes/items.js:4:79)
+    at Module._compile (internal/modules/cjs/loader.js:1063:30)
+    at Object.Module._extensions..js (internal/modules/cjs/loader.js:1092:10)
+    at Module.load (internal/modules/cjs/loader.js:928:32)
+    at Function.Module._load (internal/modules/cjs/loader.js:769:14)
+    at Module.require (internal/modules/cjs/loader.js:952:19)
+    at require (internal/modules/cjs/helpers.js:88:18)
+    at Object.<anonymous> (/home/marco/apps/web-scraping/src/index.js:14:21)
+    at Module._compile (internal/modules/cjs/loader.js:1063:30)
+2021-01-10 15:25:22.604 error: uncaughtException: Unexpected identifier
+/home/marco/apps/web-scraping/src/controllers/items.js:102
+    cont arePresent = [];
+         ^^^^^^^^^^
+
+SyntaxError: Unexpected identifier
+    at wrapSafe (internal/modules/cjs/loader.js:979:16)
+    at Module._compile (internal/modules/cjs/loader.js:1027:27)
+    at Object.Module._extensions..js (internal/modules/cjs/loader.js:1092:10)
+    at Module.load (internal/modules/cjs/loader.js:928:32)
+    at Function.Module._load (internal/modules/cjs/loader.js:769:14)
+    at Module.require (internal/modules/cjs/loader.js:952:19)
+    at require (internal/modules/cjs/helpers.js:88:18)
+    at Object.<anonymous> (/home/marco/apps/web-scraping/src/routes/items.js:4:79)
+    at Module._compile (internal/modules/cjs/loader.js:1063:30)
+    at Object.Module._extensions..js (internal/modules/cjs/loader.js:1092:10)
+    at Module.load (internal/modules/cjs/loader.js:928:32)
+    at Function.Module._load (internal/modules/cjs/loader.js:769:14)
+    at Module.require (internal/modules/cjs/loader.js:952:19)
+    at require (internal/modules/cjs/helpers.js:88:18)
+    at Object.<anonymous> (/home/marco/apps/web-scraping/src/index.js:14:21)
+    at Module._compile (internal/modules/cjs/loader.js:1063:30)
+2021-01-10 15:25:22.607 error: uncaught exception /home/marco/apps/web-scraping/src/controllers/items.js:102
+    cont arePresent = [];
+         ^^^^^^^^^^
+
+SyntaxError: Unexpected identifier
+    at wrapSafe (internal/modules/cjs/loader.js:979:16)
+    at Module._compile (internal/modules/cjs/loader.js:1027:27)
+    at Object.Module._extensions..js (internal/modules/cjs/loader.js:1092:10)
+    at Module.load (internal/modules/cjs/loader.js:928:32)
+    at Function.Module._load (internal/modules/cjs/loader.js:769:14)
+    at Module.require (internal/modules/cjs/loader.js:952:19)
+    at require (internal/modules/cjs/helpers.js:88:18)
+    at Object.<anonymous> (/home/marco/apps/web-scraping/src/routes/items.js:4:79)
+    at Module._compile (internal/modules/cjs/loader.js:1063:30)
+    at Object.Module._extensions..js (internal/modules/cjs/loader.js:1092:10)
+    at Module.load (internal/modules/cjs/loader.js:928:32)
+    at Function.Module._load (internal/modules/cjs/loader.js:769:14)
+    at Module.require (internal/modules/cjs/loader.js:952:19)
+    at require (internal/modules/cjs/helpers.js:88:18)
+    at Object.<anonymous> (/home/marco/apps/web-scraping/src/index.js:14:21)
+    at Module._compile (internal/modules/cjs/loader.js:1063:30)

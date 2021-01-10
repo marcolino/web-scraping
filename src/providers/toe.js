@@ -16,6 +16,8 @@ const info = {
   //disableScraping: true,
 };
 
+const logger = require('../logger');
+
 async function listPageEvaluate(region, page) {
   return new Promise(async (resolve, reject) => {
     const url = info.regions[region].listUrl;
@@ -24,7 +26,7 @@ async function listPageEvaluate(region, page) {
       throw(`region ${region} for provider ${info.key} has no list url`);
 
     }
-console.log('listPageEvaluate provider:', info.key, url);
+    logger.info(`listPageEvaluate.provider.${info.key} ${url}`);
     try {
       await page.goto(url);
     } catch (err) {
@@ -100,7 +102,7 @@ const itemPageEvaluate = async (region, page, item) => {
       throw(`url not defined for provider ${info.key} at region region ${region}`);
     }
     const url = baseUrl + itemUrl;
-console.log('itemPageEvaluate url:', url);
+    logger.info(`itemPageEvaluate.provider.${info.key} ${url}`);
     try {
       await page.goto(url);
     } catch (err) {

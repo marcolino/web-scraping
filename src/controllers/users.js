@@ -54,7 +54,14 @@ async function signin(req, res, next) {
       (bcrypt.compareSync(password, user.password)) ||
       ((process.env.NODE_ENV === 'development') && (password === user.password))
      ) {
-      const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET_TOKEN, { expiresIn: config.jwtTokenExpiresIn });
+      const token = jwt.sign(
+        {
+          id: user._id,
+          role: user.role
+        },
+        process.env.JWT_SECRET_TOKEN,
+        user.role !== 'system' ? { expiresIn: config.jwtTokenExpiresIn } : {}
+      );
       return res.status(200).json({ message: "user authenticated successfully", data: { user, token: token } });
     } else {
       return res.status(403).json({ message: "invalid user email/password", data: { email } });
@@ -65,7 +72,7 @@ async function signin(req, res, next) {
 }
 
 async function profile(req, res, next) {
-  const userId = req.body.userId;
+  const userId = req.userId;
 
   if (!userId) { // should not happen, route is private, we should have userId im body from auth
     return res.status(400).json({ message: "no user id found" });

@@ -18,8 +18,10 @@ const info = {
   mediumPricePerHalfHour: 70,
   mediumPricePerHour: 120,
   immutable: false,
-  disableScraping: true,
+  //disableScraping: true,
 };
+
+const logger = require('../logger');
 
 async function listPageEvaluate(region, page) {
   return new Promise(async (resolve, reject) => {
@@ -28,7 +30,8 @@ async function listPageEvaluate(region, page) {
     if (!url) {
       throw(`region ${region} for provider ${info.key} has no list url`);
     }
-console.log('listPageEvaluate provider:', info.key, url);
+    logger.info(`listPageEvaluate.provider.${info.key} ${url}`);
+
     try {
       await page.goto(url);
     } catch (err) {
@@ -58,9 +61,14 @@ console.log('listPageEvaluate provider:', info.key, url);
           }
 
           try { // title
-            data.title = item.querySelector("span.testo_generale_bold").innerText.replace(/_+/g, ' ').replace(/^\s+|\s+$/g, '');
-            data.title = decodeURIComponent(data.title);
-            data.title = data.title.toLowerCase().replace(/\b\w/g, l => l.toUpperCase()); // uppercase words
+            const titleElement = item.querySelector("span#content_nome, span.testo_generale_bold");
+            if (titleElement) {
+              data.title = titleElement.innerText.replace(/_+/g, ' ').replace(/^\s+|\s+$/g, '');
+              data.title = decodeURIComponent(data.title);
+              data.title = data.title.toLowerCase().replace(/\b\w/g, l => l.toUpperCase()); // uppercase words
+            } else {
+              logger.warn(`no title for provider {$data.provider}, id: {$data.id}, url: ${$data.url}`);
+            }
           } catch (err) {
             throw(new Error(`reading url ${url} looking for title: ${err.message}`));
           }
@@ -105,7 +113,7 @@ const itemPageEvaluate = async (region, page, item) => {
       throw(`url not defined for provider ${info.key} at region region ${region}`);
     }
     const url = baseUrl + itemUrl;
-console.log('itemPageEvaluate url:', url);
+    logger.info(`itemPageEvaluate.provider.${info.key} ${url}`);
     try {
       await page.goto(url);
     } catch (err) {
@@ -144,7 +152,7 @@ console.log('itemPageEvaluate url:', url);
         // } catch (err) {
         //   throw(new Error(`reading url ${url} looking for imageUrl: ${err.message}`));
         // }
-//console.log('trying small images for', JSON.stringify(item));
+//logger.info('trying small images for', JSON.stringify(item));
         imagesElement = document.querySelector("ul#content_immagini");
 
 //         try { // small images
@@ -152,10 +160,10 @@ console.log('itemPageEvaluate url:', url);
 //             if (imgElement) {
 //               let imageUrl = imgElement.getAttribute("src").replace(/\?.*/, '').replace(/^\//, '');
 //               const image = { url: imageUrl, category: "small" };
-// //console.log('pushing small image for', JSON.stringify(image));
+// //logger.info('pushing small image for', JSON.stringify(image));
 //               data.images.push(image);
 //             }
-// //else console.log('no small image for', JSON.stringify(item));
+// //else logger.info('no small image for', JSON.stringify(item));
 //           });
 //         } catch (err) {
 //           throw (new Error(`reading url ${url} looking for small images: ${err.message}`));
@@ -166,10 +174,10 @@ console.log('itemPageEvaluate url:', url);
             if (imgElement) {
               let imageUrl = imgElement.getAttribute("href").replace(/\?.*/, '').replace(/^\//, '');
               const image = { url: imageUrl, category: "full"};
-//console.log('pushing small image for', JSON.stringify(image));
+//logger.info('pushing small image for', JSON.stringify(image));
               data.images.push(image);
             }
-//else console.log('no full image for', JSON.stringify(item));
+//else logger.info('no full image for', JSON.stringify(item));
           });
         } catch (err) {
           throw (new Error(`reading url ${url} looking for full images: ${err.message}`));

@@ -1,3 +1,49 @@
+
+Providers it:
+ - https://www.liberliber.it/online/opere/audiolibri/elenco-per-opere/
+ - http://libroaudio.it/
+ - https://librivox.org/search?primary_key=4&search_category=language&search_page=1&search_form=get_results
+ - https://audiolibri.org/audiolibri-in-italiano/#page-content
+ 
+ - https://www.youtube.com/watch?v=fjLSzkIOXvM
+   $ sudo wget https://yt-dl.org/downloads/latest/youtube-dl -O /usr/local/bin/youtube-dl
+   $ sudo chmod a+rx /usr/local/bin/youtube-dl
+   $ youtube-dl --extract-audio --audio-format mp3 https://www.youtube.com/watch?v=jwD4AEVBL6Q
+
+ - https://www.raiplayradio.it/programmi/adaltavoce/archivio/audiolibri/ (only streaming?)
+
+  (https://creativemedia4-rai-it.akamaized.net/radiocdn/radio_ondemand_noEP/radio3_od_noEP/4177792.mp3?auth=daEcucwbIcddTcQcBdNbcaHazcFdLbMdNdr-bFvFMb-c0-AltvvGq&aifp=V001 - but how to get this links from the page? puppeteer?)
+
+Libraries:
 - Manage Auth0 web-scraping-express settings: https://manage.auth0.com/dashboard/eu/marc0/applications/g7atPYwgekG9MJrgP94R3nXSvDI0PASU/settings
 - How to Document an Express API with Swagger UI and JSDoc: https://dev.to/kabartolo/how-to-document-an-express-api-with-swagger-ui-and-jsdoc-50do
 - Building a RESTful CRUD API with Node.js, JWT, Bcrypt, Express and MongoDB: https://medium.com/zero-equals-false/building-a-restful-crud-api-with-node-js-jwt-bcrypt-express-and-mongodb-4e1fb20b7f3d
+- React-native listItem: https://react-native-elements.github.io/react-native-elements/docs/listitem/
+
+Libraries we will not use:
+ - https://github.com/goldfire/howler.js
+   howler.js is an audio library for the modern web. It defaults to Web Audio API and falls back to HTML5 Audio. This makes working with audio in JavaScript easy and reliable across all platforms.
+ - https://static.hanzluo.com/react-h5-audio-player-storybook/
+
+Resources:
+ - https://openlibrary.org/dev/docs/api/covers
+
+Tools:
+ - https://insomnia.rest/
+ 
+Docs:
+ - https://medium.com/react-native-development/how-to-use-the-flatlist-component-react-native-basics-92c482816fe6
+ - https://developer.mozilla.org/en-US/docs/Learn/Server-side/Express_Nodejs/mongoose
+ - https://auth0.com/blog/node-js-and-express-tutorial-building-and-securing-restful-apis/
+
+Deploy:
+ - https://medium.com/make-school/how-to-deploy-your-node-js-mongodb-app-to-the-web-using-heroku-63d4bccf2675
+
+Tips:
+ - with error "Updating the path '__v' would create a conflict at '__v'" run db.adminCommand({setFeatureCompatibilityVersion: "3.4"}) 
+ - an example to query quickly mongo db:
+    provider="pf"; cols="id:1, url:1"; db="web-scraping-auto"; echo "DBQuery.shellBatchSize = 10000; db.items.persons.find( {provider:'$provider'}, { _id:0, $cols } )" | mongo "$db" | grep -v '^bye$' 
+ - selector for persons with images not in cache:
+    db.mycollection.find({'images.localPath': {$eq: null}})
+ - to get array length:
+    db.mycollection.aggregate([{$project: { count: { $size: "$images" }}}])

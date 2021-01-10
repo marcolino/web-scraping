@@ -21,16 +21,16 @@ const info = {
   //disableScraping: true,
 };
 
+const logger = require('../logger');
+
 async function listPageEvaluate(region, page) {
   return new Promise(async (resolve, reject) => {
     const url = info.regions[region].listUrl;
     const imagesUrl = info.regions[region].imagesUrl;
     if (!url) {
       throw(`region ${region} for provider ${info.key} has no list url`);
-
     }
-    console.log('listPageEvaluate provider:', info.key, url);
-
+    logger.info(`listPageEvaluate.provider.${info.key}.${url}`);
     try {
       if (info.cookie) {
         await page.setCookie(info.cookie);
@@ -142,7 +142,7 @@ const itemPageEvaluate = async (region, page, item) => {
       throw(`url not defined for provider ${info.key} at region region ${region}`);
     }
     const url = baseUrl + itemUrl;
-console.log('itemPageEvaluate url:', url);
+    logger.info(`itemPageEvaluate.provider.${info.key}.${url}`);
     try {
       if (info.cookie) {
         await page.setCookie(info.cookie);
@@ -229,7 +229,7 @@ console.log('itemPageEvaluate url:', url);
                 data.sexualOrientation = rowContent;
                 break;
               default:
-                //console.log('default:', rowHeader, ':', rowContent);
+                //logger.debug('default:', rowHeader, ':', rowContent);
                 break;
             }
           });
