@@ -14,6 +14,12 @@ Providers it:
 
   (https://creativemedia4-rai-it.akamaized.net/radiocdn/radio_ondemand_noEP/radio3_od_noEP/4177792.mp3?auth=daEcucwbIcddTcQcBdNbcaHazcFdLbMdNdr-bFvFMb-c0-AltvvGq&aifp=V001 - but how to get this links from the page? puppeteer?)
 
+Mongo Database:
+ - https://cloud.mongodb.com/ (login with google, username: "marco", password: "esticazzi!123", dbname: "web-scraping", connection: "mongodb+srv://<username>:<password>@cluster0.e76px.mongodb.net/<dbname>?retryWrites=true&w=majority")
+
+Mongo Playground:
+ - https://mongoplayground.net/
+
 Libraries:
 - Manage Auth0 web-scraping-express settings: https://manage.auth0.com/dashboard/eu/marc0/applications/g7atPYwgekG9MJrgP94R3nXSvDI0PASU/settings
 - How to Document an Express API with Swagger UI and JSDoc: https://dev.to/kabartolo/how-to-document-an-express-api-with-swagger-ui-and-jsdoc-50do
@@ -42,8 +48,10 @@ Deploy:
 Tips:
  - with error "Updating the path '__v' would create a conflict at '__v'" run db.adminCommand({setFeatureCompatibilityVersion: "3.4"}) 
  - an example to query quickly mongo db:
-    provider="pf"; cols="id:1, url:1"; db="web-scraping-auto"; echo "DBQuery.shellBatchSize = 10000; db.items.persons.find( {provider:'$provider'}, { _id:0, $cols } )" | mongo "$db" | grep -v '^bye$' 
+    provider="pf"; cols="id:1, url:1"; db="web-scraping"; echo "DBQuery.shellBatchSize = 10000; db.items.persons.find( {provider:'$provider'}, { _id:0, $cols } )" | mongo "$db" | grep -v '^bye$' 
  - selector for persons with images not in cache:
-    db.mycollection.find({'images.localPath': {$eq: null}})
+    db.collection.find({'images.localPath': {$eq: null}})
  - to get array length:
-    db.mycollection.aggregate([{$project: { count: { $size: "$images" }}}])
+    //db.collection.aggregate([{$project: { count: { $size: "$images" }}}])
+    db.collection.find({}, { _id: 0, name: 1, images: { $size: "$images" })
+})

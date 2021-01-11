@@ -1,3 +1,9 @@
  V remove mongodb-memory-server
   - handle missing persons items, comparing date of last update and date of last scrape (use a virtual method)
   - protect system from multiple scrape requests (I think it's a good thing...)
+  - test:
+    - what happens if an item has no main image in getItems (should be returned nonetheless)
+    - stars in PF providerScraping (enable only PF provider, and set it as not immutable)
+    - filterFresh in getItems
+    - filterMissing (check on holiday items, missing itms, and immutable items) in getItems
+    - extraction of comments votes from getItems query

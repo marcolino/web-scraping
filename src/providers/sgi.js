@@ -45,7 +45,8 @@ async function listPageEvaluate(region, page) {
           data.provider = info.key;
           data.region = region;
           data.type = info.type;
-          data.missing = false;
+          //data.missing = false;
+          data.immutable = info.immutable;
           data.images = [];
 
           try { // url
@@ -84,10 +85,9 @@ async function listPageEvaluate(region, page) {
             throw(new Error(`reading url ${url} looking for main image: ${err.message}`));
           }
 
-          try { // holiday
-            data.holiday = !!item.querySelector("span.vacanza");
-            if (data.holiday) {
-              data.missing = true;
+          try { // on holiday
+            data.onHoliday = !!item.querySelector("span.vacanza");
+            if (data.onHoliday) {
               delete data.phone; // avoid returning a phone of a missing person (to avoid overwriting old value, possibly a better one)
             }
           } catch (err) {

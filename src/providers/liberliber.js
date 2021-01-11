@@ -8,7 +8,7 @@ const info = {
   url: "https://www.liberliber.it/",
   listUrl: "https://www.liberliber.it/online/opere/audiolibri/elenco-per-opere/",
   immutable: false,
-  disableScraping: false,
+  disableScraping: true,
 };
 
 async function listPageEvaluate(region, page) {
@@ -32,6 +32,7 @@ async function listPageEvaluate(region, page) {
           const data = {};
           data.provider = info.key;
           data.type = info.type;
+          data.immutable = info.immutable;
 
           data.book = {}
           try { // url book

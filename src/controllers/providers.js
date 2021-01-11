@@ -38,11 +38,13 @@ exports.scrapeProviders = async(req) => {
           const result = await scrapeProvider(provider, regions[r])
           results = results.concat(result);
         }
-        // save last scrape timestamp in globals
+        // save last scrape timestamp for this provider in globals
         await globalsSet(`lastScrapeTimestamp-${provider.info.key}`, new Date().toISOString());
         return results;
       })
     )).flat(); // we flat-out due to Promise.All
+    // save last scrape timestamp in globals
+    await globalsSet(`lastScrapeTimestamp`, new Date().toISOString());
     //logger.debug(`Request ${req.requestId} successful: ${data.length} providers scraped`); // TODO
     logger.info(`providers.scrapeProviders.finishing.${req.requestId}.success: ${data.length}`);
   } catch (err) {
@@ -53,7 +55,7 @@ exports.scrapeProviders = async(req) => {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
 
-exports.scrapeProvidersPersonsImages = async (req) => {
+exports.scrapeProvidersImages = async (req) => {
   try {
     const regionDescriptor = req.body.regionDescriptor || '*';
     const providers = getProvidersByRegion(regionDescriptor);
@@ -63,7 +65,7 @@ exports.scrapeProvidersPersonsImages = async (req) => {
         const regions = getProviderRegions(provider, regionDescriptor);
         let results = 0;
         for (let r = 0; r < regions.length; r++) {
-          const result = await scrapeProviderPersonsImages(provider, regions[r]);
+          const result = await scrapeProviderImages(provider, regions[r]);
           results += result;
         }
         return results;
@@ -104,12 +106,12 @@ const scrapeProviderMultiListAndItems = async (provider, region, page) => {
     const list = await scrapeList(provider, region, page, nextListPage);
     nextListPage = list && list.length ? list[list.length-1].nextListPage : null;
     let items = await scrapeItems(provider, region, page, list);
-    if (items && items.length && items[items.length-1].itemFoundBreakMultiPage) { // one item was found in immutable provider: break multi page loop
+    if (items && items.length && items[items.length-1].itemFoundBreakMultiPage) { // one item was found existing in immutable provider: break multi page loop
       items.pop();
       nextListPage = null; // break loop
     }
     itemsMultiPage = itemsMultiPage.concat(items);
-//break;
+break;
   } while (nextListPage);
   return itemsMultiPage;
 }
@@ -131,7 +133,7 @@ const scrapeItems = async (provider, region, page, list) => {
         if (item.id) { // this is not a dummy item for multi-page handling
           if (provider.info.immutable) { // this provider pages are immutable: avoid reparsing already present items
             const exists = await itemExists(item); // check if already present, to avoid reparsing already present items...
-            if (exists) { // item found in immutable provider list: break and signal multi-page handle to break
+            if (exists) { // item found existing in immutable provider list: break and signal multi-page handle to break
               itemsFull.push({itemFoundBreakMultiPage: true});
               break;
             }
@@ -166,7 +168,7 @@ const scrapeItems = async (provider, region, page, list) => {
   }
 }
 
-scrapeProviderPersonsImages = async (provider, region) => {
+scrapeProviderImages = async (provider, region) => {
   try {
     const type = "persons";
     const Items = require("../models/Items" + "." + type);
@@ -585,10 +587,10 @@ globalsSet = async(key, value) => {
 //           providersByRegion = getProvidersByRegion(regionDescriptor);
 //           await scrapeProviders(providersByRegion, regionDescriptor, {email: 'marco.solari@gmail.com', password: 'password'}, );
 //           break;
-//         case "scrapeProvidersPersonsImages":
+//         case "scrapeProvidersImages":
 //           regionDescriptor = args[1] || '*';
 //           providersByRegion = getProvidersByRegion(regionDescriptor);
-//           await scrapeProvidersPersonsImages(providersByRegion, regionDescriptor, {email: 'marco.solari@gmail.com', password: 'password'}, );
+//           await scrapeProvidersImages(providersByRegion, regionDescriptor, {email: 'marco.solari@gmail.com', password: 'password'}, );
 //           break;
 //         case "scrapeSchedule":
 //           regionDescriptor = args[1] || '*';

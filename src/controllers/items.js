@@ -1,23 +1,68 @@
 const { ObjectID } = require('mongodb');
 const logger = require('../logger');
+const globals = require('../models/Globals');
 const items = require('../models/Items.' + 'persons'); // TODO: make persons a variable...
 
 async function getItems(req, res, next) {
   try {
     const filter = req.body.filter;
+    const flags = req.body.flags;
+
+    //const oldest = 1;
+    //const lastScrapeTimestamp = // TODO: use the second solution after lastScrapeTimestamp exists in globals
+      //await globals.findOne({ key: { $regex: /^lastScrapeTimestamp-/ } }, {}, { sort: { 'value': oldest } }).exec()
+    const lastScrapeTimestamp = await globals.find({ key: 'lastScrapeTimestamp' }).exec();
+console.log(`lastScrapeTimestamp:`, lastScrapeTimestamp.value, typeof lastScrapeTimestamp.value);
+
+    const filterFresh = flags && flags.onlyFresh ? { isFresh: true } : {}; // select only fresh items, if requested
+  //const filterFresh = flags && flags.onlyFresh ? { dateInserted: { $ge: lastScrapeTimestamp.value } } : {}, // select only fresh items, if requested
+    const filterMissing = flags && flags.missingToo ? {} : { onHoliday: false, $or: [ { dateUpdated: { $gte: lastScrapeTimestamp.value } }, { immutable: true } ] }; // select missing items, too, if requested
+
     const itemsList = await items.
       find(
-        { ...filter, missing: false, }, // TODO: forcing missing: false, should force only if not specified in request ...
-        {missing: 1, _id: 0, provider:1, id:1, dateUpdated:1, url:1, title:1, imagesCount:1, commentsCount:1}
+        {
+          ...filter,
+          ...filterFresh,
+          ...filterMissing,
+        },
+        {
+          _id: 0,
+          missing: 1,
+          dateUpdated: 1,
+          provider: 1,
+          id: 1,
+          url: 1,
+          title: 1,
+          phone: 1,
+          suspicious: 1,
+          isFresh: 1,
+          images: { $size: "$images" },
+          comments: { $size: "$comments" },
+        }
       ).
-      select({
-        images: { $elemMatch: {category: 'main'}}
+      select({ // TODO: what happens if an item has no main image? we want it too...
+        images: 1, //{ $elemMatch: { category: 'main' }},
+        comments: 1,
       }).
-      sort({dateUpdated: 'descending'})
+      sort({dateInserted: 'descending', dateUpdated: 'descending'})
     ;
+
+    // TODO: check how long does this take for big queries...
+    // calculate average vote for each item in list
+    //for (let i = 0; i < itemsList.length; i++) {
+    for (const item of itemsList) {
+logger.debug(`item:`, item);
+      //const item = itemsList[i];
+      item.averageVote = item.comments.reduce((sum, value) => {
+        return sum + value.vote;
+      }, 0);
+      delete item.comments;
+    }
+logger.debug(`itemsList:`, itemsList);
+
     res.status(200).json({ message: `${itemsList.length} items found`, data: itemsList });
   } catch (err) {
-    res.status(500).json({ message: `can't get items: ${err}` });
+    res.status(500).json({ message: `can't get items: ${err}`, stack: err.stack });
   }
 }
 

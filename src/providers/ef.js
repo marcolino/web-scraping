@@ -18,7 +18,7 @@ const info = {
   mediumPricePerHalfHour: 120,
   mediumPricePerHour: 200,
   immutable: false,
-  //disableScraping: true,
+  disableScraping: true,
 };
 
 const logger = require('../logger');
@@ -53,7 +53,8 @@ async function listPageEvaluate(region, page) {
           data.provider = info.key;
           data.region = region;
           data.type = info.type;
-          data.missing = false;
+          //data.missing = false;
+          data.immutable = info.immutable;
           data.images = [];
 
           try { // url

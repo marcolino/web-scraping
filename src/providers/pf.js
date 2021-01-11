@@ -53,8 +53,9 @@ async function listPageEvaluate(region, page, nextListPage) {
           data.provider = info.key;
           data.region = region;
           data.type = info.type;
-          data.missing = false;
-          data.holiday = false;
+          //data.missing = false;
+          data.immutable = info.immutable;
+          data.onHoliday = false;
           data.images = [];
 
           try {
@@ -222,10 +223,35 @@ const itemPageEvaluate = async (region, page, item) => {
           }
 
           try { // text
-            textElement = block.querySelector("article.message-body");
+            const textElement = block.querySelector("article.message-body");
             data.comments[index].text = textElement ? textElement.innerText.replace(/\n/gm, 'ˬ').replace(/.*DATI DELL'INSERZIONISTA\s*:?\s*(.*)\s*ˬ*$/gm, '$1').replace(/ˬ/gm, '\n').replace(/\n*/, '').replace(/\s*/, '').replace(/\n*$/, '').replace(/\s*$/, '') : null;
           } catch (err) {
             throw(new Error(`reading url ${url} looking for text: ${err.message}`));
+          }
+
+          try { // vote ([1-5] / 5 stars)
+            const voteElements = block.querySelectorAll("img[alt='🌟']");
+            if (voteElements) { // vote was expressed with star images
+              // TODO: check if 0 stars is an acceptable vote (and how)... if not, 1 stars => 0, 5 stars => 1 (vote = (n-1)/4); otherwise, 0 stars => 0, 5 stars => 1 (vote = n/5)
+              data.comments[index].vote = (voteElements.length - 1) / 4;
+console.log(`VOTE (IMG) for person ${data.provider} ${data.id} comment ${index}: ${data.comments[index].vote}`);
+            } else { // vote was expressed with unicode stars
+              const starsOn = (block.innerText.match(/★?/gm) || []).length;
+              const starsOff = (block.innerText.match(/☆?/gm) || []).length;
+              if (starsOn > 0 || starsOff > 0) { // a meaningful result (for example: "★★★★☆")
+                // 0, 5 => 0 / 5 (0.0)
+                // 1, 4 => 1 / 5 (0.2)
+                // 2, 3 => 2 / 5 (0.4)
+                // 3, 2 => 3 / 5 (0.6)
+                // 4, 1 => 4 / 5 (0.8)
+                // 5, 0 => 5 / 5 (1.0)
+                data.comments[index].vote = starsOn / (starsOn + starsOff);
+console.log(`VOTE (UNICODE) for person ${data.provider} ${data.id} comment ${index}: ${data.comments[index].vote}`);
+              }
+else {console.log(`VOTE (NOT FOUND) for person ${data.provider} ${data.id} comment ${index}`);}
+            }
+          } catch (err) {
+            throw (new Error(`reading url ${url} looking for vote: ${err.message}`));
           }
 
         });

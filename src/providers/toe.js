@@ -40,8 +40,9 @@ async function listPageEvaluate(region, page) {
           data.provider = info.key;
           data.region = region;
           data.type = info.type;
-          data.missing = false;
-          data.holiday = false;
+          //data.missing = false;
+          data.immutable = info.immutable;
+          data.onHoliday = false;
           data.images = [];
           
           try { // url

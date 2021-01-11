@@ -121,11 +121,11 @@ const schemaPersons = new Schema({
   additionalInfo: {
     type: String,
   },
-  missing: {
-    type: Boolean,
-    default: false,
-  },
-  holiday: {
+  // missing: {
+  //   type: Boolean,
+  //   default: false,
+  // },
+  onHoliday: {
     type: Boolean,
     default: false,
   },
@@ -153,6 +153,9 @@ const schemaPersons = new Schema({
       date: {
         type: Date,
       },
+      vote: {
+        type: Number, // [ 0 - 1 ]
+      },
     }
   ],
   commentsCount: {
@@ -166,20 +169,36 @@ const schemaPersons = new Schema({
   suspicious: {
     type: Boolean,
   },
+  isFresh: {
+    type: Boolean,
+  },
 }, { timestamps: {createdAt: 'dateCreated', updatedAt: 'dateUpdated'} }); // timestamps option: automatically add 'createdAt' and 'updatedAt' timestamps
 
 // indexes
 schemaPersons.index({ id: 1, provider: 1, region: 1 }, { unique: true });
 
-schemaPersons.pre('validate', (next) => {
-  this.imagesCount = this.images.length;
-  this.commentsCount = this.comments.length;
-  logger.warn(`*********************** PRE VALIDATE:, ${this.images.length}, ${this.imagesCount}, ${this.commentsCount}`);
+schemaPersons.pre('save', (next) => {
+  this.isFresh = this.isNew;
   next();
 });
 
+// schemaPersons.post('save', next => {
+//   if (this.isFresh) {
+//     // ...
+//   }
+//   next();
+// });
+
+// TODO: this doesn't looks like it's working
+// schemaPersons.pre('validate', (next) => {
+//   this.imagesCount = this.images.length;
+//   this.commentsCount = this.comments.length;
+//   logger.warn(`*********************** PRE VALIDATE:, ${this.images.length}, ${this.imagesCount}, ${this.commentsCount}`);
+//   next();
+// });
+
 // // static class (model) methods
-// schemaPersons.statics.isPresent = async function(item) {
+// schemaPersons.statics.isPresent = async(item) => {
 //     try {
 //       const result = mongoose.model('Globals').findOne({ key: `lastScrapeTimestamp-${item.provider}`).exec();
 //       cons item = this.model('items.persons').findOne({provider: item.provider, id: item.id}).exec();
@@ -192,13 +211,23 @@ schemaPersons.pre('validate', (next) => {
 // };
 
 // object (instance) methods
-schemaPersons.methods.isPresent = async function() {
+schemaPersons.methods.isPresent = async() => {
   try {
     const lastScrapeTimestamp = await mongoose.model('Globals').findOne({ key: `lastScrapeTimestamp-${this.provider}` }).exec();
     //logger.debug(`lastScrapeTimestamp: ${lastScrapeTimestamp.value} <= this.dateUpdated: ${this.dateUpdated}`);
     return lastScrapeTimestamp.value <= this.dateUpdated;
   } catch (err) {
     throw(new Error(`error in schemaPersons.methods.isPresent: ${err}`));
+  }
+};
+
+schemaPersons.methods.isFreshy = async() => { // TODO: possibly unused, if isFresh workls as expected...
+  try {
+    const lastScrapeTimestamp = await mongoose.model('Globals').findOne({ key: `lastScrapeTimestamp-${this.provider}` }).exec();
+    //logger.debug(`lastScrapeTimestamp: ${lastScrapeTimestamp.value} <= this.dateInserted: ${this.dateInserted}`);
+    return lastScrapeTimestamp.value <= this.dateInserted;
+  } catch (err) {
+    throw (new Error(`error in schemaPersons.methods.isPresent: ${err}`));
   }
 };
 

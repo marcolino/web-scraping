@@ -109,10 +109,10 @@ const schema = new Schema({
   selfDescription: {
     type: String,
   },
-  missing: {
-    type: Boolean,
-    default: false,
-  },
+  // missing: {
+  //   type: Boolean,
+  //   default: false,
+  // },
   holiday: {
     type: Boolean,
     default: false,
