@@ -1,0 +1,24 @@
+{ 
+    "_id" : ObjectId("5ff5fb21b5a3f5918d979967"), 
+    "key" : "lastScrapeTimestamp-pf", 
+    "__v" : NumberInt(0), 
+    "value" : ISODate("2021-01-09T20:38:57.892+0000")
+}
+{ 
+    "_id" : ObjectId("5ff5fbc8b5a3f5918d979a42"), 
+    "key" : "lastScrapeTimestamp-ef", 
+    "__v" : NumberInt(0), 
+    "value" : ISODate("2021-01-09T20:40:36.508+0000")
+}
+{ 
+    "_id" : ObjectId("5ff5fc07b5a3f5918d979ab3"), 
+    "key" : "lastScrapeTimestamp-toe", 
+    "__v" : NumberInt(0), 
+    "value" : ISODate("2021-01-09T20:41:30.550+0000")
+}
+{ 
+    "_id" : ObjectId("5ff9ca09edc55522743f5723"), 
+    "key" : "lastScrapeTimestamp-sgi", 
+    "__v" : NumberInt(0), 
+    "value" : ISODate("2021-01-09T21:02:47.131+0000")
+}

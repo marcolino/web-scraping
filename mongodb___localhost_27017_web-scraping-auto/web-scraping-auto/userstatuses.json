@@ -1,0 +1,10 @@
+{ 
+    "_id" : ObjectId("5f420d946f9abac0cdac8981"), 
+    "item" : ObjectId("5f414188f291dc6872eb3e8d"), 
+    "user" : ObjectId("5f4109b424c0014651192f81"), 
+    "__v" : NumberInt(0), 
+    "dateCreated" : ISODate("2020-08-23T06:32:52.629+0000"), 
+    "dateUpdated" : ISODate("2020-08-23T06:34:01.890+0000"), 
+    "note" : "very nice", 
+    "vote" : 0.8
+}
