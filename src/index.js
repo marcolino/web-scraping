@@ -9,10 +9,10 @@ const express = require("express")
 // const swaggerSpec = require('../swagger');
 
 // const { dbConnect } = require('./utils/db');
-/// const usersRoutes = require('./routes/users');
-// const itemsRoutes = require('./routes/items');
-// const providersRoutes = require('./routes/providers');
-const logger = require('./logger');
+const usersRoutes = require('./routes/users');
+const itemsRoutes = require('./routes/items');
+const providersRoutes = require('./routes/providers');
+//const logger = require('./logger');
 const config = require('./config');
 
 const app = express()
