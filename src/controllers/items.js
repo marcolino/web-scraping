@@ -8,8 +8,10 @@ async function getItems(req, res, next) {
     const filter = req.body.filter;
     const flags = req.body.flags;
 
-    const itemsList = await items.find();
-return res.status(200).json({ message: `${itemsList.length} items found`, data: itemsList });
+const lastScrapeTimestamp = await globals.find({ key: 'lastScrapeTimestamp' }).exec();
+console.log(`lastScrapeTimestamp:`, lastScrapeTimestamp.value, typeof lastScrapeTimestamp.value);
+    const itemsListDEBUG = await items.find();
+    return res.status(200).json({ message: `${itemsListDEBUG.length} items found`, data: itemsListDEBUG });
 
     //const oldest = 1;
     //const lastScrapeTimestamp = // TODO: use the second solution after lastScrapeTimestamp exists in globals
