@@ -24,8 +24,8 @@ async function getItems(req, res, next) {
       find(
         {
           ...filter,
-          ...filterFresh,
-          ...filterMissing,
+          //...filterFresh,
+          //...filterMissing,
         },
         {
           _id: 0,
