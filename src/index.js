@@ -58,22 +58,9 @@ app.use((error, req, res, next) => {
 })
 
 // connect to the database instance
-//dbConnect().then(async () => {
-// start the server
-app.listen(process.env.PORT || 5000 /*config.serverPort*/, async () => {
-  //console.log(`listening on port ${process.env.PORT || 5000}`);
+dbConnect().then(async () => {
+  // start the server
+  app.listen(process.env.PORT || 5000 /*config.serverPort*/, async () => {
+    //console.log(`listening on port ${process.env.PORT || 5000}`);
+  });
 });
-//});
-
-
-// // use the express-static middleware
-// app.use(express.static("public"))
-
-// // define the first route
-// app.get("/", function (req, res) {
-//   res.send("<h1>Hello World!</h1>")
-// })
-
-// // start the server listening for requests
-// app.listen(process.env.PORT || 3000,
-//   () => console.log("Server is running..."));
