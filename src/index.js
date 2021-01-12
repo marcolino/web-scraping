@@ -62,7 +62,7 @@ app.use((error, req, res, next) => {
 // connect to the database instance
 dbConnect().then(async () => {
   // start the server
-  app.listen(config.serverPort, async () => {
+  app.listen(process.env.PORT /*config.serverPort*/, async () => {
     console.log(`listening on port ${config.serverPort}`);
   });
 });

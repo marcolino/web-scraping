@@ -2,7 +2,7 @@
   "name": "web-scraping",
   "version": "1.0.1",
   "description": "",
-  "main": "index.js",
+  "main": "node src/",
   "scripts": {
     "start": "nodemon --quiet node src/",
     "NOstart-with-swagger": "NODE_ENV=development nodemon --quiet --watch src/ node ./swagger.js",
