@@ -4,7 +4,8 @@
   "description": "",
   "main": "node src/",
   "scripts": {
-    "start": "nodemon --quiet node src/",
+    "start": "node src/",
+    "start:dev": "nodemon --quiet node src/",
     "NOstart-with-swagger": "NODE_ENV=development nodemon --quiet --watch src/ node ./swagger.js",
     "run": "NODE_ENV=development node src/",
     "run-with-swagger": "NODE_ENV=development node swagger",
