@@ -8,16 +8,13 @@ async function getItems(req, res, next) {
     const filter = req.body.filter;
     const flags = req.body.flags;
 
-    const lastScrapeTimestampDEBUG = await globals.findOne({ key: 'lastScrapeTimestamp' }).exec();
-    console.log(`lastScrapeTimestampDEBUG:`, lastScrapeTimestampDEBUG.value, typeof lastScrapeTimestampDEBUG.value);
-    const itemsListDEBUG = await items.find();
-    return res.status(200).json({ message: `${itemsListDEBUG.length} items found`, data: itemsListDEBUG });
-
+    const lastScrapeTimestamp = await globals.findOne({ key: 'lastScrapeTimestamp' }).exec();
+    console.log(`lastScrapeTimestamp:`, lastScrapeTimestamp.value, typeof lastScrapeTimestamp.value);
     //const oldest = 1;
     //const lastScrapeTimestamp = // TODO: use the second solution after lastScrapeTimestamp exists in globals
-      //await globals.findOne({ key: { $regex: /^lastScrapeTimestamp-/ } }, {}, { sort: { 'value': oldest } }).exec()
-    const lastScrapeTimestamp = await globals.find({ key: 'lastScrapeTimestamp' }).exec();
-console.log(`lastScrapeTimestamp:`, lastScrapeTimestamp.value, typeof lastScrapeTimestamp.value);
+    //  await globals.findOne({ key: { $regex: /^lastScrapeTimestamp-/ } }, {}, { sort: { 'value': oldest } }).exec()
+
+//  const itemsListDEBUG = await items.find(); return res.status(200).json({ message: `${itemsListDEBUG.length} items found`, data: itemsListDEBUG });
 
     const filterFresh = flags && flags.onlyFresh ? { isFresh: true } : {}; // select only fresh items, if requested
   //const filterFresh = flags && flags.onlyFresh ? { dateInserted: { $ge: lastScrapeTimestamp.value } } : {}, // select only fresh items, if requested
