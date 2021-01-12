@@ -14,7 +14,8 @@
   },
   "scripts": {
     "dev": "nodemon --quiet node src/",
-    "start": "serve -s build",
+    "startNO": "serve -s build",
+    "start": "node src/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],

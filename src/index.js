@@ -63,6 +63,6 @@ app.use((error, req, res, next) => {
 dbConnect().then(async () => {
   // start the server
   app.listen(process.env.PORT || 5000 /*config.serverPort*/, async () => {
-    console.log(`listening on port ${config.serverPort}`);
+    console.log(`listening on port ${process.env.PORT || 5000}`);
   });
 });
