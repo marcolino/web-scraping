@@ -33,7 +33,7 @@ app.use(morgan((process.env.NODE_ENV !== 'production') ? 'dev' : 'combined'));
 
 // adding routes
 app.use(`/users`, usersRoutes);
-app.use(`/items`, itemsRoutes);
+app.use(`/items`, itemsRoutes); 
 app.use(`/providers`, providersRoutes);
 app.use(`/doc`, swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
