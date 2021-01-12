@@ -6,7 +6,7 @@ const helmet = require('helmet');
 const morgan = require('morgan');
 
 const swaggerUi = require('swagger-ui-express');
-// const swaggerSpec = require('../swagger');
+const swaggerSpec = require('../swagger');
 
 // const { dbConnect } = require('./utils/db');
 //const usersRoutes = require('./routes/users');
