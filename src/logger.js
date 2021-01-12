@@ -53,7 +53,7 @@ const logger = winston.createLogger({
       ...options.file,
       //format: winstonFileFormat,
     }),
-    (process.env.NODE_ENV !== 'production') &&
+    //(process.env.NODE_ENV !== 'production') &&
     new (winston.transports.Console)({
       ...options.console,
       //format: winstonConsoleFormat,
