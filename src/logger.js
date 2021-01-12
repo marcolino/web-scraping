@@ -4,19 +4,19 @@ const winston = require('winston');
 // define the custom settings for each transport (file, console)
 var options = {
   file: {
-    // level: 'info',
-    // filename: `${appRoot}/logs/web-scraping.log`,
-    // handleExceptions: true,
-    // json: true,
-    // maxSize: 5242880, // 5 MB
-    // maxFiles: '10d', // 10 days
-    // colorize: false,
+    level: 'info',
+    filename: `${appRoot}/logs/web-scraping.log`,
+    handleExceptions: true,
+    json: true,
+    maxSize: 5242880, // 5 MB
+    maxFiles: '10d', // 10 days
+    colorize: false,
   },
   console: {
-    // level: 'debug',
-    // handleExceptions: true,
-    // json: false,
-    // colorize: true,
+    level: 'debug',
+    handleExceptions: true,
+    json: false,
+    colorize: true,
   },
 };
 
@@ -51,15 +51,15 @@ const logger = winston.createLogger({
   transports: [
     new (winston.transports.File)({
       ...options.file,
-      //format: winstonFileFormat,
+      format: winstonFileFormat,
     }),
     //(process.env.NODE_ENV !== 'production') &&
     new (winston.transports.Console)({
       ...options.console,
-      //format: winstonConsoleFormat,
+      format: winstonConsoleFormat,
     })
   ],
-  //exitOnError: false, // do not exit on handled exceptions
+  exitOnError: false, // do not exit on handled exceptions
 });
 
 module.exports = (...args) => console.log(...args);
