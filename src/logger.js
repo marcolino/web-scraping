@@ -20,33 +20,33 @@ var options = {
   },
 };
 
+// define a winston format for file
+const winstonFileFormat = winston.format.combine(
+  winston.format.timestamp({
+    format: "YYYY-MM-DD HH:mm:ss.SSS"
+  }),
+  winston.format.printf(
+    info => `${info.timestamp} ${info.level}: ${info.message}`
+  )
+);
+
+// define a winston format for console
+const winstonConsoleFormat = winston.format.combine(
+  winston.format.colorize({
+    all: true
+  }),
+  winston.format.label({
+    label: "LOG"
+  }),
+  winston.format.timestamp({
+    format: "YYYY-MM-DD HH:mm:ss.SSS"
+  }),
+  winston.format.printf(
+    info => `${info.label} ${info.timestamp} ${info.level}: ${info.message}`
+  )
+);
+
 module.exports = (...args) => console.log(...args);
-
-// // define a winston format for file
-// const winstonFileFormat = winston.format.combine(
-//   winston.format.timestamp({
-//     format: "YYYY-MM-DD HH:mm:ss.SSS"
-//   }),
-//   winston.format.printf(
-//     info => `${info.timestamp} ${info.level}: ${info.message}`
-//   )
-// );
-
-// // define a winston format for console
-// const winstonConsoleFormat = winston.format.combine(
-//   winston.format.colorize({
-//     all: true
-//   }),
-//   winston.format.label({
-//     label: "LOG"
-//   }),
-//   winston.format.timestamp({
-//     format: "YYYY-MM-DD HH:mm:ss.SSS"
-//   }),
-//   winston.format.printf(
-//     info => `${info.label} ${info.timestamp} ${info.level}: ${info.message}`
-//   )
-// );
 
 // // instantiate a new winston logger
 // const logger = winston.createLogger({
