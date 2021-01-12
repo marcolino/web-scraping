@@ -12,7 +12,16 @@
     "debug-with-swagger": "NODE_ENV=development node swagger",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": ["web", "scraping"],
+  "scripts_OLD": {
+    "start": "node src/",
+    "start:dev": "nodemon --quiet node src/",
+    "NOstart-with-swagger": "NODE_ENV=development nodemon --quiet --watch src/ node ./swagger.js",
+    "run": "NODE_ENV=development node src/",
+    "run-with-swagger": "NODE_ENV=development node swagger",
+    "NOswagger-autogen": "node swagger",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
   "author": "Marco Solari <marcosolari@gmail.com>",
   "license": "ISC",
   "dependencies": {
