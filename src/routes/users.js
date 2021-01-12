@@ -42,7 +42,7 @@ const { signin, signup, profile } = require('../controllers/users');
 //  *       403:
 //  *         description: User is not authenticated
 //  */
-// router.post('/signup', public, (...args) => signup(...args));
+router.post('/signup', /*public, */(...args) => signup(...args));
 
 // /**
 //  * @swagger
