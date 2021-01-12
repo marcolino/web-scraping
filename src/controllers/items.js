@@ -52,14 +52,16 @@ async function getItems(req, res, next) {
     // TODO: check how long does this take for big queries...
     // calculate average vote for each item in list
     //for (let i = 0; i < itemsList.length; i++) {
-    for (const item of itemsList) {
-logger.debug(`item: ${item.comments.vote}`);
-      item.averageVote = item.comments.reduce((sum, value) => {
-        return sum + value.vote;
-      }, 0);
-      delete item.comments;
-    }
-//logger.debug(`itemsList: ${itemsList}`);
+// logger.debug(`itemsList for start: ${new Date()}`);
+//     for (const item of itemsList) {
+// //logger.debug(`item: ${item.comments.vote}`);
+//       item.averageVote = item.comments.reduce((sum, value) => {
+//         return sum + value.vote;
+//       }, 0);
+//       delete item.comments;
+//     }
+// //logger.debug(`itemsList: ${itemsList}`);
+// logger.debug(`itemsList for end  : ${new Date()}`);
 
     res.status(200).json({ message: `${itemsList.length} items found`, data: itemsList });
   } catch (err) {
