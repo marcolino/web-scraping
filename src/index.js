@@ -53,7 +53,7 @@ app.use((req, res) => {
 
 // error handler middleware
 app.use((error, req, res, next) => {
-  console.error(error.stack);
+  //console.error(error.stack);
   res.status(500).json({ message: `internal server error: ${error}`, stack: error.stack }); // error.stack is available only if dev
 })
 
@@ -61,7 +61,7 @@ app.use((error, req, res, next) => {
 //dbConnect().then(async () => {
 // start the server
 app.listen(process.env.PORT || 5000 /*config.serverPort*/, async () => {
-  console.log(`listening on port ${process.env.PORT || 5000}`);
+  //console.log(`listening on port ${process.env.PORT || 5000}`);
 });
 //});
 
