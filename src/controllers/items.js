@@ -9,7 +9,7 @@ async function getItems(req, res, next) {
     const flags = req.body.flags;
 
     const lastScrapeTimestampDEBUG = await globals.find({ key: 'lastScrapeTimestamp' }).exec();
-    console.log(`lastScrapeTimestampDEBUG:`, lastScrapeTimestampDEBUG.value, typeof lastScrapeTimestampDEBUG.value);
+    console.log(`lastScrapeTimestampDEBUG:`, lastScrapeTimestampDEBUG, typeof lastScrapeTimestampDEBUG);
     const itemsListDEBUG = await items.find();
     return res.status(200).json({ message: `${itemsListDEBUG.length} items found`, data: itemsListDEBUG });
 
