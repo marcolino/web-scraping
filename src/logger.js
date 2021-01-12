@@ -62,14 +62,13 @@ const logger = winston.createLogger({
   exitOnError: false, // do not exit on handled exceptions
 });
 
-module.exports = (...args) => console.log(...args);
-// process.on('unhandledRejection', (error) =>{
-//   logger.error(`unhandled exception ${error.stack ? error.stack : ''}`);
-// });
+process.on('unhandledRejection', (error) =>{
+  logger.error(`unhandled exception ${error.stack ? error.stack : ''}`);
+});
 
-// process.on('uncaughtException', (error) =>{
-//   logger.error(`uncaught exception ${error.stack ? error.stack : ''}`);
-// });
+process.on('uncaughtException', (error) =>{
+  logger.error(`uncaught exception ${error.stack ? error.stack : ''}`);
+});
 
 // // // create a stream object with a 'write' function that will be used by `morgan`
 // // logger.stream = {
@@ -79,4 +78,5 @@ module.exports = (...args) => console.log(...args);
 // //   },
 // // };
 
-// module.exports = logger;
+module.exports = logger;
+//module.exports = (...args) => console.log(...args);
