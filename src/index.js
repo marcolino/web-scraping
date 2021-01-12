@@ -1,15 +1,14 @@
 // create an express app
 const express = require("express")
-const bodyParser = require('body-parser');
-const cors = require('cors');
-const helmet = require('helmet');
-const morgan = require('morgan');
+// const bodyParser = require('body-parser');
+// const cors = require('cors');
+// const helmet = require('helmet');
+// const morgan = require('morgan');
 
-const swaggerUi = require('swagger-ui-express');
-const swaggerSpec = require('../swagger');
+// const swaggerUi = require('swagger-ui-express');
+// const swaggerSpec = require('../swagger');
 
-//const { startDatabase } = require('./controllers/db');
-const { dbConnect } = require('./utils/db');
+// const { dbConnect } = require('./utils/db');
 const usersRoutes = require('./routes/users');
 const itemsRoutes = require('./routes/items');
 const providersRoutes = require('./routes/providers');
