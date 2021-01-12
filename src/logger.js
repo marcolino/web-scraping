@@ -51,15 +51,15 @@ const logger = winston.createLogger({
   transports: [
     new (winston.transports.File)({
       ...options.file,
-      format: winstonFileFormat,
+      //format: winstonFileFormat,
     }),
     (process.env.NODE_ENV !== 'production') &&
     new (winston.transports.Console)({
       ...options.console,
-      format: winstonConsoleFormat,
+      //format: winstonConsoleFormat,
     })
   ],
-  exitOnError: false, // do not exit on handled exceptions
+  //exitOnError: false, // do not exit on handled exceptions
 });
 
 module.exports = (...args) => console.log(...args);
