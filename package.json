@@ -3,7 +3,7 @@
   "version": "1.0.1",
   "description": "",
   "main": "node src/",
-  "engines": {
+  "NOengines": {
     "node": "12.x"
   },
   "ORIGscripts": {

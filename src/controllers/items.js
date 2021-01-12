@@ -8,6 +8,9 @@ async function getItems(req, res, next) {
     const filter = req.body.filter;
     const flags = req.body.flags;
 
+    const itemsList = await items.find();
+return res.status(200).json({ message: `${itemsList.length} items found`, data: itemsList });
+
     //const oldest = 1;
     //const lastScrapeTimestamp = // TODO: use the second solution after lastScrapeTimestamp exists in globals
       //await globals.findOne({ key: { $regex: /^lastScrapeTimestamp-/ } }, {}, { sort: { 'value': oldest } }).exec()

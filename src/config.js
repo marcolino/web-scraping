@@ -7,6 +7,7 @@ exports.roles = [ "admin", "system", "user", "guest" ]; // roles we recognize
 exports.imagesBaseFolder = "./cache/persons/images/";
 exports.debug = false; // debug puppeteer providers scraping
 
+const JWT_SECRET_TOKEN = "secretsecretsecret!";
 const MONGO_USER = "marco";
 const MONGO_PASS = "esticazzi!123";
 const MONGO_DB = "web-scraping";
