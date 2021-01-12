@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
 const uuid = require('uuid');
 //const logger = require('./logger');
+const users = require('./models/Users');
 
 function public(req, res, next) {
   next();
