@@ -1,38 +1,25 @@
 const jwt = require('jsonwebtoken');
 const uuid = require('uuid');
-//const logger = require('./logger');
+const logger = require('./logger');
 const users = require('./models/Users');
+//const jwt = require('express-jwt');
+// const jwksRsa = require('jwks-rsa');
+//
+// const checkJwt = jwt({
+//   secret: jwksRsa.expressJwtSecret({
+//     cache: true,
+//     rateLimit: true,
+//     jwksRequestsPerMinute: 5,
+//     jwksUri: `https://marc0.eu.auth0.com/.well-known/jwks.json`,
+//   }),
 
-// function public(req, res, next) {
-//   next();
-// }
+//   // validate the audience and the issuer
+//   audience: `https://marc0.eu.auth0.com/api/v2/`, // API_IDENTIFIER
+//   issuer: `https://marc0.eu.auth0.com`, // AUTH0_DOMAIN
+//   algorithms: ['RS256']
+// });
 
-// function private(req, res, next) {
-//   next();
-// }
-
-// const jwt = require('jsonwebtoken');
-// const uuid = require('uuid');
-// const logger = require('./logger');
-// const users = require('./models/Users');
-// //const jwt = require('express-jwt');
-// // const jwksRsa = require('jwks-rsa');
-// //
-// // const checkJwt = jwt({
-// //   secret: jwksRsa.expressJwtSecret({
-// //     cache: true,
-// //     rateLimit: true,
-// //     jwksRequestsPerMinute: 5,
-// //     jwksUri: `https://marc0.eu.auth0.com/.well-known/jwks.json`,
-// //   }),
-
-// //   // validate the audience and the issuer
-// //   audience: `https://marc0.eu.auth0.com/api/v2/`, // API_IDENTIFIER
-// //   issuer: `https://marc0.eu.auth0.com`, // AUTH0_DOMAIN
-// //   algorithms: ['RS256']
-// // });
-
-// // roles required per endpoint
+// roles required per endpoint
 const endpointRoles = { // TODO: into database?
   '/providers/scrape': [ 'admin', 'system' ],
   '/providers/scrapeSchedule': [ 'admin', 'system' ],

@@ -1,26 +1,26 @@
+const appRoot = require('app-root-path');
+const winston = require('winston');
+
+// define the custom settings for each transport (file, console)
+var options = {
+  file: {
+    level: 'info',
+    filename: `${appRoot}/logs/web-scraping.log`,
+    handleExceptions: true,
+    json: true,
+    maxSize: 5242880, // 5 MB
+    maxFiles: '10d', // 10 days
+    colorize: false,
+  },
+  console: {
+    level: 'debug',
+    handleExceptions: true,
+    json: false,
+    colorize: true,
+  },
+};
+
 module.exports = (...args) => console.log(...args);
-
-// const appRoot = require('app-root-path');
-// const winston = require('winston');
-
-// // define the custom settings for each transport (file, console)
-// var options = {
-//   file: {
-//     level: 'info',
-//     filename: `${appRoot}/logs/web-scraping.log`,
-//     handleExceptions: true,
-//     json: true,
-//     maxSize: 5242880, // 5 MB
-//     maxFiles: '10d', // 10 days
-//     colorize: false,
-//   },
-//   console: {
-//     level: 'debug',
-//     handleExceptions: true,
-//     json: false,
-//     colorize: true,
-//   },
-// };
 
 // // define a winston format for file
 // const winstonFileFormat = winston.format.combine(

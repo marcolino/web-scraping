@@ -8,7 +8,6 @@ const morgan = require('morgan');
 const swaggerUi = require('swagger-ui-express');
 const swaggerSpec = require('../swagger');
 
-//const { startDatabase } = require('./controllers/db');
 const { dbConnect } = require('./utils/db');
 const usersRoutes = require('./routes/users');
 const itemsRoutes = require('./routes/items');
@@ -18,8 +17,6 @@ const config = require('./config');
 
 // initialize the express app
 const app = express();
-
-//app.set('secretKey', process.env.JWT_SECRET_TOKEN); // jwt secret token
 
 // adding Helmet to enhance your API's security
 app.use(helmet());

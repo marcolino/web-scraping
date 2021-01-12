@@ -12,12 +12,10 @@ const { dbConnect } = require('./utils/db');
 const usersRoutes = require('./routes/users');
 const itemsRoutes = require('./routes/items');
 const providersRoutes = require('./routes/providers');
-//const logger = require('./logger');
+const logger = require('./logger');
 const config = require('./config');
 
 const app = express()
-
-//app.set('secretKey', process.env.JWT_SECRET_TOKEN); // jwt secret token
 
 // adding Helmet to enhance your API's security
 app.use(helmet());
@@ -53,14 +51,15 @@ app.use((req, res) => {
 
 // error handler middleware
 app.use((error, req, res, next) => {
-  //console.error(error.stack);
+  console.error(error.stack);
   res.status(500).json({ message: `internal server error: ${error}`, stack: error.stack }); // error.stack is available only if dev
 })
 
 // connect to the database instance
 dbConnect().then(async () => {
   // start the server
-  app.listen(process.env.PORT || config.defaultServerPort, async () => {
-    console.log(`listening on port ${process.env.PORT || 5000}`);
+  const port = process.env.PORT || config.defaultServerPort;
+  app.listen(port, async () => {
+    console.log(`listening on port ${port}`);
   });
 });
