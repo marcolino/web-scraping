@@ -3,7 +3,7 @@
   "version": "1.0.1",
   "description": "",
   "main": "node src/",
-  "scripts": {
+  "ORIGscripts": {
     "start": "node src/",
     "start:dev": "nodemon --quiet node src/",
     "NOstart-with-swagger": "NODE_ENV=development nodemon --quiet --watch src/ node ./swagger.js",
@@ -11,6 +11,14 @@
     "run-with-swagger": "NODE_ENV=development node swagger",
     "NOswagger-autogen": "node swagger",
     "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "scripts": {
+    "dev": "react-scripts start",
+    "start": "serve -s build",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject",
+    "heroku-postbuild": "yarn build"
   },
   "keywords": [],
   "author": "Marco Solari <marcosolari@gmail.com>",
@@ -33,6 +41,7 @@
     "node-fetch": "^2.6.1",
     "nodemon": "^2.0.4",
     "puppeteer": "^5.5.0",
+    "serve": "^11.3.2",
     "swagger-jsdoc": "^6.0.0",
     "swagger-ui-express": "^4.1.6",
     "uuid": "^8.3.2",
