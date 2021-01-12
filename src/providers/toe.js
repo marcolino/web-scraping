@@ -168,7 +168,6 @@ const itemPageEvaluate = async (region, page, item) => {
           let matches = {};
           document.querySelectorAll("li.list-group-item.bg-transparent").forEach(item => {
             const el = item.innerText;
-            //throw(new Error('DEBUG: ' + JSON.stringify(el)));
             matches = el.match(/^\s*Categoria\s*(.*)\s*/i);
             if (matches && matches.length > 0) data.sexualOrientation = matches[1].replace(/^\s+|\s+$/g, '');
             matches = el.match(/^\s*Eta\s*(.*)\s*/i);
