@@ -25,7 +25,7 @@ async function getItems(req, res, next) {
         {
           ...filter,
           ...filterFresh,
-          ...filterMissing,
+          //...filterMissing,
         },
         {
           _id: 0,
