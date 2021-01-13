@@ -13,6 +13,8 @@ const schema = new Schema({
   },
   password: {
     type: String,
+    default: null,
+    select: false, // hide password from any select
   },
   name: {
     type: String,
@@ -22,7 +24,7 @@ const schema = new Schema({
   },
   role: {
     type: String,
-    enum: config.roles,
+    enum: config.roles.map(r => r.name),
   },
   language: {
     type: String,

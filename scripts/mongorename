@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+#
+# Rename a local database
+
+DB_OLD="${1}"
+DB_NEW="${2}"
+TMP="tmp/mongo/"
+
+mkdir -p "$TMP"
+mongodump --quiet -d "$DB_OLD" -o "$TMP" # export old database to temporary JSON file
+if [ $? -eq 0 ]; then
+  mongorestore --quiet -d "$DB_NEW" "${TMP}${DB_OLD}" # restore temporary JSON file to new database
+  if [ $? -eq 0 ]; then
+    mongo --quiet "$DB_OLD" --eval "db.dropDatabase()" | grep "dropped" > /dev/null # drop old database
+    if [ $? -eq 0 ]; then
+      echo "done"
+    fi
+  fi
+fi
+rm -rf "$TMP"
