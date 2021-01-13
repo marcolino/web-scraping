@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { public, private } = require('../auth');
 const { scrapeProviders, scrapeProvidersImages } = require('../controllers/providers');
-//const logger = require('../logger');
+const logger = require('../logger');
 
 // endpoint to scrape items
 router.post('/scrape', private, async (req, res, next) => {

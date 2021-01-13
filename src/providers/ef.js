@@ -18,7 +18,7 @@ const info = {
   mediumPricePerHalfHour: 120,
   mediumPricePerHour: 200,
   immutable: false,
-  disableScraping: true,
+  //disableScraping: true,
 };
 
 const logger = require('../logger');

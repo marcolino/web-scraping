@@ -7,8 +7,12 @@ exports.roles = [ "admin", "system", "user", "guest" ]; // roles we recognize
 exports.imagesBaseFolder = "./cache/persons/images/";
 exports.debug = false; // debug puppeteer providers scraping
 
-const JWT_SECRET_TOKEN = "secretsecretsecret!";
-const MONGO_USER = "marco";
-const MONGO_PASS = "esticazzi!123";
-const MONGO_DB = "web-scraping";
-exports.MONGO_URI = `mongodb+srv://${MONGO_USER}:${MONGO_PASS}@cluster0.e76px.mongodb.net/${MONGO_DB}?retryWrites=true&w=majority`;
+// const JWT_SECRET_TOKEN = "secretsecretsecret!";
+// const MONGO_USER = "marco";
+// const MONGO_PASS = "esticazzi!123";
+// const MONGO_DB = "web-scraping";
+// exports.MONGO_URI = `mongodb+srv://${MONGO_USER}:${MONGO_PASS}@cluster0.e76px.mongodb.net/${MONGO_DB}?retryWrites=true&w=majority`;
+   
+
+exports.JWT_SECRET_TOKEN = `Tks8wpZ1Kfwrn9WzAjc43k0LuxYmZ`;
+exports.MONGO_URI = `mongodb://localhost:27017/web-scraping-auto`;
