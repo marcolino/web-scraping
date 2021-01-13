@@ -311,7 +311,8 @@ const saveItem = async(item) => {
       { ...item, __v: 0 },
       { upsert: true, new: true, },
     ).exec();
-    //logger.debug('saveItem retval:', retval);
+    logger.debug(`saveItem retval: ${retval}`);
+    logger.debug(`saveItem updateOne modifiedCount: ${retval.modifiedCount}, nModified: ${retval.nModified}`);
     return retval; 
   } catch (err) {
     throw (`error saving item: ${err}`);

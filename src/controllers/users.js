@@ -1,8 +1,9 @@
 //import { statusCodes } from 'http-status-codes';
-const jwt = require('jsonwebtoken');
-const bcrypt = require('bcrypt');
+//const jwt = require('jsonwebtoken');
+//const bcrypt = require('bcrypt');
 const users = require('../models/Users');
-const config = require('../config');
+const { verifyUserPassword } = require('../auth');
+//const config = require('../config');
 
 async function signup(req, res, next) {
   const name = req.body.name;
@@ -46,22 +47,12 @@ async function signin(req, res, next) {
   }
 
   try {
-    const user = await users.findOne({ email });
+    const user = await users.findOne({ email }).select("+password");
     if (!user) {
       return res.status(403).json({ message: "email not found", data: { email } });
     }
-    if (
-      (bcrypt.compareSync(password, user.password)) ||
-      ((process.env.NODE_ENV === 'development') && (password === user.password))
-     ) {
-      const token = jwt.sign(
-        {
-          id: user._id,
-          role: user.role
-        },
-        process.env.JWT_SECRET_TOKEN,
-        user.role !== 'system' ? { expiresIn: config.jwtTokenExpiresIn } : {}
-      );
+    const token = verifyUserPassword(user, password);
+    if (token) {
       return res.status(200).json({ message: "user authenticated successfully", data: { user, token: token } });
     } else {
       return res.status(403).json({ message: "invalid user email/password", data: { email } });

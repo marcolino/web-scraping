@@ -1,7 +1,6 @@
 node_modules
 .DS_Store
 .env
-
 cache/
-logs/
-mongodb___localhost_27017_web-scraping-auto/
+#logs/
+tmp/mongo/

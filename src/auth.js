@@ -1,26 +1,12 @@
 const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
 const uuid = require('uuid');
 const logger = require('./logger');
 const users = require('./models/Users');
-//const jwt = require('express-jwt');
-// const jwksRsa = require('jwks-rsa');
-//
-// const checkJwt = jwt({
-//   secret: jwksRsa.expressJwtSecret({
-//     cache: true,
-//     rateLimit: true,
-//     jwksRequestsPerMinute: 5,
-//     jwksUri: `https://marc0.eu.auth0.com/.well-known/jwks.json`,
-//   }),
-
-//   // validate the audience and the issuer
-//   audience: `https://marc0.eu.auth0.com/api/v2/`, // API_IDENTIFIER
-//   issuer: `https://marc0.eu.auth0.com`, // AUTH0_DOMAIN
-//   algorithms: ['RS256']
-// });
+const config = require('./config');
 
 // roles required per endpoint
-const endpointRoles = { // TODO: into database?
+const endpointRoles = {
   '/providers/scrape': [ 'admin', 'system' ],
   '/providers/scrapeSchedule': [ 'admin', 'system' ],
 };
@@ -71,7 +57,29 @@ const private = (req, res, next) => {
   });
 }
 
+const verifyUserPassword = (user, password) => {
+  console.log('verifyUserPassword', user, password);
+  logger.debug('verifyUserPassword', user, password);
+  if (
+    (bcrypt.compareSync(password, user.password)) ||
+    ((process.env.NODE_ENV === 'development') && (password === user.password)) // while developing we accept clean text passwords too
+  ) {
+    const token = jwt.sign(
+      {
+        id: user._id,
+        role: user.role
+      },
+      process.env.JWT_SECRET_TOKEN,
+      config.roles.find(r => r.name === user.role && r.neverExpires) ? { expiresIn: config.jwtTokenExpiresIn } : {} // some roles will never expire
+      //user.role !== 'system' ? { expiresIn: config.jwtTokenExpiresIn } : {} // 'system' user role will never expire
+    );
+    return token;
+  }
+  return null;
+}
+
 module.exports = {
   public,
   private,
+  verifyUserPassword,
 }
