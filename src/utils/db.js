@@ -4,6 +4,7 @@ const mongoose = require("mongoose");
 
 exports.dbConnect = async () => {
   try {
+    console.log(`connecting to database at ${config.MONGO_URI}`);
     await mongoose
       .connect(config.MONGO_URI, { // TODO: use process.env.MONGO_URI in production
         useUnifiedTopology: true,

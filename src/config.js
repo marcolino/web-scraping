@@ -18,5 +18,6 @@ if (process.env.DB === "cloud") { // TODO: put MONGO_URI in environment, in prod
   const MONGO_DB = "web-scraping";
   exports.MONGO_URI = `mongodb+srv://${MONGO_USER}:${MONGO_PASS}@cluster0.e76px.mongodb.net/${MONGO_DB}?retryWrites=true&w=majority`;
 } else {
-  exports.MONGO_URI = "mongodb://localhost:27017";
+  const MONGO_DB = "web-scraping";
+  exports.MONGO_URI = `mongodb://localhost:27017/${MONGO_DB}`;
 }

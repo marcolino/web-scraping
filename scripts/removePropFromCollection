@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+#
+# Rename a local database
+
+prop="${1:-missing}"
+db="${2-web-scraping}"
+
+echo 'db.items.persons.update({}, {$unset: {missing:1}}, false, true)' | \
+mongo "$db" --quiet | \
+grep -v '^bye$'

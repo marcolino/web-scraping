@@ -109,9 +109,9 @@ const schemaPersons = new Schema({
       type: String
     },
   }],
-  imagesCount: {
-    type: Number,
-  },
+  // imagesCount: {
+  //   type: Number,
+  // },
   adClass: {
     type: String,
   },
@@ -158,9 +158,9 @@ const schemaPersons = new Schema({
       },
     }
   ],
-  commentsCount: {
-    type: Number,
-  },
+  // commentsCount: {
+  //   type: Number,
+  // },
   adUrlReferences: [
     {
       type: String,
@@ -169,18 +169,77 @@ const schemaPersons = new Schema({
   suspicious: {
     type: Boolean,
   },
-  isFresh: {
+  wasNew: {
     type: Boolean,
   },
+  wasModified: {
+    type: Boolean,
+  },
+  // isPresent: {
+  //   type: Boolean,
+  // }
 }, { timestamps: {createdAt: 'dateCreated', updatedAt: 'dateUpdated'} }); // timestamps option: automatically add 'createdAt' and 'updatedAt' timestamps
 
 // indexes
 schemaPersons.index({ id: 1, provider: 1, region: 1 }, { unique: true });
 
-schemaPersons.pre('save', (next) => {
-  this.isFresh = this.isNew;
-  next();
-});
+// schemaPersons.pre('save', function(next) {
+//   this.wasNew = this.isNew;
+//   if (this.wasNew) {
+//     logger.info(`NEW ITEM DETECTED IN PRE SAVE !`);
+//   }
+//   const props = [
+//     'title',
+//     'subtitle',
+//     'url',
+//     'address',
+//     'phone',
+//     'contactInstructions',
+//     'ethnicity',
+//     'nationality',
+//     'age',
+//     'eyesColor',
+//     'hairColor',
+//     'pubicHair',
+//     'tatoo',
+//     'piercings',
+//     'height',
+//     'weight',
+//     'breastSize',
+//     'breastType',
+//     'shoeSize',
+//     'smoker',
+//     'spokenLanguages',
+//     'sexualOrientation',
+//     //'images',
+//     //'imagesCount',
+//     'adClass',
+//     'price',
+//     'additionalInfo',
+//     'onHoliday',
+//     'services',
+//     //'comments',
+//     //'commentsCount',
+//     'adUrlReferences',
+//     'suspicious',
+//   ];
+//   const wasModified = [];
+//   for (let i = 0; i < props.length; i++) {
+//     const prop = props[i];
+//     if (this.isModified(prop)) {
+//       wasModified.push(prop);
+//     }
+//   }
+//   if (wasModified.length) {
+//     logger.debug(`Changed props: ${wasModified} DETECTED IN PRE SAVE`);
+//     wasModified.forEach(prop => logger.debug(` - ${prop}: ${this[prop]}`));
+//     this.wasModified = wasModified;
+//   } else {
+//     //logger.debug(`No changed props DETECTED IN PRE SAVE`);
+//   }
+
+//   next();
+// });
 
 // schemaPersons.post('save', next => {
 //   if (this.isFresh) {
@@ -221,14 +280,30 @@ schemaPersons.methods.isPresent = async() => {
   }
 };
 
-schemaPersons.methods.isFreshy = async() => { // TODO: possibly unused, if isFresh workls as expected...
-  try {
-    const lastScrapeTimestamp = await mongoose.model('Globals').findOne({ key: `lastScrapeTimestamp-${this.provider}` }).exec();
-    //logger.debug(`lastScrapeTimestamp: ${lastScrapeTimestamp.value} <= this.dateInserted: ${this.dateInserted}`);
-    return lastScrapeTimestamp.value <= this.dateInserted;
-  } catch (err) {
-    throw (new Error(`error in schemaPersons.methods.isPresent: ${err}`));
+// schemaPersons.methods.isFreshy = async() => { // TODO: possibly unused, if isFresh workls as expected...
+//   try {
+//     const lastScrapeTimestamp = await mongoose.model('Globals').findOne({ key: `lastScrapeTimestamp-${this.provider}` }).exec();
+//     //logger.debug(`lastScrapeTimestamp: ${lastScrapeTimestamp.value} <= this.dateInserted: ${this.dateInserted}`);
+//     return lastScrapeTimestamp.value <= this.dateInserted;
+//   } catch (err) {
+//     throw (new Error(`error in schemaPersons.methods.isPresent: ${err}`));
+//   }
+// };
+
+schemaPersons.virtual('imagesCount').get(function() {
+  if (this.images) {
+    return this.images.length;
+  } else {
+    return 0;
   }
-};
+});
+
+schemaPersons.virtual('commentsCount').get(function() {
+  if (this.comments) {
+    return this.comments.length;
+  } else {
+    return 0;
+  }
+});
 
 module.exports = mongoose.model(name, schemaPersons);

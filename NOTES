@@ -19,6 +19,19 @@ Providers it:
 Mongo Database:
  - https://cloud.mongodb.com/ (login with google, username: "marco", password: "esticazzi!123", dbname: "web-scraping", connection: "mongodb+srv://<username>:<password>@cluster0.e76px.mongodb.net/<dbname>?retryWrites=true&w=majority")
 
+Mongo import/export:
+ - mongoimport 
+  --host <HOST> 
+  --ssl --username <USERNAME> 
+  --password <PASSWORD> 
+  --authenticationDatabase admin 
+  --db <DATABASE> 
+  --collection <COLLECTION> 
+  --type <FILETYPE> 
+  --file <FILENAME>
+
+ - mongoimport --host cluster0-shard-00-00-xxm0e.mongodb.net:24537 --db ny --collection <entercollectionName> --type json --file C:/data/docs/ny.json --jsonArray --authenticationDatabase admin --ssl --username xyz --password mongodb
+
 Mongo Playground:
  - https://mongoplayground.net/
 

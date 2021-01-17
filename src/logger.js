@@ -10,7 +10,7 @@ var options = {
     json: true,
     maxSize: 5242880, // 5 MB
     maxFiles: '10d', // 10 days
-    colorize: false,
+    colorize: true,
   },
   console: {
     level: 'debug',

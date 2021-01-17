@@ -113,7 +113,7 @@ const schema = new Schema({
   //   type: Boolean,
   //   default: false,
   // },
-  holiday: {
+  onHoliday: {
     type: Boolean,
     default: false,
   },

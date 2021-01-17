@@ -14,7 +14,7 @@ const info = {
   currency: "€", // TODO: put inside country...
   selfModerated: false,
   commentsOnly: true,
-  //immutable: true,
+  immutable: true,
   login: {
     loginRequestTag: 'Hai raggiunto il numero massimo di visualizzazioni',
     url: 'https://community.punterforum.com/login/',
@@ -24,7 +24,7 @@ const info = {
     passwordSelector: "[name='password']",
     submitSelector: "[type='submit']",
   },
-  //disableScraping: true,
+  disableScraping: true,
 };
 
 const logger = require('../logger');

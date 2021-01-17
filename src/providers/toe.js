@@ -24,7 +24,6 @@ async function listPageEvaluate(region, page) {
     const imagesUrl = info.regions[region].imagesUrl;
     if (!url) {
       throw(`region ${region} for provider ${info.key} has no list url`);
-
     }
     logger.info(`listPageEvaluate.provider.${info.key} ${url}`);
     try {
@@ -114,7 +113,7 @@ const itemPageEvaluate = async (region, page, item) => {
         const data = item;
 
         try { // subtitle
-          data.subtitle = document.querySelector("span.h5").innerText.replace(/^\s+|\s+$/g, '');
+          data.subtitle = document.querySelector("span.h5").innerText.replace(/^\s+|\s+$/g, '').replace(/^.*\n/, '');
         } catch (err) {
           throw(new Error(`reading url ${url} looking for title: ${err.message}`));
         }

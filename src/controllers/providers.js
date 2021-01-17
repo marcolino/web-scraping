@@ -159,7 +159,7 @@ const scrapeItems = async (provider, region, page, list) => {
             console.warn(`null item from page`);
           }
         }
-//break;
+break;
       }
     }
     return itemsFull;
@@ -304,15 +304,115 @@ const itemExists = async(item) => {
 }
 
 const saveItem = async(item) => {
+  const Items = require("../models/Items" + "." + item.type);
+  Items.findOne(
+    { id: item.id, provider: item.provider, region: item.region },
+    (err, itemOld) => {
+      if (err) {
+        throw (`error finding item to save: ${err}`);
+      }
+      if (!itemOld) { // a new item
+        compareItemsHistoryes(null, item);
+        itemOld = new Items(item);
+        itemOld.save((err, itemNew) => {
+          if (err) {
+            throw (`error saving new item: ${err}`);
+          }
+          //logger.debug(`item ${itemNew.title} inserted`);
+        });
+      } else { // an existing item
+        compareItemsHistoryes(itemOld._doc, item);
+        itemOld.set({...item});
+        itemOld.save((err, itemNew) => {
+          if (err) {
+            throw (`error updating item: ${err}`);
+          }
+          //logger.debug(`item ${itemNew.title} updated`);
+        });
+      }
+    }
+  );
+}
+
+const compareItemsHistoryes = (itemOld, itemNew) => {
+  const key = `${itemNew.provider} ${itemNew.id} ${itemNew.region}`;
+  if (!itemOld && !itemNew) { // should not happen
+    logger.warn(`${key} neither new nor old item is set!`);
+    return;
+  }
+  if (!itemOld) { // a new item
+    logger.info(`new ${key}`);
+    return;
+  }
+  // a changed item
+//logger.debug(`model.schema.paths: ` + JSON.stringify(Object.keys(model.schema.paths)));
+//logger.debug(`typeof itemOld[${prop}]: ${typeof itemOld[prop]} ${Array.isArray(itemOld[prop]) ? 'array' : ''}`);
+  let changed = false;
+  Object.keys(itemOld).map(prop => {
+    if (!['__v', '_id', 'provider', 'region', 'id', 'dateCreated', 'dateUpdated', 'wasNew', 'wasModified'/*'services', 'adUrlReferences', 'spokenLanguages', 'images', 'comments'*/].includes(prop)) {
+      //logger.debug(`--- ${prop} ---`);
+      const type = Array.isArray(itemOld[prop]) ? 'array' : typeof itemOld[prop];
+      //logger.debug(`typeof itemOld[${prop}]: ${type}`);
+      switch (type) {
+        case 'boolean':
+          //logger.warn(itemNew[prop]);
+          if (itemOld[prop] != itemNew[prop]) {
+            logger.info(`${key} changed ${prop}: ${itemNew[prop] ? 'false => true' : 'true => false'}`);
+            changed = true;
+          }
+          break;
+        case 'string':
+          if (itemOld[prop] !== itemNew[prop]) {
+            // require('colors');
+            // const diff = require('diff');
+            // const differences = diff.diffChars(itemOld[prop], itemNew[prop]);
+            // let difference = '';
+            // differences.forEach((part) => {
+            //   // green for additions, red for deletionn, grey for common parts
+            //   const color = part.added ? 'bgGreen' :
+            //     part.removed ? 'bgRed' :
+            //     'grey'
+            //   ;
+            //   difference += part.value[color];
+            // });
+            // logger.info(`${key} changed ${prop}: ${difference}`);
+            logger.info(`${key} changed ${prop}: ${itemOld[prop]} => ${itemNew[prop]}`);
+            changed = true;
+          }
+        case 'array':
+        case 'object':
+          if (prop == 'comments') {
+            logger.warn(`itemOld[${prop}]: ` + JSON.stringify(itemOld[prop]));
+            logger.warn(`itemNew[${prop}]: ` + JSON.stringify(itemNew[prop]));
+          }
+          // if (!itemOld[prop] || !itemNew[prop] || itemOld[prop].length != itemNew[prop].length) {
+          //   changed = true;
+          //   logger.debug(`${key} ${itemNew.title} changed prop ${prop} length`)
+          // }
+          // break;
+        default:
+          //logger.debug(`${prop}: type ${type} diff is to be implemented`);
+          break;
+      }
+    }
+  });
+  if (!changed) {
+    logger.info(`${key} unchanged`)
+  }
+}
+
+const updateItem_UNUSED_SINCE_PRE_UPDATE_HAS_NO_ACCESS_TO_OLD_DOC = async(item) => {
   try {
     const Items = require("../models/Items" + "." + item.type);
+//logger.info(`saveItem ${item.id}, ${item.provider}, ${item.region}, ${item.title}`);
+logger.info(`saveItem ${item}`);
     const retval = await Items.updateOne(
-      { id: item.id, provider: item.provider },
+      { id: item.id, provider: item.provider, region: item.region },
       { ...item, __v: 0 },
-      { upsert: true, new: true, },
+      { upsert: true, /*new: true,*/ },
     ).exec();
-    logger.debug(`saveItem retval: ${retval}`);
-    logger.debug(`saveItem updateOne modifiedCount: ${retval.modifiedCount}, nModified: ${retval.nModified}`);
+    logger.info(`saveItem retval: ` + JSON.stringify(retval));
+    logger.info(`saveItem updateOne nModified: ${retval.nModified}`);
     return retval; 
   } catch (err) {
     throw (`error saving item: ${err}`);

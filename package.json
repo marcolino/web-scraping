@@ -12,7 +12,10 @@
     "debug-with-swagger": "NODE_ENV=development node swagger",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": ["web", "scraping"],
+  "keywords": [
+    "web",
+    "scraping"
+  ],
   "author": "Marco Solari <marcosolari@gmail.com>",
   "license": "ISC",
   "dependencies": {
