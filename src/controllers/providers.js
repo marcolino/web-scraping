@@ -6,6 +6,7 @@ const fetch = require('node-fetch');
 const fs = require('fs');
 const mime = require('mime-types');
 const crypto = require('crypto');
+const uuid = require('uuid');
 const { phoneNormalize } = require('../utils/providers');
 //const { dbConnect, dbClose } = require('../utils/db');
 const { browserLaunch, browserPageNew, browserPageClose, browserClose } = require('../utils/browser');
@@ -76,6 +77,44 @@ exports.scrapeProvidersImages = async (req) => {
     return sum;
   } catch(err) {
     throw(`error scraping providers persons images: ${err}`);
+  }
+}
+
+groupItems = async (req) => {
+  const type = "persons";
+  const Items = require("../models/Items" + "." + type);
+
+  try {
+    const lastScrapeTimestamp = await mongoose.model('Globals').findOne({ key: `lastScrapeTimestamp` }).exec();
+
+    const itemsAll = await Items.find({});
+    const itemsNew = await Items.find({
+      dateInserted: { $ge: lastScrapeTimestamp }, // is new
+    });
+    itemsAll.foreach(itemAll => {
+      itemsNew.foreach(itemNew => {
+        if (sameGroup(itemAll, itemNew)) { // check if the two items should be grouped
+          if (itemNew.group) logger.warn(`new item ${itemNew.provider} ${itemNew.id} ${itemNew.region}' has already a group!`);
+          if (!itemAll.group) {
+            itemAll.group = uuid.v4();
+            await Items.updateOne(
+              { id: itemAll.id, provider: itemAll.provider, regionAll: itemAll.region },
+              { ...itemAll }
+            );
+          }
+          itemNew.group = itemAll.group;
+          await Items.updateOne(
+            { id: itemNew.id, provider: itemNew.provider, region: itemNew.region },
+            { ...itemNew }
+          );
+        }
+      });
+    });
+    const sameGroup = (a, b) => {
+      return (a.phone === b.phone);
+    }
+  } catch (err) {
+    throw (`error grouping item: ${err}`);
   }
 }
 
@@ -349,7 +388,7 @@ const compareItemsHistoryes = (itemOld, itemNew) => {
 //logger.debug(`typeof itemOld[${prop}]: ${typeof itemOld[prop]} ${Array.isArray(itemOld[prop]) ? 'array' : ''}`);
   let changed = false;
   Object.keys(itemOld).map(prop => {
-    if (!['__v', '_id', 'provider', 'region', 'id', 'dateCreated', 'dateUpdated', 'wasNew', 'wasModified'/*'services', 'adUrlReferences', 'spokenLanguages', 'images', 'comments'*/].includes(prop)) {
+    if (!['__v', '_id', 'provider', 'region', 'id', 'dateCreated', 'dateUpdated', /*'wasNew', 'wasModified'*//*'services', 'adUrlReferences', 'spokenLanguages', 'images', 'comments'*/].includes(prop)) {
       //logger.debug(`--- ${prop} ---`);
       const type = Array.isArray(itemOld[prop]) ? 'array' : typeof itemOld[prop];
       //logger.debug(`typeof itemOld[${prop}]: ${type}`);
@@ -362,6 +401,7 @@ const compareItemsHistoryes = (itemOld, itemNew) => {
           }
           break;
         case 'string':
+        case 'number':
           if (itemOld[prop] !== itemNew[prop]) {
             // require('colors');
             // const diff = require('diff');
@@ -391,7 +431,7 @@ const compareItemsHistoryes = (itemOld, itemNew) => {
           // }
           // break;
         default:
-          //logger.debug(`${prop}: type ${type} diff is to be implemented`);
+          logger.debug(`${prop}: type ${type} diff is not yet implemented`);
           break;
       }
     }

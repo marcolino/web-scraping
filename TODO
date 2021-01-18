@@ -7,7 +7,8 @@
   - test:
     V login with password unselectable in model
     - what happens if an item has no main image in getItems (should be returned nonetheless)
-    - stars in PF providerScraping (enable only PF provider, and set it as not immutable)
+    - stars in PF providerScraping (temporarily enable only PF provider, and set it as not immutable)
     - filterFresh in getItems
-    - filterMissing (check on holiday items, missing itms, and immutable items) in getItems
+    - filterMissing (check on holiday items, missing items, and immutable items) in getItems
     - extraction of comments votes from getItems query
+    - groupItems()

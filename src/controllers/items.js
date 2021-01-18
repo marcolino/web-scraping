@@ -37,6 +37,7 @@ async function getItems(req, res, next) {
           isFresh: 1,
           images: { $size: "$images" },
           comments: { $size: "$comments" },
+          //group: 1,
         }
       ).
       select({ // TODO: what happens if an item has no main image? we want it too...
@@ -60,10 +61,32 @@ async function getItems(req, res, next) {
 // //logger.debug(`itemsList: ${itemsList}`);
 // logger.debug(`itemsList for end  : ${new Date()}`);
 
+    const itemsListGrouped = groupBy(itemsList, item => item.group); // group items list (return only first item in each group)
+
     res.status(200).json({ message: `${itemsList.length} items found`, data: itemsList });
   } catch (err) {
     res.status(500).json({ message: `can't get items: ${err}`, stack: err.stack });
   }
+}
+
+/**
+ * Function to group a list of objects by a key property value.
+ * Only one (the first one) object with each key property value is kept, others are ignored.
+ */
+function groupBy(list, keyGetter) {
+  const map = new Map();
+  list.forEach((item) => {
+    const key = keyGetter(item);
+    let collection = map.get(key);
+    if (!collection) {
+      //map.set(key, [item]);
+      map.set(key, item);
+    } else {
+      //collection.push(item);
+      collection = item;
+    }
+  });
+  return map;
 }
 
 async function insertItem(req, res, next) {

@@ -274,21 +274,21 @@ schemaPersons.methods.isPresent = async() => {
   try {
     const lastScrapeTimestamp = await mongoose.model('Globals').findOne({ key: `lastScrapeTimestamp-${this.provider}` }).exec();
     //logger.debug(`lastScrapeTimestamp: ${lastScrapeTimestamp.value} <= this.dateUpdated: ${this.dateUpdated}`);
-    return lastScrapeTimestamp.value <= this.dateUpdated;
+    return this.dateUpdated >= lastScrapeTimestamp.value;
   } catch (err) {
     throw(new Error(`error in schemaPersons.methods.isPresent: ${err}`));
   }
 };
 
-// schemaPersons.methods.isFreshy = async() => { // TODO: possibly unused, if isFresh workls as expected...
-//   try {
-//     const lastScrapeTimestamp = await mongoose.model('Globals').findOne({ key: `lastScrapeTimestamp-${this.provider}` }).exec();
-//     //logger.debug(`lastScrapeTimestamp: ${lastScrapeTimestamp.value} <= this.dateInserted: ${this.dateInserted}`);
-//     return lastScrapeTimestamp.value <= this.dateInserted;
-//   } catch (err) {
-//     throw (new Error(`error in schemaPersons.methods.isPresent: ${err}`));
-//   }
-// };
+schemaPersons.methods.isFreshy = async() => { // TODO: possibly unused, if isFresh workls as expected...
+  try {
+    const lastScrapeTimestamp = await mongoose.model('Globals').findOne({ key: `lastScrapeTimestamp-${this.provider}` }).exec();
+logger.debug(`this.dateInserted: ${this.dateInserted} >=? lastScrapeTimestamp: ${lastScrapeTimestamp.value}`);
+    return this.dateInserted >= lastScrapeTimestamp.value;
+  } catch (err) {
+    throw (new Error(`error in schemaPersons.methods.isFreshy: ${err}`));
+  }
+};
 
 schemaPersons.virtual('imagesCount').get(function() {
   if (this.images) {
