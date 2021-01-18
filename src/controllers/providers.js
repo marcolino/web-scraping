@@ -91,8 +91,8 @@ groupItems = async (req) => {
     const itemsNew = await Items.find({
       dateInserted: { $ge: lastScrapeTimestamp }, // is new
     });
-    itemsAll.foreach(itemAll => {
-      itemsNew.foreach(itemNew => {
+    itemsAll.foreach(async(itemAll) => {
+      itemsNew.foreach(async(itemNew) => {
         if (sameGroup(itemAll, itemNew)) { // check if the two items should be grouped
           if (itemNew.group) logger.warn(`new item ${itemNew.provider} ${itemNew.id} ${itemNew.region}' has already a group!`);
           if (!itemAll.group) {
@@ -418,20 +418,53 @@ const compareItemsHistoryes = (itemOld, itemNew) => {
             // logger.info(`${key} changed ${prop}: ${difference}`);
             logger.info(`${key} changed ${prop}: ${itemOld[prop]} => ${itemNew[prop]}`);
             changed = true;
+            break;
           }
-        case 'array':
+        case 'array': // we assume one level only arrays (shallow compare)
+          const o = itemOld[prop];
+          const n = itemNew[prop];
+          const added = [];
+          const removed = [];
+          for (var oi = 0; oi < o.length; oi++) {
+            const oObj = o[oi];
+            let equal = true;
+            for (var ni = 0; ni < n.length; ni++) {
+              const nObj = n[oi];
+              for (p in nObj) {
+                if (oObj[p] != nObj[p]) {
+console.warn(p, oObj[p], nObj[p], typeof oObj[p], typeof nObj[p]);
+                  equal = false;
+                  break;
+                }
+              }
+            }
+            if (!equal) { // this old object prop was found in new object
+              added.push(oObj);
+              //removed.push(nObj);
+            }
+          }
+          if (added.length) {
+            logger.info(`${key} added ${added.length} ${prop}: ${JSON.stringify(added)}`);
+            changed = true;
+          }
+          // if (removed.length) {
+          //   logger.info(`${key} removed ${removed.length} ${prop}: ${JSON.stringify(removed)}`);
+          //   changed = true;
+          // }
+          break;
         case 'object':
-          if (prop == 'comments') {
-            logger.warn(`itemOld[${prop}]: ` + JSON.stringify(itemOld[prop]));
-            logger.warn(`itemNew[${prop}]: ` + JSON.stringify(itemNew[prop]));
-          }
+          // if (prop == 'comments') {
+          //   logger.warn(`itemOld[${prop}]: ` + JSON.stringify(itemOld[prop]));
+          //   logger.warn(`itemNew[${prop}]: ` + JSON.stringify(itemNew[prop]));
+          // }          
+          break;
           // if (!itemOld[prop] || !itemNew[prop] || itemOld[prop].length != itemNew[prop].length) {
           //   changed = true;
           //   logger.debug(`${key} ${itemNew.title} changed prop ${prop} length`)
           // }
           // break;
         default:
-          logger.debug(`${prop}: type ${type} diff is not yet implemented`);
+          logger.warn(`${prop}: type ${type} diff is not yet implemented`);
           break;
       }
     }

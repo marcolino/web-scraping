@@ -222,9 +222,10 @@ const itemPageEvaluate = async (region, page, item) => {
           }
           const [ date, time ] = str.split(' ');
           const [ day, month, year ] = date.split('/');
-          return `${year}-${month}-${day} ${time}`;
+          const d = new Date(`${year}-${month}-${day} ${time}`);
+          return d.toISOString();
+          //return `${year}-${month}-${day} ${time}`;
         }
-          
       }, info, url, imagesUrl, item);
       return resolve(itemFull);
     } catch (err) {
