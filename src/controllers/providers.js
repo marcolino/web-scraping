@@ -198,7 +198,7 @@ const scrapeItems = async (provider, region, page, list) => {
             console.warn(`null item from page`);
           }
         }
-break;
+//break;
       }
     }
     return itemsFull;
@@ -403,62 +403,77 @@ const compareItemsHistoryes = (itemOld, itemNew) => {
         case 'string':
         case 'number':
           if (itemOld[prop] !== itemNew[prop]) {
-            // require('colors');
-            // const diff = require('diff');
-            // const differences = diff.diffChars(itemOld[prop], itemNew[prop]);
-            // let difference = '';
-            // differences.forEach((part) => {
-            //   // green for additions, red for deletionn, grey for common parts
-            //   const color = part.added ? 'bgGreen' :
-            //     part.removed ? 'bgRed' :
-            //     'grey'
-            //   ;
-            //   difference += part.value[color];
-            // });
-            // logger.info(`${key} changed ${prop}: ${difference}`);
-            logger.info(`${key} changed ${prop}: ${itemOld[prop]} => ${itemNew[prop]}`);
+            require('colors');
+            const diff = require('diff');
+            const differences = diff.diffChars(itemOld[prop], itemNew[prop]);
+            let difference = '';
+            differences.forEach((part) => {
+              // green for additions, red for deletionn, grey for common parts
+              const color = part.added ? 'bgGreen' :
+                part.removed ? 'bgRed' :
+                'grey'
+              ;
+              difference += part.value[color];
+            });
+            logger.info(`${key} changed ${prop}: ${difference}`);
+
+            // logger.info(`${key} changed ${prop}: ${itemOld[prop]} => ${itemNew[prop]}`);
+
             changed = true;
           }
           break;
         case 'array': // we assume one level only arrays (shallow compare)
+//if(prop !== 'comments') break;
 //console.log('PROP:', prop);
           const o = itemOld[prop];
           const n = itemNew[prop];
-          const added = [];
+
+          // check for removed elements in array
           const removed = [];
-if (prop == 'comments') console.log('COMMENTS n.length:', n.length);
+//console.log('COMMENTS old length:', o.length);
           for (var oi = 0; oi < o.length; oi++) {
             const oObj = o[oi];
-            let equal = true;
-            let prop = null;
+            let found = false;
             for (var ni = 0; ni < n.length; ni++) {
-              const nObj = n[oi];
-              const props = Object.getOwnPropertyNames(nObj);
-              for (var p = 0; p < props.length; p++) {
-                prop = props[p];
-                //console.log('PROP:', prop);
-                if (prop !== '_id') {
-                  if (oObj[prop] !== nObj[prop]) {
-                    //console.log(prop, oObj[prop], nObj[prop], typeof String(oObj[prop]), typeof String(nObj[prop]), oObj[prop] === nObj[prop]);
-                    equal = false;
-                    break;
-                  }
-                }
+              const nObj = n[ni];
+//console.log('COMPARING:', nObj, oObj);
+              if (areEquivalent(nObj, oObj, ['_id'])) {
+                found = true;
+                break;
               }
             }
-            if (!equal) { // this old object prop was found in new object
-              added.push({firstChangedProperty: prop, row: oObj});
-              //removed.push(nObj);
+            if (!found) { // this old item was not found or was different in new items
+              removed.push(oObj);
+            }
+          }
+          if (removed.length) {
+            logger.info(`${key} removed ${removed.length} ${prop}: ${JSON.stringify(removed)}`);
+            changed = true;
+          }
+
+          // check for added elements in array
+          const added = [];
+//console.log('COMMENTS new length:', o.length);
+          for (var ni = 0; ni < n.length; ni++) {
+            const nObj = n[ni];
+            let found = false;
+            for (var oi = 0; oi < o.length; oi++) {
+              const oObj = o[oi];
+//console.log('COMPARING:', oObj, mObj);
+              if (areEquivalent(oObj, nObj, ['_id'])) {
+                found = true;
+                break;
+              }
+            }
+            if (!found) { // this new item was not found or was different in old items
+              added.push(nObj);
             }
           }
           if (added.length) {
             logger.info(`${key} added ${added.length} ${prop}: ${JSON.stringify(added)}`);
             changed = true;
           }
-          // if (removed.length) {
-          //   logger.info(`${key} removed ${removed.length} ${prop}: ${JSON.stringify(removed)}`);
-          //   changed = true;
-          // }
+
           break;
         case 'object': // we assume one level only objects (shallow compare)
           // if (prop == 'comments') {
@@ -480,6 +495,29 @@ if (prop == 'comments') console.log('COMMENTS n.length:', n.length);
   if (!changed) {
     logger.info(`${key} unchanged`)
   }
+}
+
+const areEquivalent = (a, b, ignoredProps) => {
+  // create arrays of property names
+  var aProps = Object.getOwnPropertyNames(a);
+  var bProps = Object.getOwnPropertyNames(b);
+
+  // if number of properties is different, objects are not equivalent
+  if (aProps.length != bProps.length) {
+    return false;
+  }
+
+  for (var i = 0; i < aProps.length; i++) {
+    var propName = aProps[i];
+
+    // if values of same property are not equal, objects are not equivalent
+    if (!ignoredProps.includes(propName) && (a[propName] !== b[propName])) {
+      return false;
+    }
+  }
+
+  // if we made it this far, objects are considered equivalent
+  return true;
 }
 
 const updateItem_UNUSED_SINCE_PRE_UPDATE_HAS_NO_ACCESS_TO_OLD_DOC = async(item) => {

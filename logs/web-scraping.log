@@ -10011,3 +10011,911 @@ TypeError: changed.push is not a function
 2021-01-19 18:22:24.672 info: toe 13245 italy.torino unchanged
 2021-01-19 18:22:24.714 info: providers.scrapeProviders.finishing.3e9f6d00-78d9-407e-a7a6-9eb5bcad7470.success: 1
 2021-01-19 18:22:24.714 info: finished scraping providers
+2021-01-19 20:44:30.660 info: providers.scrapeProviders.starting.3f922f74-78f6-48fe-9f65-73ac8a9ff64a
+2021-01-19 20:44:31.410 info: listPageEvaluate.provider.toe https://www.torinoerotica.com/annunci-escort-torino/
+2021-01-19 20:44:37.437 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13245
+2021-01-19 20:44:40.528 info: toe 13245 italy.torino unchanged
+2021-01-19 20:44:40.530 info: providers.scrapeProviders.finishing.3f922f74-78f6-48fe-9f65-73ac8a9ff64a.success: 1
+2021-01-19 20:44:40.531 info: finished scraping providers
+2021-01-19 20:46:56.498 info: providers.scrapeProviders.starting.3cd77c46-a526-4521-96e0-e5921284b29c
+2021-01-19 20:46:56.953 info: listPageEvaluate.provider.toe https://www.torinoerotica.com/annunci-escort-torino/
+2021-01-19 20:47:05.805 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13245
+2021-01-19 20:47:10.433 info: toe 13245 italy.torino added 1 comments: [{"firstChangedProperty":"author","row":{"_id":"600736a821e5cf292e94f8eb","author":"inesperto2","date":"2020-12-14T06:05:00.000Z","text":"Ciao, la ragazza mi ha accolto in un grande stabile nella zona di Mirafiori. Non ha fatto nessun gioco di portoni, indicandomi, una volta arrivato a destinazione, la porta del suo appartamento. Una volta entrato ho trovato una ragazza giovane con tacchi ed un abitino trasparente che metteva in risalto le sue forme (lato A e lato B direi parecchio sinuosi). Piacevole incontro di un'oretta che sicuramente ripeterei!"}}]
+2021-01-19 20:47:10.446 info: providers.scrapeProviders.finishing.3cd77c46-a526-4521-96e0-e5921284b29c.success: 1
+2021-01-19 20:47:10.446 info: finished scraping providers
+2021-01-19 20:55:04.909 info: providers.scrapeProviders.starting.7ab511f3-8fd0-4f17-9c3c-10f059d7cdff
+2021-01-19 20:55:05.259 info: listPageEvaluate.provider.toe https://www.torinoerotica.com/annunci-escort-torino/
+2021-01-19 20:55:10.889 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13245
+2021-01-19 20:55:14.665 info: toe 13245 italy.torino unchanged
+2021-01-19 20:55:14.670 info: providers.scrapeProviders.finishing.7ab511f3-8fd0-4f17-9c3c-10f059d7cdff.success: 1
+2021-01-19 20:55:14.671 info: finished scraping providers
+2021-01-19 20:55:59.638 info: providers.scrapeProviders.starting.cb6ccca9-1fd6-4e84-83cf-9d6222de357d
+2021-01-19 20:56:00.053 info: listPageEvaluate.provider.toe https://www.torinoerotica.com/annunci-escort-torino/
+2021-01-19 20:56:05.400 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13245
+2021-01-19 20:56:07.662 info: toe 13245 italy.torino added 10 images: [{"_id":"6007392221e5cf292e94f8f7","url":"photo-escort/122266-13245/s/1-640755774-3814863694.jpeg","category":"main"},{"_id":"6007392221e5cf292e94f8f8","url":"photo-escort/122266-13245/1-1062668486-3811939692.jpeg","category":"full"},{"_id":"6007392221e5cf292e94f8f9","url":"photo-escort/122266-13245/1-1062668486-3811939704.JPG","category":"full"},{"_id":"6007392221e5cf292e94f8fa","url":"photo-escort/122266-13245/1-640755774-3814863694.jpeg","category":"full"},{"_id":"6007392221e5cf292e94f8fb","url":"photo-escort/122266-13245/2-1062668486-3811939692.JPG","category":"full"},{"_id":"6007392221e5cf292e94f8fc","url":"photo-escort/122266-13245/2-640755774-3814863694.JPG","category":"full"},{"_id":"6007392221e5cf292e94f8fd","url":"photo-escort/122266-13245/3-1062668486-3811939692.JPG","category":"full"},{"_id":"6007392221e5cf292e94f8fe","url":"photo-escort/122266-13245/3-640755774-3814863694.JPG","category":"full"},{"_id":"6007392221e5cf292e94f8ff","url":"photo-escort/122266-13245/4-1062668486-3811939692.JPG","category":"full"},{"_id":"6007392221e5cf292e94f900","url":"photo-escort/122266-13245/5-1062668486-3811939693.JPG","category":"full"}]
+2021-01-19 20:56:07.668 error: uncaughtException: oObj is not defined
+ReferenceError: oObj is not defined
+    at /home/marco/apps/web-scraping/src/controllers/providers.js:482:28
+    at Array.map (<anonymous>)
+    at compareItemsHistoryes (/home/marco/apps/web-scraping/src/controllers/providers.js:390:24)
+    at /home/marco/apps/web-scraping/src/controllers/providers.js:370:11
+    at /home/marco/apps/web-scraping/node_modules/mongoose/lib/model.js:4838:16
+    at /home/marco/apps/web-scraping/node_modules/mongoose/lib/helpers/promiseOrCallback.js:24:16
+    at /home/marco/apps/web-scraping/node_modules/mongoose/lib/model.js:4861:21
+    at model.<anonymous> (/home/marco/apps/web-scraping/node_modules/mongoose/lib/model.js:502:7)
+    at /home/marco/apps/web-scraping/node_modules/kareem/index.js:315:21
+    at next (/home/marco/apps/web-scraping/node_modules/kareem/index.js:209:27)
+    at /home/marco/apps/web-scraping/node_modules/kareem/index.js:182:9
+    at /home/marco/apps/web-scraping/node_modules/kareem/index.js:507:38
+    at processTicksAndRejections (internal/process/task_queues.js:75:11)
+2021-01-19 20:56:07.668 error: uncaught exception ReferenceError: oObj is not defined
+    at /home/marco/apps/web-scraping/src/controllers/providers.js:482:28
+    at Array.map (<anonymous>)
+    at compareItemsHistoryes (/home/marco/apps/web-scraping/src/controllers/providers.js:390:24)
+    at /home/marco/apps/web-scraping/src/controllers/providers.js:370:11
+    at /home/marco/apps/web-scraping/node_modules/mongoose/lib/model.js:4838:16
+    at /home/marco/apps/web-scraping/node_modules/mongoose/lib/helpers/promiseOrCallback.js:24:16
+    at /home/marco/apps/web-scraping/node_modules/mongoose/lib/model.js:4861:21
+    at model.<anonymous> (/home/marco/apps/web-scraping/node_modules/mongoose/lib/model.js:502:7)
+    at /home/marco/apps/web-scraping/node_modules/kareem/index.js:315:21
+    at next (/home/marco/apps/web-scraping/node_modules/kareem/index.js:209:27)
+    at /home/marco/apps/web-scraping/node_modules/kareem/index.js:182:9
+    at /home/marco/apps/web-scraping/node_modules/kareem/index.js:507:38
+    at processTicksAndRejections (internal/process/task_queues.js:75:11)
+2021-01-19 20:58:34.872 info: providers.scrapeProviders.starting.50be374f-ddda-4fd5-8c46-80abf7695cf9
+2021-01-19 20:58:35.294 info: listPageEvaluate.provider.toe https://www.torinoerotica.com/annunci-escort-torino/
+2021-01-19 20:58:40.862 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13245
+2021-01-19 20:58:43.630 info: toe 13245 italy.torino added 10 images: [{"_id":"60073957d314cf2ed1d54eeb","url":"photo-escort/122266-13245/s/1-640755774-3814863694.jpeg","category":"main"},{"_id":"60073957d314cf2ed1d54eec","url":"photo-escort/122266-13245/1-1062668486-3811939692.jpeg","category":"full"},{"_id":"60073957d314cf2ed1d54eed","url":"photo-escort/122266-13245/1-1062668486-3811939704.JPG","category":"full"},{"_id":"60073957d314cf2ed1d54eee","url":"photo-escort/122266-13245/1-640755774-3814863694.jpeg","category":"full"},{"_id":"60073957d314cf2ed1d54eef","url":"photo-escort/122266-13245/2-1062668486-3811939692.JPG","category":"full"},{"_id":"60073957d314cf2ed1d54ef0","url":"photo-escort/122266-13245/2-640755774-3814863694.JPG","category":"full"},{"_id":"60073957d314cf2ed1d54ef1","url":"photo-escort/122266-13245/3-1062668486-3811939692.JPG","category":"full"},{"_id":"60073957d314cf2ed1d54ef2","url":"photo-escort/122266-13245/3-640755774-3814863694.JPG","category":"full"},{"_id":"60073957d314cf2ed1d54ef3","url":"photo-escort/122266-13245/4-1062668486-3811939692.JPG","category":"full"},{"_id":"60073957d314cf2ed1d54ef4","url":"photo-escort/122266-13245/5-1062668486-3811939693.JPG","category":"full"}]
+2021-01-19 20:58:43.631 info: toe 13245 italy.torino removed 10 images: [{"_id":"600739f341b7dc2f8184dd57","url":"photo-escort/122266-13245/s/1-640755774-3814863694.jpeg","category":"main"},{"_id":"600739f341b7dc2f8184dd58","url":"photo-escort/122266-13245/1-1062668486-3811939692.jpeg","category":"full"},{"_id":"600739f341b7dc2f8184dd59","url":"photo-escort/122266-13245/1-1062668486-3811939704.JPG","category":"full"},{"_id":"600739f341b7dc2f8184dd5a","url":"photo-escort/122266-13245/1-640755774-3814863694.jpeg","category":"full"},{"_id":"600739f341b7dc2f8184dd5b","url":"photo-escort/122266-13245/2-1062668486-3811939692.JPG","category":"full"},{"_id":"600739f341b7dc2f8184dd5c","url":"photo-escort/122266-13245/2-640755774-3814863694.JPG","category":"full"},{"_id":"600739f341b7dc2f8184dd5d","url":"photo-escort/122266-13245/3-1062668486-3811939692.JPG","category":"full"},{"_id":"600739f341b7dc2f8184dd5e","url":"photo-escort/122266-13245/3-640755774-3814863694.JPG","category":"full"},{"_id":"600739f341b7dc2f8184dd5f","url":"photo-escort/122266-13245/4-1062668486-3811939692.JPG","category":"full"},{"_id":"600739f341b7dc2f8184dd60","url":"photo-escort/122266-13245/5-1062668486-3811939693.JPG","category":"full"}]
+2021-01-19 20:58:43.640 info: providers.scrapeProviders.finishing.50be374f-ddda-4fd5-8c46-80abf7695cf9.success: 1
+2021-01-19 20:58:43.641 info: finished scraping providers
+2021-01-19 21:00:28.289 info: providers.scrapeProviders.starting.059f273b-74a6-4157-8afd-3eb0ac7d2b7f
+2021-01-19 21:00:28.727 info: listPageEvaluate.provider.toe https://www.torinoerotica.com/annunci-escort-torino/
+2021-01-19 21:00:34.207 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13245
+2021-01-19 21:00:37.876 info: toe 13245 italy.torino added 10 images: [{"_id":"600739f341b7dc2f8184dd57","url":"photo-escort/122266-13245/s/1-640755774-3814863694.jpeg","category":"main"},{"_id":"600739f341b7dc2f8184dd58","url":"photo-escort/122266-13245/1-1062668486-3811939692.jpeg","category":"full"},{"_id":"600739f341b7dc2f8184dd59","url":"photo-escort/122266-13245/1-1062668486-3811939704.JPG","category":"full"},{"_id":"600739f341b7dc2f8184dd5a","url":"photo-escort/122266-13245/1-640755774-3814863694.jpeg","category":"full"},{"_id":"600739f341b7dc2f8184dd5b","url":"photo-escort/122266-13245/2-1062668486-3811939692.JPG","category":"full"},{"_id":"600739f341b7dc2f8184dd5c","url":"photo-escort/122266-13245/2-640755774-3814863694.JPG","category":"full"},{"_id":"600739f341b7dc2f8184dd5d","url":"photo-escort/122266-13245/3-1062668486-3811939692.JPG","category":"full"},{"_id":"600739f341b7dc2f8184dd5e","url":"photo-escort/122266-13245/3-640755774-3814863694.JPG","category":"full"},{"_id":"600739f341b7dc2f8184dd5f","url":"photo-escort/122266-13245/4-1062668486-3811939692.JPG","category":"full"},{"_id":"600739f341b7dc2f8184dd60","url":"photo-escort/122266-13245/5-1062668486-3811939693.JPG","category":"full"}]
+2021-01-19 21:00:37.877 info: toe 13245 italy.torino removed 10 images: [{"_id":"60073a65c2fe9e30fa025e98","url":"photo-escort/122266-13245/s/1-640755774-3814863694.jpeg","category":"main"},{"_id":"60073a65c2fe9e30fa025e99","url":"photo-escort/122266-13245/1-1062668486-3811939692.jpeg","category":"full"},{"_id":"60073a65c2fe9e30fa025e9a","url":"photo-escort/122266-13245/1-1062668486-3811939704.JPG","category":"full"},{"_id":"60073a65c2fe9e30fa025e9b","url":"photo-escort/122266-13245/1-640755774-3814863694.jpeg","category":"full"},{"_id":"60073a65c2fe9e30fa025e9c","url":"photo-escort/122266-13245/2-1062668486-3811939692.JPG","category":"full"},{"_id":"60073a65c2fe9e30fa025e9d","url":"photo-escort/122266-13245/2-640755774-3814863694.JPG","category":"full"},{"_id":"60073a65c2fe9e30fa025e9e","url":"photo-escort/122266-13245/3-1062668486-3811939692.JPG","category":"full"},{"_id":"60073a65c2fe9e30fa025e9f","url":"photo-escort/122266-13245/3-640755774-3814863694.JPG","category":"full"},{"_id":"60073a65c2fe9e30fa025ea0","url":"photo-escort/122266-13245/4-1062668486-3811939692.JPG","category":"full"},{"_id":"60073a65c2fe9e30fa025ea1","url":"photo-escort/122266-13245/5-1062668486-3811939693.JPG","category":"full"}]
+2021-01-19 21:00:37.881 info: providers.scrapeProviders.finishing.059f273b-74a6-4157-8afd-3eb0ac7d2b7f.success: 1
+2021-01-19 21:00:37.881 info: finished scraping providers
+2021-01-19 21:09:57.805 info: providers.scrapeProviders.starting.8fdd3b7f-2d54-45b6-aaeb-52d872c53611
+2021-01-19 21:09:58.129 info: listPageEvaluate.provider.toe https://www.torinoerotica.com/annunci-escort-torino/
+2021-01-19 21:10:05.931 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13245
+2021-01-19 21:10:09.985 info: toe 13245 italy.torino unchanged
+2021-01-19 21:10:09.988 info: providers.scrapeProviders.finishing.8fdd3b7f-2d54-45b6-aaeb-52d872c53611.success: 1
+2021-01-19 21:10:09.989 info: finished scraping providers
+2021-01-19 21:12:44.427 info: providers.scrapeProviders.starting.8ca2c9ad-d474-42e5-b929-b64ef67bb9a9
+2021-01-19 21:12:45.027 info: listPageEvaluate.provider.toe https://www.torinoerotica.com/annunci-escort-torino/
+2021-01-19 21:12:50.330 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13245
+2021-01-19 21:12:53.802 info: toe 13245 italy.torino unchanged
+2021-01-19 21:12:53.811 info: providers.scrapeProviders.finishing.8ca2c9ad-d474-42e5-b929-b64ef67bb9a9.success: 1
+2021-01-19 21:12:53.812 info: finished scraping providers
+2021-01-19 21:13:54.586 info: providers.scrapeProviders.starting.ed4b511d-cf2f-44e3-b223-ec44ec65223d
+2021-01-19 21:13:54.979 info: listPageEvaluate.provider.toe https://www.torinoerotica.com/annunci-escort-torino/
+2021-01-19 21:14:02.159 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13245
+2021-01-19 21:14:05.610 info: toe 13245 italy.torino unchanged
+2021-01-19 21:14:05.614 info: providers.scrapeProviders.finishing.ed4b511d-cf2f-44e3-b223-ec44ec65223d.success: 1
+2021-01-19 21:14:05.614 info: finished scraping providers
+2021-01-19 21:15:28.894 info: providers.scrapeProviders.starting.cb5e31b4-d887-48ae-9521-88f7380401bc
+2021-01-19 21:15:29.334 info: listPageEvaluate.provider.toe https://www.torinoerotica.com/annunci-escort-torino/
+2021-01-19 21:15:38.008 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13245
+2021-01-19 21:15:41.270 info: toe 13245 italy.torino removed 10 images: [{"_id":"60073d8da412193389afdb55","url":"photo-escort/122266-13245/s/1-640755774-3814863694.jpeg","category":"main"},{"_id":"60073d8da412193389afdb56","url":"photo-escort/122266-13245/1-1062668486-3811939692.jpeg","category":"full"},{"_id":"60073d8da412193389afdb57","url":"photo-escort/122266-13245/1-1062668486-3811939704.JPG","category":"full"},{"_id":"60073d8da412193389afdb58","url":"photo-escort/122266-13245/1-640755774-3814863694.jpeg","category":"full"},{"_id":"60073d8da412193389afdb59","url":"photo-escort/122266-13245/2-1062668486-3811939692.JPG","category":"full"},{"_id":"60073d8da412193389afdb5a","url":"photo-escort/122266-13245/2-640755774-3814863694.JPG","category":"full"},{"_id":"60073d8da412193389afdb5b","url":"photo-escort/122266-13245/3-1062668486-3811939692.JPG","category":"full"},{"_id":"60073d8da412193389afdb5c","url":"photo-escort/122266-13245/3-640755774-3814863694.JPG","category":"full"},{"_id":"60073d8da412193389afdb5d","url":"photo-escort/122266-13245/4-1062668486-3811939692.JPG","category":"full"},{"_id":"60073d8da412193389afdb5e","url":"photo-escort/122266-13245/5-1062668486-3811939693.JPG","category":"full"}]
+2021-01-19 21:15:41.270 info: toe 13245 italy.torino added 10 images: [{"_id":"60073deda105b434b0d4edb9","url":"photo-escort/122266-13245/s/1-640755774-3814863694.jpeg","category":"main"},{"_id":"60073deda105b434b0d4edba","url":"photo-escort/122266-13245/1-1062668486-3811939692.jpeg","category":"full"},{"_id":"60073deda105b434b0d4edbb","url":"photo-escort/122266-13245/1-1062668486-3811939704.JPG","category":"full"},{"_id":"60073deda105b434b0d4edbc","url":"photo-escort/122266-13245/1-640755774-3814863694.jpeg","category":"full"},{"_id":"60073deda105b434b0d4edbd","url":"photo-escort/122266-13245/2-1062668486-3811939692.JPG","category":"full"},{"_id":"60073deda105b434b0d4edbe","url":"photo-escort/122266-13245/2-640755774-3814863694.JPG","category":"full"},{"_id":"60073deda105b434b0d4edbf","url":"photo-escort/122266-13245/3-1062668486-3811939692.JPG","category":"full"},{"_id":"60073deda105b434b0d4edc0","url":"photo-escort/122266-13245/3-640755774-3814863694.JPG","category":"full"},{"_id":"60073deda105b434b0d4edc1","url":"photo-escort/122266-13245/4-1062668486-3811939692.JPG","category":"full"},{"_id":"60073deda105b434b0d4edc2","url":"photo-escort/122266-13245/5-1062668486-3811939693.JPG","category":"full"}]
+2021-01-19 21:15:41.277 info: providers.scrapeProviders.finishing.cb5e31b4-d887-48ae-9521-88f7380401bc.success: 1
+2021-01-19 21:15:41.277 info: finished scraping providers
+2021-01-19 21:29:03.042 info: providers.scrapeProviders.starting.963cd065-8cc2-4a94-9a5b-c6baff1de3c1
+2021-01-19 21:29:03.369 info: listPageEvaluate.provider.toe https://www.torinoerotica.com/annunci-escort-torino/
+2021-01-19 21:29:09.352 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13245
+2021-01-19 21:29:13.035 info: toe 13245 italy.torino removed 10 images: [{"_id":"60073deda105b434b0d4edb9","url":"photo-escort/122266-13245/s/1-640755774-3814863694.jpeg","category":"main"},{"_id":"60073deda105b434b0d4edba","url":"photo-escort/122266-13245/1-1062668486-3811939692.jpeg","category":"full"},{"_id":"60073deda105b434b0d4edbb","url":"photo-escort/122266-13245/1-1062668486-3811939704.JPG","category":"full"},{"_id":"60073deda105b434b0d4edbc","url":"photo-escort/122266-13245/1-640755774-3814863694.jpeg","category":"full"},{"_id":"60073deda105b434b0d4edbd","url":"photo-escort/122266-13245/2-1062668486-3811939692.JPG","category":"full"},{"_id":"60073deda105b434b0d4edbe","url":"photo-escort/122266-13245/2-640755774-3814863694.JPG","category":"full"},{"_id":"60073deda105b434b0d4edbf","url":"photo-escort/122266-13245/3-1062668486-3811939692.JPG","category":"full"},{"_id":"60073deda105b434b0d4edc0","url":"photo-escort/122266-13245/3-640755774-3814863694.JPG","category":"full"},{"_id":"60073deda105b434b0d4edc1","url":"photo-escort/122266-13245/4-1062668486-3811939692.JPG","category":"full"},{"_id":"60073deda105b434b0d4edc2","url":"photo-escort/122266-13245/5-1062668486-3811939693.JPG","category":"full"}]
+2021-01-19 21:29:13.036 info: toe 13245 italy.torino added 10 images: [{"_id":"60074118e32f933642491c2d","url":"photo-escort/122266-13245/s/1-640755774-3814863694.jpeg","category":"main"},{"_id":"60074118e32f933642491c2e","url":"photo-escort/122266-13245/1-1062668486-3811939692.jpeg","category":"full"},{"_id":"60074118e32f933642491c2f","url":"photo-escort/122266-13245/1-1062668486-3811939704.JPG","category":"full"},{"_id":"60074118e32f933642491c30","url":"photo-escort/122266-13245/1-640755774-3814863694.jpeg","category":"full"},{"_id":"60074118e32f933642491c31","url":"photo-escort/122266-13245/2-1062668486-3811939692.JPG","category":"full"},{"_id":"60074118e32f933642491c32","url":"photo-escort/122266-13245/2-640755774-3814863694.JPG","category":"full"},{"_id":"60074118e32f933642491c33","url":"photo-escort/122266-13245/3-1062668486-3811939692.JPG","category":"full"},{"_id":"60074118e32f933642491c34","url":"photo-escort/122266-13245/3-640755774-3814863694.JPG","category":"full"},{"_id":"60074118e32f933642491c35","url":"photo-escort/122266-13245/4-1062668486-3811939692.JPG","category":"full"},{"_id":"60074118e32f933642491c36","url":"photo-escort/122266-13245/5-1062668486-3811939693.JPG","category":"full"}]
+2021-01-19 21:29:13.054 info: providers.scrapeProviders.finishing.963cd065-8cc2-4a94-9a5b-c6baff1de3c1.success: 1
+2021-01-19 21:29:13.056 info: finished scraping providers
+2021-01-19 21:30:23.180 info: providers.scrapeProviders.starting.3217c6aa-a5d3-4d6e-8b38-c2cf58c4839e
+2021-01-19 21:30:23.684 info: listPageEvaluate.provider.toe https://www.torinoerotica.com/annunci-escort-torino/
+2021-01-19 21:30:28.991 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13245
+2021-01-19 21:30:31.827 info: toe 13245 italy.torino unchanged
+2021-01-19 21:30:31.836 info: providers.scrapeProviders.finishing.3217c6aa-a5d3-4d6e-8b38-c2cf58c4839e.success: 1
+2021-01-19 21:30:31.837 info: finished scraping providers
+2021-01-19 21:30:57.805 info: providers.scrapeProviders.starting.82aaa379-6df1-424d-9623-f8422a4a68bb
+2021-01-19 21:30:58.194 info: listPageEvaluate.provider.toe https://www.torinoerotica.com/annunci-escort-torino/
+2021-01-19 21:31:16.159 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13245
+2021-01-19 21:31:18.136 info: toe 13245 italy.torino unchanged
+2021-01-19 21:31:18.151 info: providers.scrapeProviders.finishing.82aaa379-6df1-424d-9623-f8422a4a68bb.success: 1
+2021-01-19 21:31:18.152 info: finished scraping providers
+2021-01-19 21:31:48.691 info: providers.scrapeProviders.starting.11f0edd6-bc5c-43d8-9c5b-2c0739c87775
+2021-01-19 21:31:49.045 info: listPageEvaluate.provider.toe https://www.torinoerotica.com/annunci-escort-torino/
+2021-01-19 21:31:54.690 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13245
+2021-01-19 21:31:57.818 info: toe 13245 italy.torino unchanged
+2021-01-19 21:31:57.822 info: providers.scrapeProviders.finishing.11f0edd6-bc5c-43d8-9c5b-2c0739c87775.success: 1
+2021-01-19 21:31:57.823 info: finished scraping providers
+2021-01-19 22:14:06.184 info: providers.scrapeProviders.starting.409778cc-5025-419d-90ec-86257c30fedf
+2021-01-19 22:14:06.601 info: listPageEvaluate.provider.toe https://www.torinoerotica.com/annunci-escort-torino/
+2021-01-19 22:14:12.052 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13245
+2021-01-19 22:14:15.013 info: toe 13245 italy.torino removed 1 comments: [{"author":"xxx","date":"2020-12-14T06:05:00.000Z","text":"cvbsgb"}]
+2021-01-19 22:14:15.021 info: providers.scrapeProviders.finishing.409778cc-5025-419d-90ec-86257c30fedf.success: 1
+2021-01-19 22:14:15.022 info: finished scraping providers
+2021-01-19 22:15:08.845 info: providers.scrapeProviders.starting.077219d4-6ddb-4d96-aa83-67a13076c8be
+2021-01-19 22:15:09.180 info: listPageEvaluate.provider.toe https://www.torinoerotica.com/annunci-escort-torino/
+2021-01-19 22:15:18.019 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13245
+2021-01-19 22:15:21.628 info: new toe 13245 italy.torino
+2021-01-19 22:15:21.632 info: providers.scrapeProviders.finishing.077219d4-6ddb-4d96-aa83-67a13076c8be.success: 1
+2021-01-19 22:15:21.632 info: finished scraping providers
+2021-01-19 22:21:03.864 info: providers.scrapeProviders.starting.4c215cf7-ad5d-4d5d-b166-bd5052f1299f
+2021-01-19 22:21:04.580 info: listPageEvaluate.provider.toe https://www.torinoerotica.com/annunci-escort-torino/
+2021-01-19 22:21:10.633 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13245
+2021-01-19 22:21:12.873 info: toe 13245 italy.torino added 1 comments: [{"_id":"60074d481e6a8543c76d8e9e","author":"inesperto","date":"2020-12-14T06:05:00.000Z","text":"Ciao, la ragazza mi ha accolto in un grande stabile nella zona di Mirafiori. Non ha fatto nessun gioco di portoni, indicandomi, una volta arrivato a destinazione, la porta del suo appartamento. Una volta entrato ho trovato una ragazza giovane con tacchi ed un abitino trasparente che metteva in risalto le sue forme (lato A e lato B direi parecchio sinuosi). Piacevole incontro di un'oretta che sicuramente ripeterei!"}]
+2021-01-19 22:21:12.880 info: providers.scrapeProviders.finishing.4c215cf7-ad5d-4d5d-b166-bd5052f1299f.success: 1
+2021-01-19 22:21:12.881 info: finished scraping providers
+2021-01-19 22:21:54.594 info: providers.scrapeProviders.starting.c9a5582b-0766-4f24-8221-d87f0acac3df
+2021-01-19 22:21:54.982 info: listPageEvaluate.provider.toe https://www.torinoerotica.com/annunci-escort-torino/
+2021-01-19 22:22:01.188 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13245
+2021-01-19 22:22:03.895 info: toe 13245 italy.torino unchanged
+2021-01-19 22:22:03.905 info: providers.scrapeProviders.finishing.c9a5582b-0766-4f24-8221-d87f0acac3df.success: 1
+2021-01-19 22:22:03.905 info: finished scraping providers
+2021-01-19 22:22:23.452 info: providers.scrapeProviders.starting.ce2a7e5c-17e7-4b1a-9e74-e5faf3534faf
+2021-01-19 22:22:23.822 info: listPageEvaluate.provider.toe https://www.torinoerotica.com/annunci-escort-torino/
+2021-01-19 22:22:30.386 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13245
+2021-01-19 22:22:32.846 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13008
+2021-01-19 22:22:32.898 info: toe 13245 italy.torino unchanged
+2021-01-19 22:22:34.429 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=11602
+2021-01-19 22:22:34.515 info: toe 13008 italy.torino unchanged
+2021-01-19 22:22:36.112 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=7286
+2021-01-19 22:22:36.200 info: toe 11602 italy.torino added 1 comments: [{"_id":"60074d9cc534b244fdb4565a","author":"DANILO83","date":"2021-01-18T12:27:45.000Z","text":"Luna è una ragazza molto bella, diversa dalle altre perché ha un eleganza innata nel modo di porsi. Te ne accorgi già da come ti accoglie, con un sorriso accennato che rende intriso di meraviglia un viso scolpito con lo scalpellino della sensualità. E' una di quelle donne che ti fanno capire che anche sulla terra esiste il paradiso. Con lei puoi toccarlo ma devi sapertelo meritare. Trattatela con rispetto e con la dolcezza che richiede una donna così speciale.A presto meraviglia!"}]
+2021-01-19 22:22:36.201 info: toe 11602 italy.torino removed 1 images: [{"_id":"60034b3c7c714bf3179cfa00","url":"photo-escort/116438-11602/s/1-705054144-3784538520.jpg","category":"main"}]
+2021-01-19 22:22:36.201 info: toe 11602 italy.torino added 1 images: [{"_id":"60074d9cc534b244fdb45649","url":"photo-escort/116438-11602/s/2-272715783-3784814190.JPG","category":"main"}]
+2021-01-19 22:22:40.083 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=9317
+2021-01-19 22:22:40.186 info: toe 7286 italy.torino added 1 comments: [{"_id":"60074da0c534b244fdb456a3","author":"Nessuno88","date":"2021-01-18T14:42:52.000Z","text":"L'ho incontrata una sola volta qualche anno fa e difatti avrei molto piacere di ritornarci visto che ci siamo trovati molto bene entrambi al nostro incontro! La sto chiamando da diversi mesi ma non mi risponde mai..."}]
+2021-01-19 22:22:41.548 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=9700
+2021-01-19 22:22:41.592 info: toe 9317 italy.torino unchanged
+2021-01-19 22:22:43.230 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=9374
+2021-01-19 22:22:43.289 info: toe 9700 italy.torino unchanged
+2021-01-19 22:22:45.778 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13096
+2021-01-19 22:22:45.861 info: toe 9374 italy.torino unchanged
+2021-01-19 22:22:48.682 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=12860
+2021-01-19 22:22:48.755 info: toe 13096 italy.torino unchanged
+2021-01-19 22:22:50.882 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13545
+2021-01-19 22:22:50.997 info: toe 12860 italy.torino unchanged
+2021-01-19 22:22:53.268 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=9594
+2021-01-19 22:22:53.309 info: toe 13545 italy.torino changed sexualOrientation: Donna => Eterosessuale
+2021-01-19 22:22:53.309 info: toe 13545 italy.torino changed selfDescription: Novità in città!
+Le foto che vedi sono reali e recenti, mi troverai proprio così come mi vedi.
+Saprò metterti al centro delle mie attenzioni e farti sentire davvero bene.
+
+Non ricevo chiamate da numeri anonimi. No stranieri.
+
+Chiamami per un appuntamento con preavviso di 30 minuti (no perditempo) sicuramente tornerai da me. => NO STRANIERI - NO STRANIERI - NO STRANIERI
+
+Novità in città!
+Le foto che vedi sono reali e recenti, mi troverai proprio così come mi vedi.
+Saprò metterti al centro delle mie attenzioni e farti sentire davvero bene.
+
+Non ricevo chiamate da numeri anonimi e Sms.
+
+Chiamami per un appuntamento con preavviso di 30 minuti (no perditempo) sicuramente tornerai da me.
+Per uomini Italiani educati, gentili e amanti dell'igiene personale.
+
+Disponibile per uomini, donne e coppie.
+
+Ti aspetto in intimo sensuale e tacchi a spillo, tutta sexy per te...
+Zona Corso Grosseto.
+2021-01-19 22:22:53.310 info: toe 13545 italy.torino removed 2 images: [{"_id":"60034b527c714bf3179cfad9","url":"photo-escort/123484-13545/s/5-177485281-3819963888.jpg","category":"main"},{"_id":"60034b527c714bf3179cfaee","url":"photo-escort/123484-13545/4-177485281-3819963888.jpg","category":"full"}]
+2021-01-19 22:22:53.311 info: toe 13545 italy.torino added 1 images: [{"_id":"60074dadc534b244fdb45724","url":"photo-escort/123484-13545/s/3-177485281-3819963908.jpg","category":"main"}]
+2021-01-19 22:22:54.273 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=11517
+2021-01-19 22:22:54.298 info: toe 9594 italy.torino unchanged
+2021-01-19 22:22:55.075 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=12391
+2021-01-19 22:22:55.088 info: toe 11517 italy.torino unchanged
+2021-01-19 22:22:55.990 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=12774
+2021-01-19 22:22:56.018 info: toe 12391 italy.torino unchanged
+2021-01-19 22:22:56.938 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13206
+2021-01-19 22:22:56.972 info: toe 12774 italy.torino unchanged
+2021-01-19 22:22:58.868 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13530
+2021-01-19 22:22:58.890 info: toe 13206 italy.torino unchanged
+2021-01-19 22:23:02.602 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=4376
+2021-01-19 22:23:02.665 info: toe 13530 italy.torino unchanged
+2021-01-19 22:23:05.021 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=4360
+2021-01-19 22:23:05.086 info: toe 4376 italy.torino unchanged
+2021-01-19 22:23:06.672 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=3907
+2021-01-19 22:23:06.735 info: toe 4360 italy.torino changed age: 35 => 37
+2021-01-19 22:23:06.736 info: toe 4360 italy.torino changed subtitle: Barbara Messicana 27enne novità bomba sexy => Barbara Messicana 37enne novità bomba sexy
+2021-01-19 22:23:08.143 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13518
+2021-01-19 22:23:08.226 info: toe 3907 italy.torino unchanged
+2021-01-19 22:23:10.520 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13487
+2021-01-19 22:23:10.540 info: toe 13518 italy.torino unchanged
+2021-01-19 22:23:12.059 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=9638
+2021-01-19 22:23:12.135 info: toe 13487 italy.torino unchanged
+2021-01-19 22:23:14.156 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=5463
+2021-01-19 22:23:14.246 info: toe 9638 italy.torino removed 1 images: [{"_id":"60035289ccd88402675497f4","url":"photo-escort/108518-9638/s/3-712923726-3808676127.JPG","category":"main"}]
+2021-01-19 22:23:14.249 info: toe 9638 italy.torino added 4 images: [{"_id":"60074dc2c534b244fdb457f0","url":"photo-escort/108518-9638/s/2-605072752-3820144760.jpg","category":"main"},{"_id":"60074dc2c534b244fdb457fe","url":"photo-escort/108518-9638/1-605072752-3820144760.jpg","category":"full"},{"_id":"60074dc2c534b244fdb45810","url":"photo-escort/108518-9638/2-605072752-3820144760.jpg","category":"full"},{"_id":"60074dc2c534b244fdb4581e","url":"photo-escort/108518-9638/3-605072752-3820144761.jpg","category":"full"}]
+2021-01-19 22:23:16.042 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=11823
+2021-01-19 22:23:16.072 info: toe 5463 italy.torino changed subtitle: GISELLE
+Giselle splendida bionda appena arrivata! => Giselle splendida bionda appena arrivata!
+2021-01-19 22:23:16.072 info: toe 5463 italy.torino removed 14 images: [{"_id":"5ffe0b4e212fcd25f09a3a93","url":"photo-escort/94082-5463/s/4-817970234-3816592989.jpeg","category":"main","date":"2020-12-08T11:43:09.000Z","etag":"\"3fe52f4d57cdd61:0\"","localPath":"./cache/persons/images/toe/5463_giselle_main_5f3baa2fb3989f46a4ccf1acbdf540e5.jpg"},{"_id":"5ffe0b4e212fcd25f09a3a95","url":"photo-escort/94082-5463/1-58900592-3784714343.JPG","category":"full","date":"2019-12-05T12:32:23.000Z","etag":"\"af7e79b68abd51:0\"","localPath":"./cache/persons/images/toe/5463_giselle_full_32c11f0de6382c1287d623b43a0a9ace.jpg"},{"_id":"5ffe0b50212fcd25f09a3aa1","url":"photo-escort/94082-5463/1-58900592-3784714348.JPG","category":"full","date":"2019-12-05T12:32:28.000Z","etag":"\"da5061e68abd51:0\"","localPath":"./cache/persons/images/toe/5463_giselle_full_5d7401525e99b57e8e98d450fb3e2b35.jpg"},{"_id":"5ffe0b50212fcd25f09a3aa7","url":"photo-escort/94082-5463/1-817970234-3816592988.jpeg","category":"full","date":"2020-12-08T11:43:09.000Z","etag":"\"228eea4c57cdd61:0\"","localPath":"./cache/persons/images/toe/5463_giselle_full_49749d625f96798b27c30499e65d64bb.jpg"},{"_id":"5ffe0b51212fcd25f09a3aab","url":"photo-escort/94082-5463/2-58900592-3784714343.JPG","category":"full","date":"2019-12-05T12:32:23.000Z","etag":"\"e3a19fb68abd51:0\"","localPath":"./cache/persons/images/toe/5463_giselle_full_f5041b8681aee3a0dfb7b8aabc50b83f.jpg"},{"_id":"5ffe0b51212fcd25f09a3ab1","url":"photo-escort/94082-5463/2-58900592-3784714348.JPG","category":"full","date":"2019-12-05T12:32:28.000Z","etag":"\"4dd689e68abd51:0\"","localPath":"./cache/persons/images/toe/5463_giselle_full_bccf95539b84fad8e673e5b17c70919a.jpg"},{"_id":"5ffe0b52212fcd25f09a3ab7","url":"photo-escort/94082-5463/2-817970234-3816592989.jpeg","category":"full","date":"2020-12-08T11:43:09.000Z","etag":"\"74224d57cdd61:0\"","localPath":"./cache/persons/images/toe/5463_giselle_full_0dbdd0151c3b27e88149070ad83f4097.jpg"},{"_id":"5ffe0b53212fcd25f09a3ac1","url":"photo-escort/94082-5463/3-58900592-3784714343.JPG","category":"full","date":"2019-12-05T12:32:23.000Z","etag":"\"41efadb68abd51:0\"","localPath":"./cache/persons/images/toe/5463_giselle_full_ee4bd3749617c32b1c9485ee16f40134.jpg"},{"_id":"5ffe0b53212fcd25f09a3ac5","url":"photo-escort/94082-5463/3-58900592-3784714348.JPG","category":"full","date":"2019-12-05T12:32:28.000Z","etag":"\"9bf8afe68abd51:0\"","localPath":"./cache/persons/images/toe/5463_giselle_full_31e6eb38d00e7eeea754c5dfb5297a6f.jpg"},{"_id":"5ffe0b54212fcd25f09a3ac9","url":"photo-escort/94082-5463/3-817970234-3816592989.jpeg","category":"full","date":"2020-12-08T11:43:09.000Z","etag":"\"dc76184d57cdd61:0\"","localPath":"./cache/persons/images/toe/5463_giselle_full_f2c775f764fbf4203a4b1f615430bb06.jpg"},{"_id":"5ffe0b54212fcd25f09a3acd","url":"photo-escort/94082-5463/4-58900592-3784714343.JPG","category":"full","date":"2019-12-05T12:32:24.000Z","etag":"\"8812d4b68abd51:0\"","localPath":"./cache/persons/images/toe/5463_giselle_full_ca0c8a6080d348e42843e2af387d6d4a.jpg"},{"_id":"5ffe0b55212fcd25f09a3ad3","url":"photo-escort/94082-5463/4-58900592-3784714348.JPG","category":"full","date":"2019-12-05T12:32:29.000Z","etag":"\"2b7ed8e68abd51:0\"","localPath":"./cache/persons/images/toe/5463_giselle_full_af2c77e4bd996f10654a1727776a374c.jpg"},{"_id":"5ffe0b55212fcd25f09a3ad7","url":"photo-escort/94082-5463/4-817970234-3816592989.jpeg","category":"full","date":"2020-12-08T11:43:09.000Z","etag":"\"46d03b4d57cdd61:0\"","localPath":"./cache/persons/images/toe/5463_giselle_full_024fa41a6c99ca3abef39bd3e20119d2.jpg"},{"_id":"5ffe0b56212fcd25f09a3adb","url":"photo-escort/94082-5463/5-58900592-3784714344.JPG","category":"full","date":"2019-12-05T12:32:24.000Z","etag":"\"ec35fab68abd51:0\"","localPath":"./cache/persons/images/toe/5463_giselle_full_4fb39746b28d41fb9fd3fc1c1c418df6.jpg"}]
+2021-01-19 22:23:16.072 info: toe 5463 italy.torino added 14 images: [{"_id":"60074dc4c534b244fdb4586d","url":"photo-escort/94082-5463/s/4-817970234-3816592989.jpeg","category":"main"},{"_id":"60074dc4c534b244fdb4586e","url":"photo-escort/94082-5463/1-58900592-3784714343.JPG","category":"full"},{"_id":"60074dc4c534b244fdb4586f","url":"photo-escort/94082-5463/1-58900592-3784714348.JPG","category":"full"},{"_id":"60074dc4c534b244fdb45870","url":"photo-escort/94082-5463/1-817970234-3816592988.jpeg","category":"full"},{"_id":"60074dc4c534b244fdb45871","url":"photo-escort/94082-5463/2-58900592-3784714343.JPG","category":"full"},{"_id":"60074dc4c534b244fdb45872","url":"photo-escort/94082-5463/2-58900592-3784714348.JPG","category":"full"},{"_id":"60074dc4c534b244fdb45873","url":"photo-escort/94082-5463/2-817970234-3816592989.jpeg","category":"full"},{"_id":"60074dc4c534b244fdb45874","url":"photo-escort/94082-5463/3-58900592-3784714343.JPG","category":"full"},{"_id":"60074dc4c534b244fdb45875","url":"photo-escort/94082-5463/3-58900592-3784714348.JPG","category":"full"},{"_id":"60074dc4c534b244fdb45876","url":"photo-escort/94082-5463/3-817970234-3816592989.jpeg","category":"full"},{"_id":"60074dc4c534b244fdb45877","url":"photo-escort/94082-5463/4-58900592-3784714343.JPG","category":"full"},{"_id":"60074dc4c534b244fdb45878","url":"photo-escort/94082-5463/4-58900592-3784714348.JPG","category":"full"},{"_id":"60074dc4c534b244fdb45879","url":"photo-escort/94082-5463/4-817970234-3816592989.jpeg","category":"full"},{"_id":"60074dc4c534b244fdb4587a","url":"photo-escort/94082-5463/5-58900592-3784714344.JPG","category":"full"}]
+2021-01-19 22:23:17.117 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=3667
+2021-01-19 22:23:17.139 info: toe 11823 italy.torino changed subtitle: MISS JUSTINE
+bella donna elegante per incontri piccanti => bella donna elegante per incontri piccanti
+2021-01-19 22:23:17.140 info: toe 11823 italy.torino removed 15 images: [{"_id":"5ffe0e83212fcd25f09a525d","url":"photo-escort/117112-11823/s/2-1062671240-3800969183.JPG","category":"main","date":"2020-06-10T14:46:23.000Z","etag":"\"23ac5be9353fd61:0\"","localPath":"./cache/persons/images/toe/11823_missjustine_main_fbd296f2bcaf12e8580281bb9efc9013.jpg"},{"_id":"5ffe0e83212fcd25f09a5261","url":"photo-escort/117112-11823/1-1062671240-3800969187.JPG","category":"full","date":"2020-06-10T14:46:27.000Z","etag":"\"c972a7eb353fd61:0\"","localPath":"./cache/persons/images/toe/11823_missjustine_full_fcfd26ae91944af880ac4fad94054b6d.jpg"},{"_id":"5ffe0e84212fcd25f09a5263","url":"photo-escort/117112-11823/1-1062673449-3800971179.jpeg","category":"full","date":"2020-06-10T15:19:39.000Z","etag":"\"371e118f3a3fd61:0\"","localPath":"./cache/persons/images/toe/11823_missjustine_full_4e8cf830b543671f1adeb434d5c8c144.jpg"},{"_id":"5ffe0e84212fcd25f09a5265","url":"photo-escort/117112-11823/1-559136472-3803802346.jpg","category":"full","date":"2020-07-13T09:45:46.000Z","etag":"\"c33f761fa58d61:0\"","localPath":"./cache/persons/images/toe/11823_missjustine_full_c2d16d4a341703d4dbd98c7010a06f0d.jpg"},{"_id":"5ffe0e84212fcd25f09a5267","url":"photo-escort/117112-11823/1-772948147-3803907435.JPG","category":"full","date":"2020-07-14T14:57:16.000Z","etag":"\"e1266110ef59d61:0\"","localPath":"./cache/persons/images/toe/11823_missjustine_full_3b92feae65eb75ecb42953954bf3925e.jpg"},{"_id":"5ffe0e85212fcd25f09a526b","url":"photo-escort/117112-11823/1-772948147-3803907441.JPG","category":"full","date":"2020-07-14T14:57:21.000Z","etag":"\"afd0ad13ef59d61:0\"","localPath":"./cache/persons/images/toe/11823_missjustine_full_b8c383676e5cabaeeb40b3b13ddb7063.jpg"},{"_id":"5ffe0e85212fcd25f09a526d","url":"photo-escort/117112-11823/2-1062671240-3800969183.JPG","category":"full","date":"2020-06-10T14:46:23.000Z","etag":"\"8e7060e9353fd61:0\"","localPath":"./cache/persons/images/toe/11823_missjustine_full_edc6fb9b4182a977f78550fddef29427.jpg"},{"_id":"5ffe0e86212fcd25f09a526f","url":"photo-escort/117112-11823/2-1062671240-3800969187.JPG","category":"full","date":"2020-06-10T14:46:27.000Z","etag":"\"d35db3eb353fd61:0\"","localPath":"./cache/persons/images/toe/11823_missjustine_full_65276d6c7b4f9332b3dc8ad5a87bc277.jpg"},{"_id":"5ffe0e86212fcd25f09a5271","url":"photo-escort/117112-11823/2-772948147-3803907436.JPG","category":"full","date":"2020-07-14T14:57:16.000Z","etag":"\"89387410ef59d61:0\"","localPath":"./cache/persons/images/toe/11823_missjustine_full_e961b07ec7cf3e0740644e1165eff475.jpg"},{"_id":"5ffe0e86212fcd25f09a5273","url":"photo-escort/117112-11823/3-1062671240-3800969183.JPG","category":"full","date":"2020-06-10T14:46:23.000Z","etag":"\"cdbd6ee9353fd61:0\"","localPath":"./cache/persons/images/toe/11823_missjustine_full_ce5c378c188dde193b422c48e3f05118.jpg"},{"_id":"5ffe0e87212fcd25f09a5275","url":"photo-escort/117112-11823/3-772948147-3803907436.JPG","category":"full","date":"2020-07-14T14:57:16.000Z","etag":"\"558a8510ef59d61:0\"","localPath":"./cache/persons/images/toe/11823_missjustine_full_76fb9d16fdaf27d4dcac019e1c4d1c63.jpg"},{"_id":"5ffe0e87212fcd25f09a5279","url":"photo-escort/117112-11823/4-1062671240-3800969183.JPG","category":"full","date":"2020-06-10T14:46:23.000Z","etag":"\"d9a87ae9353fd61:0\"","localPath":"./cache/persons/images/toe/11823_missjustine_full_928c473d6059ba3c6d5fbb7544ecca9d.jpg"},{"_id":"5ffe0e88212fcd25f09a527b","url":"photo-escort/117112-11823/4-772948147-3803907436.JPG","category":"full","date":"2020-07-14T14:57:16.000Z","etag":"\"7c6fa310ef59d61:0\"","localPath":"./cache/persons/images/toe/11823_missjustine_full_00bb16ba2ea1574e84d4a03f778f38da.jpg"},{"_id":"5ffe0e88212fcd25f09a527d","url":"photo-escort/117112-11823/4-772948147-3803907442.JPG","category":"full","date":"2020-07-14T14:57:22.000Z","etag":"\"7e701014ef59d61:0\"","localPath":"./cache/persons/images/toe/11823_missjustine_full_7e7bd222d15bf6acb7eed77675542e8c.jpg"},{"_id":"5ffe0e89212fcd25f09a527f","url":"photo-escort/117112-11823/5-772948147-3803907436.JPG","category":"full","date":"2020-07-14T14:57:16.000Z","etag":"\"fa9c010ef59d61:0\"","localPath":"./cache/persons/images/toe/11823_missjustine_full_af6f57e2ffc9e7631f1a2ef961f461ea.jpg"}]
+2021-01-19 22:23:17.140 info: toe 11823 italy.torino added 15 images: [{"_id":"60074dc5c534b244fdb45885","url":"photo-escort/117112-11823/s/2-1062671240-3800969183.JPG","category":"main"},{"_id":"60074dc5c534b244fdb45886","url":"photo-escort/117112-11823/1-1062671240-3800969187.JPG","category":"full"},{"_id":"60074dc5c534b244fdb45887","url":"photo-escort/117112-11823/1-1062673449-3800971179.jpeg","category":"full"},{"_id":"60074dc5c534b244fdb45888","url":"photo-escort/117112-11823/1-559136472-3803802346.jpg","category":"full"},{"_id":"60074dc5c534b244fdb45889","url":"photo-escort/117112-11823/1-772948147-3803907435.JPG","category":"full"},{"_id":"60074dc5c534b244fdb4588a","url":"photo-escort/117112-11823/1-772948147-3803907441.JPG","category":"full"},{"_id":"60074dc5c534b244fdb4588b","url":"photo-escort/117112-11823/2-1062671240-3800969183.JPG","category":"full"},{"_id":"60074dc5c534b244fdb4588c","url":"photo-escort/117112-11823/2-1062671240-3800969187.JPG","category":"full"},{"_id":"60074dc5c534b244fdb4588d","url":"photo-escort/117112-11823/2-772948147-3803907436.JPG","category":"full"},{"_id":"60074dc5c534b244fdb4588e","url":"photo-escort/117112-11823/3-1062671240-3800969183.JPG","category":"full"},{"_id":"60074dc5c534b244fdb4588f","url":"photo-escort/117112-11823/3-772948147-3803907436.JPG","category":"full"},{"_id":"60074dc5c534b244fdb45890","url":"photo-escort/117112-11823/4-1062671240-3800969183.JPG","category":"full"},{"_id":"60074dc5c534b244fdb45891","url":"photo-escort/117112-11823/4-772948147-3803907436.JPG","category":"full"},{"_id":"60074dc5c534b244fdb45892","url":"photo-escort/117112-11823/4-772948147-3803907442.JPG","category":"full"},{"_id":"60074dc5c534b244fdb45893","url":"photo-escort/117112-11823/5-772948147-3803907436.JPG","category":"full"}]
+2021-01-19 22:23:18.872 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=12457
+2021-01-19 22:23:18.989 info: toe 3667 italy.torino changed subtitle: BIANCA
+Bianca, disponibile anche per giochiochini particolari... => Bianca, disponibile anche per giochiochini particolari...
+2021-01-19 22:23:18.991 info: toe 3667 italy.torino removed 9 images: [{"_id":"5ffe0bd2212fcd25f09a3e41","url":"photo-escort/90390-3667/s/2-241214947-3785328807.jpeg","category":"main","date":"2019-12-12T15:13:28.000Z","etag":"\"49779b5feb0d51:0\"","localPath":"./cache/persons/images/toe/3667_bianca_main_fa5efb789ac9dbc6c12a80f5bab9d7c2.jpg"},{"_id":"5ffe0bd3212fcd25f09a3e45","url":"photo-escort/90390-3667/1-241214947-3785328807.jpeg","category":"full","date":"2019-12-12T15:13:27.000Z","etag":"\"74a4d2b4feb0d51:0\"","localPath":"./cache/persons/images/toe/3667_bianca_full_543ebb97d9c3cd798751b61346967251.jpg"},{"_id":"5ffe0bd3212fcd25f09a3e49","url":"photo-escort/90390-3667/1-744843670-3809238466.JPG","category":"full","date":"2020-09-14T07:47:46.000Z","etag":"\"13ca48566b8ad61:0\"","localPath":"./cache/persons/images/toe/3667_bianca_full_6afd61f27088b496a8bf2bd9cf08f198.jpg"},{"_id":"5ffe0bd4212fcd25f09a3e4f","url":"photo-escort/90390-3667/2-241214947-3785328807.jpeg","category":"full","date":"2019-12-12T15:13:28.000Z","etag":"\"7dc417b5feb0d51:0\"","localPath":"./cache/persons/images/toe/3667_bianca_full_ed25cb4f520fbd402f9d1ae8b16903cf.jpg"},{"_id":"5ffe0bd4212fcd25f09a3e51","url":"photo-escort/90390-3667/2-744843670-3809238466.JPG","category":"full","date":"2020-09-14T07:47:46.000Z","etag":"\"1eb554566b8ad61:0\"","localPath":"./cache/persons/images/toe/3667_bianca_full_2fb1f0feef5ae1d9ae152244f1deb17b.jpg"},{"_id":"5ffe0bd5212fcd25f09a3e55","url":"photo-escort/90390-3667/3-241214947-3785328808.jpeg","category":"full","date":"2019-12-12T15:13:28.000Z","etag":"\"e5bd55b5feb0d51:0\"","localPath":"./cache/persons/images/toe/3667_bianca_full_4d15cfc4c6689f77f26d7e425f505bf9.jpg"},{"_id":"5ffe0bd5212fcd25f09a3e5b","url":"photo-escort/90390-3667/3-744843670-3809238466.JPG","category":"full","date":"2020-09-14T07:47:46.000Z","etag":"\"5e263566b8ad61:0\"","localPath":"./cache/persons/images/toe/3667_bianca_full_f430515ce412feac854c131326c4a2ea.jpg"},{"_id":"5ffe0bd6212fcd25f09a3e5f","url":"photo-escort/90390-3667/4-241214947-3785328808.jpeg","category":"full","date":"2019-12-12T15:13:29.000Z","etag":"\"9c1996b5feb0d51:0\"","localPath":"./cache/persons/images/toe/3667_bianca_full_77d67f2d908e64dde4fa6e7d111a6f88.jpg"},{"_id":"5ffe0bd6212fcd25f09a3e63","url":"photo-escort/90390-3667/5-241214947-3785328809.jpeg","category":"full","date":"2019-12-12T15:13:29.000Z","etag":"\"3e16b5b5feb0d51:0\"","localPath":"./cache/persons/images/toe/3667_bianca_full_408cd42cc2525820cb73bff6c053fcbe.jpg"}]
+2021-01-19 22:23:18.991 info: toe 3667 italy.torino added 9 images: [{"_id":"60074dc6c534b244fdb45896","url":"photo-escort/90390-3667/s/2-241214947-3785328807.jpeg","category":"main"},{"_id":"60074dc6c534b244fdb45897","url":"photo-escort/90390-3667/1-241214947-3785328807.jpeg","category":"full"},{"_id":"60074dc6c534b244fdb45898","url":"photo-escort/90390-3667/1-744843670-3809238466.JPG","category":"full"},{"_id":"60074dc6c534b244fdb45899","url":"photo-escort/90390-3667/2-241214947-3785328807.jpeg","category":"full"},{"_id":"60074dc6c534b244fdb4589a","url":"photo-escort/90390-3667/2-744843670-3809238466.JPG","category":"full"},{"_id":"60074dc6c534b244fdb4589b","url":"photo-escort/90390-3667/3-241214947-3785328808.jpeg","category":"full"},{"_id":"60074dc6c534b244fdb4589c","url":"photo-escort/90390-3667/3-744843670-3809238466.JPG","category":"full"},{"_id":"60074dc6c534b244fdb4589d","url":"photo-escort/90390-3667/4-241214947-3785328808.jpeg","category":"full"},{"_id":"60074dc6c534b244fdb4589e","url":"photo-escort/90390-3667/5-241214947-3785328809.jpeg","category":"full"}]
+2021-01-19 22:23:19.924 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13438
+2021-01-19 22:23:19.999 info: toe 12457 italy.torino unchanged
+2021-01-19 22:23:21.497 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13689
+2021-01-19 22:23:21.523 info: toe 13438 italy.torino changed phone: +39-3922684591 => +39-3511317445
+2021-01-19 22:23:22.831 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13605
+2021-01-19 22:23:22.910 info: new toe 13689 italy.torino
+2021-01-19 22:23:23.822 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13037
+2021-01-19 22:23:23.834 info: new toe 13605 italy.torino
+2021-01-19 22:23:26.296 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=8824
+2021-01-19 22:23:26.311 info: new toe 13037 italy.torino
+2021-01-19 22:23:27.802 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=8936
+2021-01-19 22:23:27.824 info: new toe 8824 italy.torino
+2021-01-19 22:23:29.078 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=3783
+2021-01-19 22:23:29.153 info: toe 8936 italy.torino unchanged
+2021-01-19 22:23:30.691 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=11644
+2021-01-19 22:23:30.739 info: toe 3783 italy.torino unchanged
+2021-01-19 22:23:32.240 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=3724
+2021-01-19 22:23:32.276 info: toe 11644 italy.torino unchanged
+2021-01-19 22:24:44.854 info: providers.scrapeProviders.starting.6962593e-3037-489d-8d1e-2d06bd38142e
+2021-01-19 22:24:45.432 info: listPageEvaluate.provider.toe https://www.torinoerotica.com/annunci-escort-torino/
+2021-01-19 22:24:51.397 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13245
+2021-01-19 22:24:53.900 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13008
+2021-01-19 22:24:53.953 info: toe 13245 italy.torino unchanged
+2021-01-19 22:24:54.946 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=11602
+2021-01-19 22:24:54.976 info: toe 13008 italy.torino unchanged
+2021-01-19 22:24:56.234 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=7286
+2021-01-19 22:24:56.290 info: toe 11602 italy.torino unchanged
+2021-01-19 22:24:58.419 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=9317
+2021-01-19 22:24:58.551 info: toe 7286 italy.torino unchanged
+2021-01-19 22:24:59.840 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=9700
+2021-01-19 22:24:59.908 info: toe 9317 italy.torino unchanged
+2021-01-19 22:25:01.707 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=9374
+2021-01-19 22:25:01.737 info: toe 9700 italy.torino unchanged
+2021-01-19 22:25:04.166 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13096
+2021-01-19 22:25:04.266 info: toe 9374 italy.torino unchanged
+2021-01-19 22:25:06.601 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=12860
+2021-01-19 22:25:06.641 info: toe 13096 italy.torino unchanged
+2021-01-19 22:25:09.829 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13545
+2021-01-19 22:25:09.882 info: toe 12860 italy.torino unchanged
+2021-01-19 22:25:11.799 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=9594
+2021-01-19 22:25:11.846 info: toe 13545 italy.torino unchanged
+2021-01-19 22:25:12.648 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=11517
+2021-01-19 22:25:12.677 info: toe 9594 italy.torino unchanged
+2021-01-19 22:25:13.908 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=12391
+2021-01-19 22:25:13.922 info: toe 11517 italy.torino unchanged
+2021-01-19 22:25:14.893 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=12774
+2021-01-19 22:25:14.952 info: toe 12391 italy.torino unchanged
+2021-01-19 22:25:16.392 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13206
+2021-01-19 22:25:16.455 info: toe 12774 italy.torino unchanged
+2021-01-19 22:25:18.397 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13530
+2021-01-19 22:25:18.440 info: toe 13206 italy.torino unchanged
+2021-01-19 22:25:20.423 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=4376
+2021-01-19 22:25:20.479 info: toe 13530 italy.torino unchanged
+2021-01-19 22:25:22.398 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=4360
+2021-01-19 22:25:22.442 info: toe 4376 italy.torino unchanged
+2021-01-19 22:25:24.594 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=3907
+2021-01-19 22:25:24.612 info: toe 4360 italy.torino unchanged
+2021-01-19 22:25:25.942 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13518
+2021-01-19 22:25:25.981 info: toe 3907 italy.torino unchanged
+2021-01-19 22:25:27.509 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13487
+2021-01-19 22:25:27.563 info: toe 13518 italy.torino unchanged
+2021-01-19 22:25:28.514 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=9638
+2021-01-19 22:25:28.540 info: toe 13487 italy.torino unchanged
+2021-01-19 22:25:30.672 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=5463
+2021-01-19 22:25:30.799 info: toe 9638 italy.torino unchanged
+2021-01-19 22:25:32.139 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=11823
+2021-01-19 22:25:32.218 info: toe 5463 italy.torino unchanged
+2021-01-19 22:25:33.071 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=3667
+2021-01-19 22:25:33.109 info: toe 11823 italy.torino unchanged
+2021-01-19 22:25:34.556 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=12457
+2021-01-19 22:25:34.657 info: toe 3667 italy.torino unchanged
+2021-01-19 22:25:35.479 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13438
+2021-01-19 22:25:35.516 info: toe 12457 italy.torino unchanged
+2021-01-19 22:25:36.649 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13689
+2021-01-19 22:25:36.694 info: toe 13438 italy.torino unchanged
+2021-01-19 22:25:37.635 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13605
+2021-01-19 22:25:37.659 info: toe 13689 italy.torino unchanged
+2021-01-19 22:25:38.709 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13037
+2021-01-19 22:25:38.726 info: toe 13605 italy.torino unchanged
+2021-01-19 22:25:40.977 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=8824
+2021-01-19 22:25:41.014 info: toe 13037 italy.torino unchanged
+2021-01-19 22:25:42.573 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=8936
+2021-01-19 22:25:42.605 info: toe 8824 italy.torino unchanged
+2021-01-19 22:25:44.164 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=3783
+2021-01-19 22:25:44.204 info: toe 8936 italy.torino unchanged
+2021-01-19 22:25:45.701 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=11644
+2021-01-19 22:25:45.733 info: toe 3783 italy.torino unchanged
+2021-01-19 22:25:46.629 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=3724
+2021-01-19 22:25:46.662 info: toe 11644 italy.torino unchanged
+2021-01-19 22:25:48.940 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=7807
+2021-01-19 22:25:48.992 info: toe 3724 italy.torino unchanged
+2021-01-19 22:25:49.996 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=4485
+2021-01-19 22:25:50.041 info: toe 7807 italy.torino unchanged
+2021-01-19 22:25:51.046 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=4245
+2021-01-19 22:25:51.101 info: toe 4485 italy.torino unchanged
+2021-01-19 22:25:52.479 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=10484
+2021-01-19 22:25:52.507 info: toe 4245 italy.torino unchanged
+2021-01-19 22:25:53.332 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13686
+2021-01-19 22:25:53.364 info: toe 10484 italy.torino unchanged
+2021-01-19 22:25:54.378 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=4997
+2021-01-19 22:25:54.396 info: new toe 13686 italy.torino
+2021-01-19 22:25:55.394 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=12996
+2021-01-19 22:25:55.512 info: toe 4997 italy.torino added 1 comments: [{"_id":"60074e633356f345d59e11c5","author":"TAXI_TORINO","date":"2021-01-18T15:51:48.000Z","text":"Continuo sempre ad andare a trovarla! Una bella donna che sa come succhiare un cazzo fino alla fine, per me a Torino non ha concorrenza. In questo momento essendo lei stata sempre attenta alla pulizia mi lascia anche tranquillo. Ciao Sabrina a presto"}]
+2021-01-19 22:25:55.512 info: toe 4997 italy.torino removed 2 images: [{"_id":"60034b7e7c714bf3179cfc9d","url":"photo-escort/92846-4997/s/1-213174421-3814702832.jpg","category":"main"},{"_id":"60034b7e7c714bf3179cfca0","url":"photo-escort/92846-4997/1-213174421-3814702832.jpg","category":"full"}]
+2021-01-19 22:25:55.513 info: toe 4997 italy.torino added 2 images: [{"_id":"60074e633356f345d59e11be","url":"photo-escort/92846-4997/s/1-605082304-3820149975.jpeg","category":"main"},{"_id":"60074e633356f345d59e11c1","url":"photo-escort/92846-4997/1-605082304-3820149975.jpeg","category":"full"}]
+2021-01-19 22:25:56.246 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=3681
+2021-01-19 22:25:56.276 info: toe 12996 italy.torino unchanged
+2021-01-19 22:25:57.123 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=11164
+2021-01-19 22:25:57.213 info: toe 3681 italy.torino unchanged
+2021-01-19 22:25:58.135 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13488
+2021-01-19 22:25:58.193 info: toe 11164 italy.torino unchanged
+2021-01-19 22:25:59.402 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=4963
+2021-01-19 22:25:59.462 info: toe 13488 italy.torino unchanged
+2021-01-19 22:26:00.452 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=10020
+2021-01-19 22:26:00.476 info: toe 4963 italy.torino unchanged
+2021-01-19 22:26:01.396 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13429
+2021-01-19 22:26:01.416 info: toe 10020 italy.torino unchanged
+2021-01-19 22:26:02.463 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=4994
+2021-01-19 22:26:02.481 info: toe 13429 italy.torino unchanged
+2021-01-19 22:26:03.422 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=3710
+2021-01-19 22:26:03.450 info: toe 4994 italy.torino unchanged
+2021-01-19 22:26:04.361 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=10860
+2021-01-19 22:26:04.387 info: toe 3710 italy.torino unchanged
+2021-01-19 22:26:05.215 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=7316
+2021-01-19 22:26:05.239 info: toe 10860 italy.torino unchanged
+2021-01-19 22:26:06.468 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=12823
+2021-01-19 22:26:06.510 info: toe 7316 italy.torino unchanged
+2021-01-19 22:26:07.413 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=5017
+2021-01-19 22:26:07.436 info: toe 12823 italy.torino unchanged
+2021-01-19 22:26:08.643 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=4341
+2021-01-19 22:26:08.669 info: toe 5017 italy.torino unchanged
+2021-01-19 22:26:09.733 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13497
+2021-01-19 22:26:09.765 info: toe 4341 italy.torino unchanged
+2021-01-19 22:26:10.661 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13395
+2021-01-19 22:26:10.682 info: toe 13497 italy.torino added 1 comments: [{"_id":"60074e723356f345d59e12af","author":"Piningius","date":"2021-01-16T23:20:03.000Z","text":"Attenti! È una strega che vi ammalia. Non potrete più farne a meno!"}]
+2021-01-19 22:26:11.680 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=10332
+2021-01-19 22:26:11.715 info: toe 13395 italy.torino unchanged
+2021-01-19 22:26:13.425 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13580
+2021-01-19 22:26:13.487 info: toe 10332 italy.torino unchanged
+2021-01-19 22:26:14.568 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13132
+2021-01-19 22:26:14.596 info: toe 13580 italy.torino unchanged
+2021-01-19 22:26:16.281 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=9942
+2021-01-19 22:26:16.297 info: toe 13132 italy.torino unchanged
+2021-01-19 22:26:17.430 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13034
+2021-01-19 22:26:17.443 info: toe 9942 italy.torino unchanged
+2021-01-19 22:26:18.434 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=6096
+2021-01-19 22:26:18.510 info: toe 13034 italy.torino unchanged
+2021-01-19 22:26:19.534 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=12039
+2021-01-19 22:26:19.597 info: toe 6096 italy.torino unchanged
+2021-01-19 22:26:20.958 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=12909
+2021-01-19 22:26:21.031 info: toe 12039 italy.torino unchanged
+2021-01-19 22:26:21.881 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=3863
+2021-01-19 22:26:21.914 error: uncaughtException: Cannot find module 'diff'
+Require stack:
+- /home/marco/apps/web-scraping/src/controllers/providers.js
+- /home/marco/apps/web-scraping/src/routes/providers.js
+- /home/marco/apps/web-scraping/src/index.js
+Error: Cannot find module 'diff'
+Require stack:
+- /home/marco/apps/web-scraping/src/controllers/providers.js
+- /home/marco/apps/web-scraping/src/routes/providers.js
+- /home/marco/apps/web-scraping/src/index.js
+    at Function.Module._resolveFilename (internal/modules/cjs/loader.js:880:15)
+    at Function.Module._load (internal/modules/cjs/loader.js:725:27)
+    at Module.require (internal/modules/cjs/loader.js:952:19)
+    at require (internal/modules/cjs/helpers.js:88:18)
+    at /home/marco/apps/web-scraping/src/controllers/providers.js:407:26
+    at Array.map (<anonymous>)
+    at compareItemsHistoryes (/home/marco/apps/web-scraping/src/controllers/providers.js:390:24)
+    at /home/marco/apps/web-scraping/src/controllers/providers.js:370:11
+    at /home/marco/apps/web-scraping/node_modules/mongoose/lib/model.js:4838:16
+    at /home/marco/apps/web-scraping/node_modules/mongoose/lib/helpers/promiseOrCallback.js:24:16
+    at /home/marco/apps/web-scraping/node_modules/mongoose/lib/model.js:4861:21
+    at model.<anonymous> (/home/marco/apps/web-scraping/node_modules/mongoose/lib/model.js:502:7)
+    at /home/marco/apps/web-scraping/node_modules/kareem/index.js:315:21
+    at next (/home/marco/apps/web-scraping/node_modules/kareem/index.js:209:27)
+    at /home/marco/apps/web-scraping/node_modules/kareem/index.js:182:9
+    at /home/marco/apps/web-scraping/node_modules/kareem/index.js:507:38
+2021-01-19 22:26:21.916 error: uncaught exception Error: Cannot find module 'diff'
+Require stack:
+- /home/marco/apps/web-scraping/src/controllers/providers.js
+- /home/marco/apps/web-scraping/src/routes/providers.js
+- /home/marco/apps/web-scraping/src/index.js
+    at Function.Module._resolveFilename (internal/modules/cjs/loader.js:880:15)
+    at Function.Module._load (internal/modules/cjs/loader.js:725:27)
+    at Module.require (internal/modules/cjs/loader.js:952:19)
+    at require (internal/modules/cjs/helpers.js:88:18)
+    at /home/marco/apps/web-scraping/src/controllers/providers.js:407:26
+    at Array.map (<anonymous>)
+    at compareItemsHistoryes (/home/marco/apps/web-scraping/src/controllers/providers.js:390:24)
+    at /home/marco/apps/web-scraping/src/controllers/providers.js:370:11
+    at /home/marco/apps/web-scraping/node_modules/mongoose/lib/model.js:4838:16
+    at /home/marco/apps/web-scraping/node_modules/mongoose/lib/helpers/promiseOrCallback.js:24:16
+    at /home/marco/apps/web-scraping/node_modules/mongoose/lib/model.js:4861:21
+    at model.<anonymous> (/home/marco/apps/web-scraping/node_modules/mongoose/lib/model.js:502:7)
+    at /home/marco/apps/web-scraping/node_modules/kareem/index.js:315:21
+    at next (/home/marco/apps/web-scraping/node_modules/kareem/index.js:209:27)
+    at /home/marco/apps/web-scraping/node_modules/kareem/index.js:182:9
+    at /home/marco/apps/web-scraping/node_modules/kareem/index.js:507:38
+2021-01-19 22:26:58.458 info: providers.scrapeProviders.starting.e633ee71-6f46-46c9-b955-c5a4aa733c03
+2021-01-19 22:26:58.866 info: listPageEvaluate.provider.toe https://www.torinoerotica.com/annunci-escort-torino/
+2021-01-19 22:27:05.360 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13245
+2021-01-19 22:27:07.772 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13008
+2021-01-19 22:27:07.847 info: toe 13245 italy.torino unchanged
+2021-01-19 22:27:09.263 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=11602
+2021-01-19 22:27:09.290 info: toe 13008 italy.torino unchanged
+2021-01-19 22:27:10.220 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=7286
+2021-01-19 22:27:10.287 info: toe 11602 italy.torino unchanged
+2021-01-19 22:27:12.247 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=9317
+2021-01-19 22:27:12.332 info: toe 7286 italy.torino unchanged
+2021-01-19 22:27:13.163 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=9700
+2021-01-19 22:27:13.197 info: toe 9317 italy.torino unchanged
+2021-01-19 22:27:14.516 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=9374
+2021-01-19 22:27:14.550 info: toe 9700 italy.torino unchanged
+2021-01-19 22:27:16.171 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13096
+2021-01-19 22:27:16.256 info: toe 9374 italy.torino unchanged
+2021-01-19 22:27:17.781 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=12860
+2021-01-19 22:27:17.809 info: toe 13096 italy.torino unchanged
+2021-01-19 22:27:18.970 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13545
+2021-01-19 22:27:19.039 info: toe 12860 italy.torino unchanged
+2021-01-19 22:27:20.601 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=9594
+2021-01-19 22:27:20.680 info: toe 13545 italy.torino unchanged
+2021-01-19 22:27:21.565 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=11517
+2021-01-19 22:27:21.634 info: toe 9594 italy.torino unchanged
+2021-01-19 22:27:22.428 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=12391
+2021-01-19 22:27:22.447 info: toe 11517 italy.torino unchanged
+2021-01-19 22:27:23.379 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=12774
+2021-01-19 22:27:23.460 info: toe 12391 italy.torino unchanged
+2021-01-19 22:27:25.174 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13206
+2021-01-19 22:27:25.228 info: toe 12774 italy.torino unchanged
+2021-01-19 22:27:27.465 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13530
+2021-01-19 22:27:27.501 info: toe 13206 italy.torino unchanged
+2021-01-19 22:27:31.138 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=4376
+2021-01-19 22:27:31.171 info: toe 13530 italy.torino unchanged
+2021-01-19 22:27:33.931 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=4360
+2021-01-19 22:27:33.972 info: toe 4376 italy.torino unchanged
+2021-01-19 22:27:35.537 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=3907
+2021-01-19 22:27:35.614 info: toe 4360 italy.torino unchanged
+2021-01-19 22:27:37.283 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13518
+2021-01-19 22:27:37.344 info: toe 3907 italy.torino unchanged
+2021-01-19 22:27:40.190 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13487
+2021-01-19 22:27:40.229 info: toe 13518 italy.torino unchanged
+2021-01-19 22:27:41.434 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=9638
+2021-01-19 22:27:41.490 info: toe 13487 italy.torino unchanged
+2021-01-19 22:27:43.871 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=5463
+2021-01-19 22:27:43.974 info: toe 9638 italy.torino unchanged
+2021-01-19 22:27:45.277 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=11823
+2021-01-19 22:27:45.308 info: toe 5463 italy.torino unchanged
+2021-01-19 22:27:46.435 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=3667
+2021-01-19 22:27:46.475 info: toe 11823 italy.torino unchanged
+2021-01-19 22:27:47.852 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=12457
+2021-01-19 22:27:47.910 info: toe 3667 italy.torino unchanged
+2021-01-19 22:27:49.339 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13438
+2021-01-19 22:27:49.354 info: toe 12457 italy.torino unchanged
+2021-01-19 22:27:50.865 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13689
+2021-01-19 22:27:50.890 info: toe 13438 italy.torino unchanged
+2021-01-19 22:27:52.037 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13605
+2021-01-19 22:27:52.108 info: toe 13689 italy.torino unchanged
+2021-01-19 22:27:53.807 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13037
+2021-01-19 22:27:53.824 info: toe 13605 italy.torino unchanged
+2021-01-19 22:27:55.559 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=8824
+2021-01-19 22:27:55.605 info: toe 13037 italy.torino unchanged
+2021-01-19 22:27:57.068 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=8936
+2021-01-19 22:27:57.125 info: toe 8824 italy.torino unchanged
+2021-01-19 22:27:58.114 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=3783
+2021-01-19 22:27:58.190 info: toe 8936 italy.torino unchanged
+2021-01-19 22:27:59.715 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=11644
+2021-01-19 22:27:59.748 info: toe 3783 italy.torino unchanged
+2021-01-19 22:28:00.684 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=3724
+2021-01-19 22:28:00.744 info: toe 11644 italy.torino unchanged
+2021-01-19 22:28:01.898 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=7807
+2021-01-19 22:28:01.987 info: toe 3724 italy.torino unchanged
+2021-01-19 22:28:02.994 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=4485
+2021-01-19 22:28:03.021 info: toe 7807 italy.torino unchanged
+2021-01-19 22:28:03.850 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=4245
+2021-01-19 22:28:03.890 info: toe 4485 italy.torino unchanged
+2021-01-19 22:28:05.329 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=10484
+2021-01-19 22:28:05.413 info: toe 4245 italy.torino unchanged
+2021-01-19 22:28:06.321 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13686
+2021-01-19 22:28:06.341 info: toe 10484 italy.torino unchanged
+2021-01-19 22:28:07.328 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=4997
+2021-01-19 22:28:07.349 info: toe 13686 italy.torino unchanged
+2021-01-19 22:28:08.439 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=12996
+2021-01-19 22:28:08.509 info: toe 4997 italy.torino unchanged
+2021-01-19 22:28:09.364 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=3681
+2021-01-19 22:28:09.381 info: toe 12996 italy.torino unchanged
+2021-01-19 22:28:10.313 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=11164
+2021-01-19 22:28:10.334 info: toe 3681 italy.torino unchanged
+2021-01-19 22:28:11.259 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13488
+2021-01-19 22:28:11.277 info: toe 11164 italy.torino unchanged
+2021-01-19 22:28:12.781 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=4963
+2021-01-19 22:28:12.827 info: toe 13488 italy.torino unchanged
+2021-01-19 22:28:13.965 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=10020
+2021-01-19 22:28:13.984 info: toe 4963 italy.torino unchanged
+2021-01-19 22:28:14.978 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13429
+2021-01-19 22:28:15.012 info: toe 10020 italy.torino unchanged
+2021-01-19 22:28:15.919 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=4994
+2021-01-19 22:28:15.980 info: toe 13429 italy.torino unchanged
+2021-01-19 22:28:16.954 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=3710
+2021-01-19 22:28:16.976 info: toe 4994 italy.torino unchanged
+2021-01-19 22:28:17.828 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=10860
+2021-01-19 22:28:17.911 info: toe 3710 italy.torino unchanged
+2021-01-19 22:28:18.757 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=7316
+2021-01-19 22:28:18.792 info: toe 10860 italy.torino unchanged
+2021-01-19 22:28:19.808 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=12823
+2021-01-19 22:28:19.839 info: toe 7316 italy.torino unchanged
+2021-01-19 22:28:20.721 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=5017
+2021-01-19 22:28:20.759 info: toe 12823 italy.torino unchanged
+2021-01-19 22:28:22.503 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=4341
+2021-01-19 22:28:22.541 info: toe 5017 italy.torino unchanged
+2021-01-19 22:28:23.548 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13497
+2021-01-19 22:28:23.641 info: toe 4341 italy.torino unchanged
+2021-01-19 22:28:24.626 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13395
+2021-01-19 22:28:24.650 info: toe 13497 italy.torino unchanged
+2021-01-19 22:28:25.466 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=10332
+2021-01-19 22:28:25.478 info: toe 13395 italy.torino unchanged
+2021-01-19 22:28:28.238 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13580
+2021-01-19 22:28:28.264 info: toe 10332 italy.torino unchanged
+2021-01-19 22:28:29.416 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13132
+2021-01-19 22:28:29.439 info: toe 13580 italy.torino unchanged
+2021-01-19 22:28:31.854 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=9942
+2021-01-19 22:28:31.902 info: toe 13132 italy.torino unchanged
+2021-01-19 22:28:32.929 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13034
+2021-01-19 22:28:32.948 info: toe 9942 italy.torino unchanged
+2021-01-19 22:28:33.894 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=6096
+2021-01-19 22:28:33.927 info: toe 13034 italy.torino unchanged
+2021-01-19 22:28:34.936 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=12039
+2021-01-19 22:28:34.980 info: toe 6096 italy.torino unchanged
+2021-01-19 22:28:35.991 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=12909
+2021-01-19 22:28:36.004 info: toe 12039 italy.torino unchanged
+2021-01-19 22:28:36.922 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=3863
+2021-01-19 22:28:36.951 info: toe 12909 italy.torino unchanged
+2021-01-19 22:28:39.365 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=12779
+2021-01-19 22:28:39.406 info: toe 3863 italy.torino unchanged
+2021-01-19 22:28:40.483 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13123
+2021-01-19 22:28:40.527 info: toe 12779 italy.torino unchanged
+2021-01-19 22:28:42.226 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=3757
+2021-01-19 22:28:42.282 info: toe 13123 italy.torino unchanged
+2021-01-19 22:28:43.525 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=4543
+2021-01-19 22:28:43.551 info: toe 3757 italy.torino unchanged
+2021-01-19 22:28:44.769 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=10822
+2021-01-19 22:28:44.885 info: toe 4543 italy.torino unchanged
+2021-01-19 22:28:46.050 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=11297
+2021-01-19 22:28:46.068 info: toe 10822 italy.torino unchanged
+2021-01-19 22:28:47.407 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13080
+2021-01-19 22:28:47.424 info: toe 11297 italy.torino unchanged
+2021-01-19 22:28:49.164 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=3640
+2021-01-19 22:28:49.212 info: toe 13080 italy.torino unchanged
+2021-01-19 22:28:50.739 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=5877
+2021-01-19 22:28:50.754 info: toe 3640 italy.torino unchanged
+2021-01-19 22:28:51.783 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=3871
+2021-01-19 22:28:51.790 info: toe 5877 italy.torino unchanged
+2021-01-19 22:28:53.719 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=3799
+2021-01-19 22:28:53.774 info: toe 3871 italy.torino unchanged
+2021-01-19 22:28:54.853 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13519
+2021-01-19 22:28:54.873 info: toe 3799 italy.torino unchanged
+2021-01-19 22:28:56.010 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13048
+2021-01-19 22:28:56.021 info: toe 13519 italy.torino unchanged
+2021-01-19 22:28:57.532 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=8268
+2021-01-19 22:28:57.578 info: toe 13048 italy.torino unchanged
+2021-01-19 22:28:59.282 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13419
+2021-01-19 22:28:59.309 info: toe 8268 italy.torino unchanged
+2021-01-19 22:29:00.483 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13626
+2021-01-19 22:29:00.531 info: toe 13419 italy.torino unchanged
+2021-01-19 22:29:02.404 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13005
+2021-01-19 22:29:02.430 info: toe 13626 italy.torino unchanged
+2021-01-19 22:29:03.546 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=12977
+2021-01-19 22:29:03.598 info: toe 13005 italy.torino unchanged
+2021-01-19 22:29:04.936 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13666
+2021-01-19 22:29:05.006 info: toe 12977 italy.torino unchanged
+2021-01-19 22:29:06.058 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=10646
+2021-01-19 22:29:06.079 info: toe 13666 italy.torino unchanged
+2021-01-19 22:29:07.023 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=11970
+2021-01-19 22:29:07.076 info: toe 10646 italy.torino unchanged
+2021-01-19 22:29:08.028 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=12413
+2021-01-19 22:29:08.039 info: toe 11970 italy.torino removed 1 images: [{"_id":"60034bcc7c714bf3179cff3f","url":"photo-escort/117526-11970/s/1-171812858-3816769575.jpeg","category":"main"}]
+2021-01-19 22:29:08.040 info: toe 11970 italy.torino added 1 images: [{"_id":"60074f249d14e546d49fbd3d","url":"photo-escort/117526-11970/s/3-171812858-3816769576.JPG","category":"main"}]
+2021-01-19 22:29:09.491 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=3776
+2021-01-19 22:29:09.530 info: toe 12413 italy.torino unchanged
+2021-01-19 22:29:11.258 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13642
+2021-01-19 22:29:11.301 info: toe 3776 italy.torino removed 47 images: [{"_id":"60034bd57c714bf3179cff58","url":"photo-escort/90490-3776/s/1-782171827-3779286980.jpg","category":"main"},{"_id":"60034bd57c714bf3179cff59","url":"photo-escort/90490-3776/1-430084200-3746692000.JPG","category":"full"},{"_id":"60034bd57c714bf3179cff5a","url":"photo-escort/90490-3776/1-430084200-3746692009.JPG","category":"full"},{"_id":"60034bd57c714bf3179cff5b","url":"photo-escort/90490-3776/1-430084200-3746692019.JPG","category":"full"},{"_id":"60034bd57c714bf3179cff5c","url":"photo-escort/90490-3776/1-430084200-3746692030.JPG","category":"full"},{"_id":"60034bd57c714bf3179cff5d","url":"photo-escort/90490-3776/1-430084200-3746694227.JPG","category":"full"},{"_id":"60034bd57c714bf3179cff5e","url":"photo-escort/90490-3776/1-430084200-3746694241.JPG","category":"full"},{"_id":"60034bd57c714bf3179cff5f","url":"photo-escort/90490-3776/1-430084200-3746694254.JPG","category":"full"},{"_id":"60034bd57c714bf3179cff60","url":"photo-escort/90490-3776/1-734195021-3764598674.JPG","category":"full"},{"_id":"60034bd57c714bf3179cff61","url":"photo-escort/90490-3776/1-734195021-3764598687.JPG","category":"full"},{"_id":"60034bd57c714bf3179cff62","url":"photo-escort/90490-3776/1-782171827-3779286980.jpg","category":"full"},{"_id":"60034bd57c714bf3179cff63","url":"photo-escort/90490-3776/1-782171827-3779286987.jpg","category":"full"},{"_id":"60034bd57c714bf3179cff64","url":"photo-escort/90490-3776/1-782171827-3779286993.jpg","category":"full"},{"_id":"60034bd57c714bf3179cff65","url":"photo-escort/90490-3776/1-782171827-3779287051.jpg","category":"full"},{"_id":"60034bd57c714bf3179cff66","url":"photo-escort/90490-3776/1-819389471-3780918407.jpg","category":"full"},{"_id":"60034bd57c714bf3179cff67","url":"photo-escort/90490-3776/2-430084200-3746692001.JPG","category":"full"},{"_id":"60034bd57c714bf3179cff68","url":"photo-escort/90490-3776/2-430084200-3746692011.JPG","category":"full"},{"_id":"60034bd57c714bf3179cff69","url":"photo-escort/90490-3776/2-430084200-3746692031.JPG","category":"full"},{"_id":"60034bd57c714bf3179cff6a","url":"photo-escort/90490-3776/2-430084200-3746694228.JPG","category":"full"},{"_id":"60034bd57c714bf3179cff6b","url":"photo-escort/90490-3776/2-430084200-3746694243.JPG","category":"full"},{"_id":"60034bd57c714bf3179cff6c","url":"photo-escort/90490-3776/2-430084200-3746694255.JPG","category":"full"},{"_id":"60034bd57c714bf3179cff6d","url":"photo-escort/90490-3776/2-734195021-3764598675.JPG","category":"full"},{"_id":"60034bd57c714bf3179cff6e","url":"photo-escort/90490-3776/2-734195021-3764598689.JPG","category":"full"},{"_id":"60034bd57c714bf3179cff6f","url":"photo-escort/90490-3776/2-782171827-3779286987.jpg","category":"full"},{"_id":"60034bd57c714bf3179cff70","url":"photo-escort/90490-3776/3-430084200-3746692012.JPG","category":"full"},{"_id":"60034bd57c714bf3179cff71","url":"photo-escort/90490-3776/3-430084200-3746692033.JPG","category":"full"},{"_id":"60034bd57c714bf3179cff72","url":"photo-escort/90490-3776/3-430084200-3746694229.JPG","category":"full"},{"_id":"60034bd57c714bf3179cff73","url":"photo-escort/90490-3776/3-430084200-3746694243.JPG","category":"full"},{"_id":"60034bd57c714bf3179cff74","url":"photo-escort/90490-3776/3-430084200-3746694256.JPG","category":"full"},{"_id":"60034bd57c714bf3179cff75","url":"photo-escort/90490-3776/3-734195021-3764598676.JPG","category":"full"},{"_id":"60034bd57c714bf3179cff76","url":"photo-escort/90490-3776/3-734195021-3764598691.JPG","category":"full"},{"_id":"60034bd57c714bf3179cff77","url":"photo-escort/90490-3776/3-782171827-3779286981.jpg","category":"full"},{"_id":"60034bd57c714bf3179cff78","url":"photo-escort/90490-3776/3-782171827-3779286988.jpg","category":"full"},{"_id":"60034bd57c714bf3179cff79","url":"photo-escort/90490-3776/4-430084200-3746692023.JPG","category":"full"},{"_id":"60034bd57c714bf3179cff7a","url":"photo-escort/90490-3776/4-430084200-3746692034.JPG","category":"full"},{"_id":"60034bd57c714bf3179cff7b","url":"photo-escort/90490-3776/4-430084200-3746694230.JPG","category":"full"},{"_id":"60034bd57c714bf3179cff7c","url":"photo-escort/90490-3776/4-430084200-3746694245.JPG","category":"full"},{"_id":"60034bd57c714bf3179cff7d","url":"photo-escort/90490-3776/4-430084200-3746694257.JPG","category":"full"},{"_id":"60034bd57c714bf3179cff7e","url":"photo-escort/90490-3776/4-734195021-3764598678.JPG","category":"full"},{"_id":"60034bd57c714bf3179cff7f","url":"photo-escort/90490-3776/4-782171827-3779286981.jpg","category":"full"},{"_id":"60034bd57c714bf3179cff80","url":"photo-escort/90490-3776/4-782171827-3779286988.jpg","category":"full"},{"_id":"60034bd57c714bf3179cff81","url":"photo-escort/90490-3776/5-430084200-3746692024.JPG","category":"full"},{"_id":"60034bd57c714bf3179cff82","url":"photo-escort/90490-3776/5-430084200-3746692035.JPG","category":"full"},{"_id":"60034bd57c714bf3179cff83","url":"photo-escort/90490-3776/5-430084200-3746694232.JPG","category":"full"},{"_id":"60034bd57c714bf3179cff84","url":"photo-escort/90490-3776/5-430084200-3746694246.JPG","category":"full"},{"_id":"60034bd57c714bf3179cff85","url":"photo-escort/90490-3776/5-734195021-3764598680.JPG","category":"full"},{"_id":"60034bd57c714bf3179cff86","url":"photo-escort/90490-3776/5-782171827-3779286981.jpg","category":"full"}]
+2021-01-19 22:29:11.302 info: toe 3776 italy.torino added 14 images: [{"_id":"60074f279d14e546d49fbd56","url":"photo-escort/90490-3776/s/5-605054280-3820131004.jpg","category":"main"},{"_id":"60074f279d14e546d49fbd57","url":"photo-escort/90490-3776/1-605054280-3820130997.jpg","category":"full"},{"_id":"60074f279d14e546d49fbd58","url":"photo-escort/90490-3776/1-605054280-3820131003.jpg","category":"full"},{"_id":"60074f279d14e546d49fbd59","url":"photo-escort/90490-3776/1-605054280-3820131014.jpg","category":"full"},{"_id":"60074f279d14e546d49fbd5a","url":"photo-escort/90490-3776/2-605054280-3820130998.jpg","category":"full"},{"_id":"60074f279d14e546d49fbd5b","url":"photo-escort/90490-3776/2-605054280-3820131004.jpg","category":"full"},{"_id":"60074f279d14e546d49fbd5c","url":"photo-escort/90490-3776/2-605054280-3820131015.jpg","category":"full"},{"_id":"60074f279d14e546d49fbd5d","url":"photo-escort/90490-3776/3-605054280-3820130998.jpg","category":"full"},{"_id":"60074f279d14e546d49fbd5e","url":"photo-escort/90490-3776/3-605054280-3820131004.jpg","category":"full"},{"_id":"60074f279d14e546d49fbd5f","url":"photo-escort/90490-3776/3-605054280-3820131015.jpg","category":"full"},{"_id":"60074f279d14e546d49fbd60","url":"photo-escort/90490-3776/4-605054280-3820130998.jpg","category":"full"},{"_id":"60074f279d14e546d49fbd61","url":"photo-escort/90490-3776/4-605054280-3820131004.jpg","category":"full"},{"_id":"60074f279d14e546d49fbd62","url":"photo-escort/90490-3776/5-605054280-3820130998.jpg","category":"full"},{"_id":"60074f279d14e546d49fbd63","url":"photo-escort/90490-3776/5-605054280-3820131004.jpg","category":"full"}]
+2021-01-19 22:29:12.800 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13453
+2021-01-19 22:29:12.829 info: toe 13642 italy.torino unchanged
+2021-01-19 22:29:14.159 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=10068
+2021-01-19 22:29:14.178 info: toe 13453 italy.torino unchanged
+2021-01-19 22:29:15.328 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=7679
+2021-01-19 22:29:15.350 info: toe 10068 italy.torino unchanged
+2021-01-19 22:29:17.161 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13179
+2021-01-19 22:29:17.182 info: toe 7679 italy.torino removed 2 images: [{"_id":"60034bde7c714bf3179cffd8","url":"photo-escort/99788-7679/s/5-650238893-3819571898.jpg","category":"main"},{"_id":"60034bde7c714bf3179cffe0","url":"photo-escort/99788-7679/2-650238893-3819571897.jpg","category":"full"}]
+2021-01-19 22:29:17.182 info: toe 7679 italy.torino added 2 images: [{"_id":"60074f2d9d14e546d49fbd97","url":"photo-escort/99788-7679/s/1-391265042-3820051411.jpg","category":"main"},{"_id":"60074f2d9d14e546d49fbd98","url":"photo-escort/99788-7679/1-391265042-3820051411.jpg","category":"full"}]
+2021-01-19 22:29:23.556 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13671
+2021-01-19 22:29:23.573 info: toe 13179 italy.torino unchanged
+2021-01-19 22:29:25.590 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13567
+2021-01-19 22:29:25.672 info: toe 13671 italy.torino changed phone: [90m+[39m[41m380[49m[42m44[49m[90m-[39m[41m9[49m[42m74[49m[90m5[39m[41m9[49m[90m12[39m[42m1[49m[90m6[39m[41m5[49m[42m8[49m[90m2[39m[41m0[49m[42m3[49m
+2021-01-19 22:29:30.038 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=11372
+2021-01-19 22:29:30.075 info: toe 13567 italy.torino unchanged
+2021-01-19 22:29:31.126 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13625
+2021-01-19 22:29:31.149 info: toe 11372 italy.torino unchanged
+2021-01-19 22:29:32.873 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=12629
+2021-01-19 22:29:32.904 info: toe 13625 italy.torino unchanged
+2021-01-19 22:29:34.705 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13675
+2021-01-19 22:29:34.783 info: toe 12629 italy.torino unchanged
+2021-01-19 22:29:36.345 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=11603
+2021-01-19 22:29:36.371 info: toe 13675 italy.torino unchanged
+2021-01-19 22:29:40.742 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13596
+2021-01-19 22:29:40.772 info: toe 11603 italy.torino unchanged
+2021-01-19 22:29:44.672 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=11921
+2021-01-19 22:29:44.713 info: toe 13596 italy.torino unchanged
+2021-01-19 22:29:46.631 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13679
+2021-01-19 22:29:46.648 info: toe 11921 italy.torino unchanged
+2021-01-19 22:29:48.603 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=3843
+2021-01-19 22:29:48.635 info: toe 13679 italy.torino unchanged
+2021-01-19 22:29:52.512 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13682
+2021-01-19 22:29:52.554 info: toe 3843 italy.torino unchanged
+2021-01-19 22:29:55.387 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13683
+2021-01-19 22:29:55.402 info: toe 13682 italy.torino unchanged
+2021-01-19 22:29:57.340 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=4934
+2021-01-19 22:29:57.350 info: toe 13683 italy.torino unchanged
+2021-01-19 22:29:58.780 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13146
+2021-01-19 22:29:58.838 info: new toe 4934 italy.torino
+2021-01-19 22:30:01.319 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13525
+2021-01-19 22:30:01.353 info: toe 13146 italy.torino changed subtitle: [90mV[39m[41mALENTINA
+V[49m[90malentin sexy e provocante l'escort che sogni di incontrare[39m
+2021-01-19 22:30:01.356 info: toe 13146 italy.torino removed 9 images: [{"_id":"5ffe0e2b212fcd25f09a5007","url":"photo-escort/121703-13146/s/2-817921303-3816524957.JPG","category":"main","date":"2020-12-07T16:49:17.000Z","etag":"\"7fe4dae6b8ccd61:0\"","localPath":"./cache/persons/images/toe/13146_valentina_main_d56736f35ec25af8e4b0ecd044e422eb.jpg"},{"_id":"5ffe0e2c212fcd25f09a500f","url":"photo-escort/121703-13146/1-817921303-3816524951.jpg","category":"full","date":"2020-12-07T16:49:11.000Z","etag":"\"3834ce3b8ccd61:0\"","localPath":"./cache/persons/images/toe/13146_valentina_full_fe98e74529715a07e3db5b78f16e7330.jpg"},{"_id":"5ffe0e2c212fcd25f09a5013","url":"photo-escort/121703-13146/1-817921303-3816524957.JPG","category":"full","date":"2020-12-07T16:49:17.000Z","etag":"\"2b70c3e6b8ccd61:0\"","localPath":"./cache/persons/images/toe/13146_valentina_full_7c14f730e53430e35c305e1dca0061dc.jpg"},{"_id":"5ffe0e2d212fcd25f09a5017","url":"photo-escort/121703-13146/2-817921303-3816524951.JPG","category":"full","date":"2020-12-07T16:49:11.000Z","etag":"\"fb616fe3b8ccd61:0\"","localPath":"./cache/persons/images/toe/13146_valentina_full_95ca0880ee3f3a5b0c9474a186735b02.jpg"},{"_id":"5ffe0e2d212fcd25f09a501b","url":"photo-escort/121703-13146/2-817921303-3816524957.JPG","category":"full","date":"2020-12-07T16:49:17.000Z","etag":"\"7b6ce5e6b8ccd61:0\"","localPath":"./cache/persons/images/toe/13146_valentina_full_60e1456528b4c896760bb15f6b45feae.jpg"},{"_id":"5ffe0e2e212fcd25f09a5021","url":"photo-escort/121703-13146/3-817921303-3816524951.JPG","category":"full","date":"2020-12-07T16:49:11.000Z","etag":"\"e5c193e3b8ccd61:0\"","localPath":"./cache/persons/images/toe/13146_valentina_full_c3dea1a2bed04cbc93bdee63be982786.jpg"},{"_id":"5ffe0e2f212fcd25f09a5025","url":"photo-escort/121703-13146/3-817921303-3816524957.JPG","category":"full","date":"2020-12-07T16:49:17.000Z","etag":"\"5f626e7b8ccd61:0\"","localPath":"./cache/persons/images/toe/13146_valentina_full_f60c0ff3d19ef34b6c7314a41a0317f6.jpg"},{"_id":"5ffe0e30212fcd25f09a502b","url":"photo-escort/121703-13146/4-817921303-3816524951.JPG","category":"full","date":"2020-12-07T16:49:12.000Z","etag":"\"49bfb4e3b8ccd61:0\"","localPath":"./cache/persons/images/toe/13146_valentina_full_71eb8524cf577a144998b01f1febddd4.jpg"},{"_id":"5ffe0e31212fcd25f09a502f","url":"photo-escort/121703-13146/5-817921303-3816524952.JPG","category":"full","date":"2020-12-07T16:49:12.000Z","etag":"\"1f6ec6e3b8ccd61:0\"","localPath":"./cache/persons/images/toe/13146_valentina_full_068871e370bd230a33d8beb3e46d9780.jpg"}]
+2021-01-19 22:30:01.356 info: toe 13146 italy.torino added 9 images: [{"_id":"60074f599d14e546d49fbe59","url":"photo-escort/121703-13146/s/4-817921303-3816524951.JPG","category":"main"},{"_id":"60074f599d14e546d49fbe5a","url":"photo-escort/121703-13146/1-817921303-3816524951.jpg","category":"full"},{"_id":"60074f599d14e546d49fbe5b","url":"photo-escort/121703-13146/1-817921303-3816524957.JPG","category":"full"},{"_id":"60074f599d14e546d49fbe5c","url":"photo-escort/121703-13146/2-817921303-3816524951.JPG","category":"full"},{"_id":"60074f599d14e546d49fbe5d","url":"photo-escort/121703-13146/2-817921303-3816524957.JPG","category":"full"},{"_id":"60074f599d14e546d49fbe5e","url":"photo-escort/121703-13146/3-817921303-3816524951.JPG","category":"full"},{"_id":"60074f599d14e546d49fbe5f","url":"photo-escort/121703-13146/3-817921303-3816524957.JPG","category":"full"},{"_id":"60074f599d14e546d49fbe60","url":"photo-escort/121703-13146/4-817921303-3816524951.JPG","category":"full"},{"_id":"60074f599d14e546d49fbe61","url":"photo-escort/121703-13146/5-817921303-3816524952.JPG","category":"full"}]
+2021-01-19 22:30:05.618 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=9789
+2021-01-19 22:30:05.668 info: toe 13525 italy.torino changed subtitle: [90mJ[39m[41mESSICA
+J[49m[90messica, favolosa ragazza mora, bella come una modella[39m
+2021-01-19 22:30:05.670 info: toe 13525 italy.torino removed 22 images: [{"_id":"5ffe0c4f212fcd25f09a41cf","url":"photo-escort/123419-13525/s/4-1023484238-3813479248.jpg","category":"main","date":"2020-11-02T10:47:52.000Z","etag":"\"c7de709d5b1d61:0\"","localPath":"./cache/persons/images/toe/13525_jessica_main_5a77838a0f042fc960f79afc94e16fbb.jpg"},{"_id":"5ffe0c4f212fcd25f09a41d3","url":"photo-escort/123419-13525/1-1023484238-3813479247.jpg","category":"full","date":"2020-11-02T10:47:53.000Z","etag":"\"ced4e29d5b1d61:0\"","localPath":"./cache/persons/images/toe/13525_jessica_full_241cdf77ca4049f2ad2143b495310522.jpg"},{"_id":"5ffe0c50212fcd25f09a41d5","url":"photo-escort/123419-13525/1-1023484238-3813479262.jpg","category":"full","date":"2020-11-02T10:47:53.000Z","etag":"\"ca1e109e5b1d61:0\"","localPath":"./cache/persons/images/toe/13525_jessica_full_b8b05e646b1fc1dfa03cda98250f6ad2.jpg"},{"_id":"5ffe0c50212fcd25f09a41db","url":"photo-escort/123419-13525/1-1023488798-3813482868.JPG","category":"full","date":"2020-11-02T11:47:48.000Z","etag":"\"7c0e8fcdb1d61:0\"","localPath":"./cache/persons/images/toe/13525_jessica_full_764fc4c897f1ef8629fdb6e5a7f519de.jpg"},{"_id":"5ffe0c52212fcd25f09a41df","url":"photo-escort/123419-13525/1-1023488798-3813484088.JPG","category":"full","date":"2020-11-02T12:08:09.000Z","etag":"\"f5623dd410b1d61:0\"","localPath":"./cache/persons/images/toe/13525_jessica_full_39eb2548a265b3f7dac6c71bc0d8efe1.jpg"},{"_id":"5ffe0c54212fcd25f09a41e5","url":"photo-escort/123419-13525/1-1023488798-3813484095.JPG","category":"full","date":"2020-11-02T12:08:16.000Z","etag":"\"413c4ed810b1d61:0\"","localPath":"./cache/persons/images/toe/13525_jessica_full_5d461ed2cf546de8511783ba8596fd22.jpg"},{"_id":"5ffe0c54212fcd25f09a41e9","url":"photo-escort/123419-13525/1-1023488798-3813484264.JPG","category":"full","date":"2020-11-02T12:11:04.000Z","etag":"\"6e7bca3c11b1d61:0\"","localPath":"./cache/persons/images/toe/13525_jessica_full_935ab84c6533045edebcdf0ab552be5b.jpg"},{"_id":"5ffe0c55212fcd25f09a41ef","url":"photo-escort/123419-13525/1-1023488798-3813484303.JPG","category":"full","date":"2020-11-02T12:11:43.000Z","etag":"\"ac52205411b1d61:0\"","localPath":"./cache/persons/images/toe/13525_jessica_full_db4974e90339dc81b08918f3d3cfe80a.jpg"},{"_id":"5ffe0c56212fcd25f09a41f5","url":"photo-escort/123419-13525/1-1023488798-3813484456.JPG","category":"full","date":"2020-11-02T12:14:16.000Z","etag":"\"43d712af11b1d61:0\"","localPath":"./cache/persons/images/toe/13525_jessica_full_d4a431215cc3fb49521194e79a4d04c5.jpg"},{"_id":"5ffe0c57212fcd25f09a41ff","url":"photo-escort/123419-13525/1-1023488798-3813484589.JPG","category":"full","date":"2020-11-02T12:16:29.000Z","etag":"\"192667fe11b1d61:0\"","localPath":"./cache/persons/images/toe/13525_jessica_full_4f8e4c9bd6f8acc907779f931409303f.jpg"},{"_id":"5ffe0c58212fcd25f09a4203","url":"photo-escort/123419-13525/1-1023488798-3813484966.JPG","category":"full","date":"2020-11-02T12:22:46.000Z","etag":"\"174958df12b1d61:0\"","localPath":"./cache/persons/images/toe/13525_jessica_full_f0a05482a95b6c4879ea85c3260e3eba.jpg"},{"_id":"5ffe0c58212fcd25f09a4207","url":"photo-escort/123419-13525/1-1023488798-3813484977.JPG","category":"full","date":"2020-11-02T12:22:57.000Z","etag":"\"62eecae512b1d61:0\"","localPath":"./cache/persons/images/toe/13525_jessica_full_19c417fedeea38cb19e6a4ddeb68f9e3.jpg"},{"_id":"5ffe0c59212fcd25f09a420d","url":"photo-escort/123419-13525/1-1023488798-3813485115.JPG","category":"full","date":"2020-11-02T12:25:16.000Z","etag":"\"26343f3813b1d61:0\"","localPath":"./cache/persons/images/toe/13525_jessica_full_03c5edbbafc39606a2c31b9df518f6e3.jpg"},{"_id":"5ffe0c59212fcd25f09a4211","url":"photo-escort/123419-13525/1-1023488798-3813485389.jpg","category":"full","date":"2020-11-02T12:29:50.000Z","etag":"\"53718fdb13b1d61:0\"","localPath":"./cache/persons/images/toe/13525_jessica_full_2df14fd497d9f4fcb1ed11c4b522d3f5.jpg"},{"_id":"5ffe0c5a212fcd25f09a4215","url":"photo-escort/123419-13525/1-1023488798-3813485499.JPG","category":"full","date":"2020-11-02T12:31:39.000Z","etag":"\"e0b3c51c14b1d61:0\"","localPath":"./cache/persons/images/toe/13525_jessica_full_206fe4fb07dbbc9cb27fbad2a8de9151.jpg"},{"_id":"5ffe0c5a212fcd25f09a4217","url":"photo-escort/123419-13525/1-1023488798-3813485623.JPG","category":"full","date":"2020-11-02T12:33:43.000Z","etag":"\"27decf6614b1d61:0\"","localPath":"./cache/persons/images/toe/13525_jessica_full_eb686f9f78e5eb6750eab46985cabc67.jpg"},{"_id":"5ffe0c5b212fcd25f09a421b","url":"photo-escort/123419-13525/2-1023484238-3813479234.jpg","category":"full","date":"2020-11-02T10:47:53.000Z","etag":"\"e860cd9d5b1d61:0\"","localPath":"./cache/persons/images/toe/13525_jessica_full_06deea288ef43c5cd93f5e7bdd832eee.jpg"},{"_id":"5ffe0c5b212fcd25f09a421f","url":"photo-escort/123419-13525/2-1023484238-3813479247.jpg","category":"full","date":"2020-11-02T10:47:53.000Z","etag":"\"d5bfee9d5b1d61:0\"","localPath":"./cache/persons/images/toe/13525_jessica_full_dfdb16e6c9c2d880a0df6a4ed662b285.jpg"},{"_id":"5ffe0c5d212fcd25f09a4227","url":"photo-escort/123419-13525/2-1023484238-3813479262.jpg","category":"full","date":"2020-11-02T10:47:53.000Z","etag":"\"c991c9e5b1d61:0\"","localPath":"./cache/persons/images/toe/13525_jessica_full_407aba8d6e9a974ad44a6ac7908b5687.jpg"},{"_id":"5ffe0c5d212fcd25f09a4229","url":"photo-escort/123419-13525/3-1023484238-3813479248.jpg","category":"full","date":"2020-11-02T10:47:53.000Z","etag":"\"dbaafa9d5b1d61:0\"","localPath":"./cache/persons/images/toe/13525_jessica_full_1d6e6c6acc5162a7a9f257db2c281213.jpg"},{"_id":"5ffe0c5e212fcd25f09a422f","url":"photo-escort/123419-13525/3-1023484238-3813479262.jpg","category":"full","date":"2020-11-02T10:47:54.000Z","etag":"\"d3f4279e5b1d61:0\"","localPath":"./cache/persons/images/toe/13525_jessica_full_883c9037f3a24146740ee49bde5d7ea3.jpg"},{"_id":"5ffe0c5e212fcd25f09a4233","url":"photo-escort/123419-13525/4-1023484238-3813479248.jpg","category":"full","date":"2020-11-02T10:47:53.000Z","etag":"\"e49569e5b1d61:0\"","localPath":"./cache/persons/images/toe/13525_jessica_full_cb638a8b9f1812ebb7298e45669f8be9.jpg"}]
+2021-01-19 22:30:05.672 info: toe 13525 italy.torino added 22 images: [{"_id":"60074f5d9d14e546d49fbe63","url":"photo-escort/123419-13525/s/4-1023484238-3813479248.jpg","category":"main"},{"_id":"60074f5d9d14e546d49fbe64","url":"photo-escort/123419-13525/1-1023484238-3813479247.jpg","category":"full"},{"_id":"60074f5d9d14e546d49fbe65","url":"photo-escort/123419-13525/1-1023484238-3813479262.jpg","category":"full"},{"_id":"60074f5d9d14e546d49fbe66","url":"photo-escort/123419-13525/1-1023488798-3813482868.JPG","category":"full"},{"_id":"60074f5d9d14e546d49fbe67","url":"photo-escort/123419-13525/1-1023488798-3813484088.JPG","category":"full"},{"_id":"60074f5d9d14e546d49fbe68","url":"photo-escort/123419-13525/1-1023488798-3813484095.JPG","category":"full"},{"_id":"60074f5d9d14e546d49fbe69","url":"photo-escort/123419-13525/1-1023488798-3813484264.JPG","category":"full"},{"_id":"60074f5d9d14e546d49fbe6a","url":"photo-escort/123419-13525/1-1023488798-3813484303.JPG","category":"full"},{"_id":"60074f5d9d14e546d49fbe6b","url":"photo-escort/123419-13525/1-1023488798-3813484456.JPG","category":"full"},{"_id":"60074f5d9d14e546d49fbe6c","url":"photo-escort/123419-13525/1-1023488798-3813484589.JPG","category":"full"},{"_id":"60074f5d9d14e546d49fbe6d","url":"photo-escort/123419-13525/1-1023488798-3813484966.JPG","category":"full"},{"_id":"60074f5d9d14e546d49fbe6e","url":"photo-escort/123419-13525/1-1023488798-3813484977.JPG","category":"full"},{"_id":"60074f5d9d14e546d49fbe6f","url":"photo-escort/123419-13525/1-1023488798-3813485115.JPG","category":"full"},{"_id":"60074f5d9d14e546d49fbe70","url":"photo-escort/123419-13525/1-1023488798-3813485389.jpg","category":"full"},{"_id":"60074f5d9d14e546d49fbe71","url":"photo-escort/123419-13525/1-1023488798-3813485499.JPG","category":"full"},{"_id":"60074f5d9d14e546d49fbe72","url":"photo-escort/123419-13525/1-1023488798-3813485623.JPG","category":"full"},{"_id":"60074f5d9d14e546d49fbe73","url":"photo-escort/123419-13525/2-1023484238-3813479234.jpg","category":"full"},{"_id":"60074f5d9d14e546d49fbe74","url":"photo-escort/123419-13525/2-1023484238-3813479247.jpg","category":"full"},{"_id":"60074f5d9d14e546d49fbe75","url":"photo-escort/123419-13525/2-1023484238-3813479262.jpg","category":"full"},{"_id":"60074f5d9d14e546d49fbe76","url":"photo-escort/123419-13525/3-1023484238-3813479248.jpg","category":"full"},{"_id":"60074f5d9d14e546d49fbe77","url":"photo-escort/123419-13525/3-1023484238-3813479262.jpg","category":"full"},{"_id":"60074f5d9d14e546d49fbe78","url":"photo-escort/123419-13525/4-1023484238-3813479248.jpg","category":"full"}]
+2021-01-19 22:30:07.065 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13688
+2021-01-19 22:30:07.124 info: new toe 9789 italy.torino
+2021-01-19 22:30:08.690 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=12085
+2021-01-19 22:30:08.709 info: new toe 13688 italy.torino
+2021-01-19 22:30:10.008 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13125
+2021-01-19 22:30:10.049 info: toe 12085 italy.torino unchanged
+2021-01-19 22:30:13.655 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=12259
+2021-01-19 22:30:13.718 info: toe 13125 italy.torino unchanged
+2021-01-19 22:30:15.606 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=3725
+2021-01-19 22:30:15.617 info: new toe 12259 italy.torino
+2021-01-19 22:30:17.744 info: toe 3725 italy.torino unchanged
+2021-01-19 22:30:17.753 info: providers.scrapeProviders.finishing.e633ee71-6f46-46c9-b955-c5a4aa733c03.success: 116
+2021-01-19 22:30:17.753 info: finished scraping providers
+2021-01-19 22:36:08.007 info: providers.scrapeProviders.starting.3bc29dc3-93b8-45ce-8616-096f2815784d
+2021-01-19 22:36:08.541 info: listPageEvaluate.provider.toe https://www.torinoerotica.com/annunci-escort-torino/
+2021-01-19 22:36:15.228 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13245
+2021-01-19 22:36:17.598 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13008
+2021-01-19 22:36:17.660 info: toe 13245 italy.torino unchanged
+2021-01-19 22:36:20.076 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=11602
+2021-01-19 22:36:20.101 info: toe 13008 italy.torino unchanged
+2021-01-19 22:36:22.495 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=7286
+2021-01-19 22:36:22.591 info: toe 11602 italy.torino unchanged
+2021-01-19 22:36:31.804 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=9317
+2021-01-19 22:36:31.933 info: toe 7286 italy.torino unchanged
+2021-01-19 22:36:33.683 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=9700
+2021-01-19 22:36:33.769 info: toe 9317 italy.torino unchanged
+2021-01-19 22:36:38.305 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=9374
+2021-01-19 22:36:38.357 info: toe 9700 italy.torino unchanged
+2021-01-19 22:36:43.404 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13096
+2021-01-19 22:36:43.533 info: toe 9374 italy.torino unchanged
+2021-01-19 22:36:48.345 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=12860
+2021-01-19 22:36:48.396 info: toe 13096 italy.torino unchanged
+2021-01-19 22:36:52.352 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13545
+2021-01-19 22:36:52.398 info: toe 12860 italy.torino unchanged
+2021-01-19 22:36:56.245 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=9594
+2021-01-19 22:36:56.344 info: toe 13545 italy.torino unchanged
+2021-01-19 22:36:58.308 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=11517
+2021-01-19 22:36:58.371 info: toe 9594 italy.torino unchanged
+2021-01-19 22:36:59.751 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=12391
+2021-01-19 22:36:59.798 info: toe 11517 italy.torino unchanged
+2021-01-19 22:37:01.208 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=12774
+2021-01-19 22:37:01.256 info: toe 12391 italy.torino unchanged
+2021-01-19 22:37:04.144 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13206
+2021-01-19 22:37:04.180 info: toe 12774 italy.torino unchanged
+2021-01-19 22:37:06.908 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13530
+2021-01-19 22:37:06.927 info: toe 13206 italy.torino unchanged
+2021-01-19 22:37:14.832 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=4376
+2021-01-19 22:37:14.899 info: toe 13530 italy.torino unchanged
+2021-01-19 22:37:18.661 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=4360
+2021-01-19 22:37:18.716 info: toe 4376 italy.torino unchanged
+2021-01-19 22:37:24.871 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=3907
+2021-01-19 22:37:24.889 info: toe 4360 italy.torino unchanged
+2021-01-19 22:37:27.190 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13518
+2021-01-19 22:37:27.227 info: toe 3907 italy.torino unchanged
+2021-01-19 22:37:32.341 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13487
+2021-01-19 22:37:32.393 info: toe 13518 italy.torino unchanged
+2021-01-19 22:37:33.513 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=9638
+2021-01-19 22:37:33.563 info: toe 13487 italy.torino unchanged
+2021-01-19 22:37:37.229 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=5463
+2021-01-19 22:37:37.396 info: toe 9638 italy.torino unchanged
+2021-01-19 22:37:40.136 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=11823
+2021-01-19 22:37:40.166 info: toe 5463 italy.torino unchanged
+2021-01-19 22:37:41.659 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=3667
+2021-01-19 22:37:41.681 info: toe 11823 italy.torino unchanged
+2021-01-19 22:37:45.938 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=12457
+2021-01-19 22:37:46.073 info: toe 3667 italy.torino unchanged
+2021-01-19 22:37:48.149 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13438
+2021-01-19 22:37:48.178 info: toe 12457 italy.torino unchanged
+2021-01-19 22:37:53.800 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13689
+2021-01-19 22:37:53.853 info: toe 13438 italy.torino unchanged
+2021-01-19 22:37:55.450 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13605
+2021-01-19 22:37:55.476 info: toe 13689 italy.torino unchanged
+2021-01-19 22:37:57.063 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13037
+2021-01-19 22:37:57.124 info: toe 13605 italy.torino unchanged
+2021-01-19 22:38:00.129 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=8824
+2021-01-19 22:38:00.188 info: toe 13037 italy.torino unchanged
+2021-01-19 22:38:02.735 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=8936
+2021-01-19 22:38:02.763 info: toe 8824 italy.torino unchanged
+2021-01-19 22:38:05.215 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=3783
+2021-01-19 22:38:05.241 info: toe 8936 italy.torino unchanged
+2021-01-19 22:38:08.782 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=11644
+2021-01-19 22:38:08.798 info: toe 3783 italy.torino unchanged
+2021-01-19 22:38:09.758 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=3724
+2021-01-19 22:38:09.793 info: toe 11644 italy.torino unchanged
+2021-01-19 22:38:12.835 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=7807
+2021-01-19 22:38:12.897 info: toe 3724 italy.torino unchanged
+2021-01-19 22:38:14.124 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=4485
+2021-01-19 22:38:14.148 info: toe 7807 italy.torino unchanged
+2021-01-19 22:38:15.260 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=4245
+2021-01-19 22:38:15.306 info: toe 4485 italy.torino unchanged
+2021-01-19 22:38:20.517 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=10484
+2021-01-19 22:38:20.548 info: toe 4245 italy.torino unchanged
+2021-01-19 22:38:22.298 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13686
+2021-01-19 22:38:22.333 info: toe 10484 italy.torino unchanged
+2021-01-19 22:38:23.534 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=4997
+2021-01-19 22:38:23.568 info: toe 13686 italy.torino unchanged
+2021-01-19 22:38:24.599 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=12996
+2021-01-19 22:38:24.660 info: toe 4997 italy.torino unchanged
+2021-01-19 22:38:25.910 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=3681
+2021-01-19 22:38:25.967 info: toe 12996 italy.torino unchanged
+2021-01-19 22:38:27.118 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=11164
+2021-01-19 22:38:27.142 info: toe 3681 italy.torino unchanged
+2021-01-19 22:38:28.665 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13488
+2021-01-19 22:38:28.696 info: toe 11164 italy.torino unchanged
+2021-01-19 22:38:31.825 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=4963
+2021-01-19 22:38:31.847 info: toe 13488 italy.torino unchanged
+2021-01-19 22:38:33.070 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=10020
+2021-01-19 22:38:33.093 info: toe 4963 italy.torino unchanged
+2021-01-19 22:38:36.753 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13429
+2021-01-19 22:38:36.785 info: toe 10020 italy.torino unchanged
+2021-01-19 22:38:38.097 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=4994
+2021-01-19 22:38:38.106 info: toe 13429 italy.torino unchanged
+2021-01-19 22:38:39.978 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=3710
+2021-01-19 22:38:40.019 info: toe 4994 italy.torino unchanged
+2021-01-19 22:38:41.682 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=10860
+2021-01-19 22:38:41.761 info: toe 3710 italy.torino unchanged
+2021-01-19 22:38:44.265 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=7316
+2021-01-19 22:38:44.324 info: toe 10860 italy.torino unchanged
+2021-01-19 22:38:46.337 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=12823
+2021-01-19 22:38:46.393 info: toe 7316 italy.torino unchanged
+2021-01-19 22:38:47.942 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=5017
+2021-01-19 22:38:47.995 info: toe 12823 italy.torino unchanged
+2021-01-19 22:38:54.854 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=4341
+2021-01-19 22:38:54.888 info: toe 5017 italy.torino unchanged
+2021-01-19 22:38:56.021 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13497
+2021-01-19 22:38:56.102 info: toe 4341 italy.torino unchanged
+2021-01-19 22:38:57.512 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13395
+2021-01-19 22:38:57.583 info: toe 13497 italy.torino unchanged
+2021-01-19 22:38:58.976 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=10332
+2021-01-19 22:38:58.990 info: toe 13395 italy.torino unchanged
+2021-01-19 22:39:00.794 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13580
+2021-01-19 22:39:00.869 info: toe 10332 italy.torino unchanged
+2021-01-19 22:39:02.392 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13132
+2021-01-19 22:39:02.455 info: toe 13580 italy.torino unchanged
+2021-01-19 22:39:09.186 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=9942
+2021-01-19 22:39:09.205 info: toe 13132 italy.torino unchanged
+2021-01-19 22:39:10.802 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13034
+2021-01-19 22:39:10.817 info: toe 9942 italy.torino unchanged
+2021-01-19 22:39:12.017 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=6096
+2021-01-19 22:39:12.038 info: toe 13034 italy.torino unchanged
+2021-01-19 22:39:12.919 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=12039
+2021-01-19 22:39:12.960 info: toe 6096 italy.torino unchanged
+2021-01-19 22:39:16.441 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=12909
+2021-01-19 22:39:16.469 info: toe 12039 italy.torino unchanged
+2021-01-19 22:39:18.531 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=3863
+2021-01-19 22:39:18.545 info: toe 12909 italy.torino unchanged
+2021-01-19 22:39:21.791 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=12779
+2021-01-19 22:39:21.815 info: toe 3863 italy.torino unchanged
+2021-01-19 22:39:23.091 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13123
+2021-01-19 22:39:23.116 info: toe 12779 italy.torino unchanged
+2021-01-19 22:39:24.068 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=3757
+2021-01-19 22:39:24.082 info: toe 13123 italy.torino unchanged
+2021-01-19 22:39:24.946 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=4543
+2021-01-19 22:39:24.964 info: toe 3757 italy.torino unchanged
+2021-01-19 22:39:26.137 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=10822
+2021-01-19 22:39:26.155 info: toe 4543 italy.torino unchanged
+2021-01-19 22:39:27.109 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=11297
+2021-01-19 22:39:27.127 info: toe 10822 italy.torino unchanged
+2021-01-19 22:39:30.195 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13080
+2021-01-19 22:39:30.211 info: toe 11297 italy.torino unchanged
+2021-01-19 22:39:32.811 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=3640
+2021-01-19 22:39:32.834 info: toe 13080 italy.torino unchanged
+2021-01-19 22:39:34.405 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=5877
+2021-01-19 22:39:34.420 info: toe 3640 italy.torino unchanged
+2021-01-19 22:39:35.174 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=3871
+2021-01-19 22:39:35.183 info: toe 5877 italy.torino unchanged
+2021-01-19 22:39:37.781 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=3799
+2021-01-19 22:39:37.809 info: toe 3871 italy.torino unchanged
+2021-01-19 22:39:38.707 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13519
+2021-01-19 22:39:38.766 info: toe 3799 italy.torino unchanged
+2021-01-19 22:39:39.602 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13048
+2021-01-19 22:39:39.617 info: toe 13519 italy.torino unchanged
+2021-01-19 22:39:40.926 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=8268
+2021-01-19 22:39:40.977 info: toe 13048 italy.torino unchanged
+2021-01-19 22:39:42.169 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13419
+2021-01-19 22:39:42.224 info: toe 8268 italy.torino unchanged
+2021-01-19 22:39:43.109 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13626
+2021-01-19 22:39:43.124 info: toe 13419 italy.torino unchanged
+2021-01-19 22:39:46.740 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13005
+2021-01-19 22:39:46.760 info: toe 13626 italy.torino unchanged
+2021-01-19 22:39:47.658 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=12977
+2021-01-19 22:39:47.715 info: toe 13005 italy.torino unchanged
+2021-01-19 22:39:51.664 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13666
+2021-01-19 22:39:51.685 info: toe 12977 italy.torino unchanged
+2021-01-19 22:39:52.768 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=10646
+2021-01-19 22:39:52.784 info: toe 13666 italy.torino unchanged
+2021-01-19 22:39:53.733 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=11970
+2021-01-19 22:39:53.748 info: toe 10646 italy.torino unchanged
+2021-01-19 22:39:55.701 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=12413
+2021-01-19 22:39:55.716 info: toe 11970 italy.torino unchanged
+2021-01-19 22:39:58.942 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=3776
+2021-01-19 22:39:58.973 info: toe 12413 italy.torino unchanged
+2021-01-19 22:40:00.465 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13642
+2021-01-19 22:40:00.484 info: toe 3776 italy.torino unchanged
+2021-01-19 22:40:03.356 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13453
+2021-01-19 22:40:03.376 info: toe 13642 italy.torino unchanged
+2021-01-19 22:40:04.466 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=10068
+2021-01-19 22:40:04.481 info: toe 13453 italy.torino unchanged
+2021-01-19 22:40:05.551 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=7679
+2021-01-19 22:40:05.619 info: toe 10068 italy.torino unchanged
+2021-01-19 22:40:06.804 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13179
+2021-01-19 22:40:06.825 info: toe 7679 italy.torino unchanged
+2021-01-19 22:40:17.925 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13671
+2021-01-19 22:40:17.945 info: toe 13179 italy.torino unchanged
+2021-01-19 22:40:19.333 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13567
+2021-01-19 22:40:19.386 info: toe 13671 italy.torino unchanged
+2021-01-19 22:40:23.211 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=11372
+2021-01-19 22:40:23.235 info: toe 13567 italy.torino unchanged
+2021-01-19 22:40:24.122 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13625
+2021-01-19 22:40:24.141 info: toe 11372 italy.torino unchanged
+2021-01-19 22:40:25.084 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=12629
+2021-01-19 22:40:25.099 info: toe 13625 italy.torino unchanged
+2021-01-19 22:40:27.168 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13675
+2021-01-19 22:40:27.189 info: toe 12629 italy.torino unchanged
+2021-01-19 22:40:28.713 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=11603
+2021-01-19 22:40:28.722 info: toe 13675 italy.torino unchanged
+2021-01-19 22:40:35.678 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13596
+2021-01-19 22:40:35.702 info: toe 11603 italy.torino unchanged
+2021-01-19 22:40:39.615 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=11921
+2021-01-19 22:40:39.630 info: toe 13596 italy.torino unchanged
+2021-01-19 22:40:40.520 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13679
+2021-01-19 22:40:40.536 info: toe 11921 italy.torino unchanged
+2021-01-19 22:40:41.533 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=3843
+2021-01-19 22:40:41.546 info: toe 13679 italy.torino unchanged
+2021-01-19 22:40:43.428 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13682
+2021-01-19 22:40:43.452 info: toe 3843 italy.torino unchanged
+2021-01-19 22:40:44.160 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13683
+2021-01-19 22:40:44.167 info: toe 13682 italy.torino unchanged
+2021-01-19 22:40:45.096 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=4934
+2021-01-19 22:40:45.126 info: toe 13683 italy.torino unchanged
+2021-01-19 22:40:46.695 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13146
+2021-01-19 22:40:46.709 info: toe 4934 italy.torino unchanged
+2021-01-19 22:40:47.559 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13525
+2021-01-19 22:40:47.569 info: toe 13146 italy.torino unchanged
+2021-01-19 22:40:50.339 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=9789
+2021-01-19 22:40:50.412 info: toe 13525 italy.torino unchanged
+2021-01-19 22:40:51.551 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13688
+2021-01-19 22:40:51.570 info: toe 9789 italy.torino unchanged
+2021-01-19 22:40:52.743 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=12085
+2021-01-19 22:40:52.791 info: toe 13688 italy.torino unchanged
+2021-01-19 22:40:53.575 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13125
+2021-01-19 22:40:53.582 info: toe 12085 italy.torino unchanged
+2021-01-19 22:40:55.282 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=12259
+2021-01-19 22:40:55.312 info: toe 13125 italy.torino unchanged
+2021-01-19 22:40:56.073 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=3725
+2021-01-19 22:40:56.082 info: toe 12259 italy.torino unchanged
+2021-01-19 22:40:57.622 info: toe 3725 italy.torino unchanged
+2021-01-19 22:40:57.635 info: providers.scrapeProviders.finishing.3bc29dc3-93b8-45ce-8616-096f2815784d.success: 116
+2021-01-19 22:40:57.636 info: finished scraping providers
