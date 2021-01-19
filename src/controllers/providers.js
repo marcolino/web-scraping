@@ -351,21 +351,23 @@ const saveItem = async(item) => {
         throw (`error finding item to save: ${err}`);
       }
       if (!itemOld) { // a new item
-        compareItemsHistoryes(null, item);
         itemOld = new Items(item);
         itemOld.save((err, itemNew) => {
           if (err) {
             throw (`error saving new item: ${err}`);
           }
+          compareItemsHistoryes(null, itemNew);
           //logger.debug(`item ${itemNew.title} inserted`);
         });
       } else { // an existing item
-        compareItemsHistoryes(itemOld._doc, item);
+        const itemOldFlat = JSON.parse(JSON.stringify(itemOld));
         itemOld.set({...item});
         itemOld.save((err, itemNew) => {
           if (err) {
             throw (`error updating item: ${err}`);
           }
+          const itemNewFlat = JSON.parse(JSON.stringify(itemNew._doc));
+          compareItemsHistoryes(itemOldFlat, itemNewFlat);
           //logger.debug(`item ${itemNew.title} updated`);
         });
       }
@@ -384,14 +386,12 @@ const compareItemsHistoryes = (itemOld, itemNew) => {
     return;
   }
   // a changed item
-//logger.debug(`model.schema.paths: ` + JSON.stringify(Object.keys(model.schema.paths)));
-//logger.debug(`typeof itemOld[${prop}]: ${typeof itemOld[prop]} ${Array.isArray(itemOld[prop]) ? 'array' : ''}`);
   let changed = false;
   Object.keys(itemOld).map(prop => {
     if (!['__v', '_id', 'provider', 'region', 'id', 'dateCreated', 'dateUpdated', /*'wasNew', 'wasModified'*//*'services', 'adUrlReferences', 'spokenLanguages', 'images', 'comments'*/].includes(prop)) {
       //logger.debug(`--- ${prop} ---`);
       const type = Array.isArray(itemOld[prop]) ? 'array' : typeof itemOld[prop];
-      //logger.debug(`typeof itemOld[${prop}]: ${type}`);
+//logger.debug(`typeof itemOld[${prop}]: ${type}`);
       switch (type) {
         case 'boolean':
           //logger.warn(itemNew[prop]);
@@ -418,28 +418,36 @@ const compareItemsHistoryes = (itemOld, itemNew) => {
             // logger.info(`${key} changed ${prop}: ${difference}`);
             logger.info(`${key} changed ${prop}: ${itemOld[prop]} => ${itemNew[prop]}`);
             changed = true;
-            break;
           }
+          break;
         case 'array': // we assume one level only arrays (shallow compare)
+//console.log('PROP:', prop);
           const o = itemOld[prop];
           const n = itemNew[prop];
           const added = [];
           const removed = [];
+if (prop == 'comments') console.log('COMMENTS n.length:', n.length);
           for (var oi = 0; oi < o.length; oi++) {
             const oObj = o[oi];
             let equal = true;
+            let prop = null;
             for (var ni = 0; ni < n.length; ni++) {
               const nObj = n[oi];
-              for (p in nObj) {
-                if (oObj[p] != nObj[p]) {
-console.warn(p, oObj[p], nObj[p], typeof oObj[p], typeof nObj[p]);
-                  equal = false;
-                  break;
+              const props = Object.getOwnPropertyNames(nObj);
+              for (var p = 0; p < props.length; p++) {
+                prop = props[p];
+                //console.log('PROP:', prop);
+                if (prop !== '_id') {
+                  if (oObj[prop] !== nObj[prop]) {
+                    //console.log(prop, oObj[prop], nObj[prop], typeof String(oObj[prop]), typeof String(nObj[prop]), oObj[prop] === nObj[prop]);
+                    equal = false;
+                    break;
+                  }
                 }
               }
             }
             if (!equal) { // this old object prop was found in new object
-              added.push(oObj);
+              added.push({firstChangedProperty: prop, row: oObj});
               //removed.push(nObj);
             }
           }
@@ -452,7 +460,7 @@ console.warn(p, oObj[p], nObj[p], typeof oObj[p], typeof nObj[p]);
           //   changed = true;
           // }
           break;
-        case 'object':
+        case 'object': // we assume one level only objects (shallow compare)
           // if (prop == 'comments') {
           //   logger.warn(`itemOld[${prop}]: ` + JSON.stringify(itemOld[prop]));
           //   logger.warn(`itemNew[${prop}]: ` + JSON.stringify(itemNew[prop]));

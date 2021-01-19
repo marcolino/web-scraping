@@ -31,7 +31,7 @@ const private = (req, res, next) => {
     if (err) {
       return res.status(401).json({ message: `this is a private route (${err.message})` });
     }
-//logger.debug(`decoded:`, decoded);
+//logger.info('decoded: ' + JSON.stringify(decoded));
     // add user id to request
     req.userId = decoded.id;
     req.role = decoded.role;
@@ -42,7 +42,7 @@ const private = (req, res, next) => {
 //logger.log(`middleware req endpoint:`, endpoint, endpointRoles, endpointRoles[endpoint], endpoint in endpointRoles ? true : false);
     if (endpoint in endpointRoles) { // this endpoint has a specific role requirement
       const user = await users.findOne({_id: req.userId});
-//logger.log('user:', user);
+//logger.info(`user: ${user}`);
       if (!req.role) { // user has no role set
         return res.status(401).json({ message: `this is a reserved route, sorry` });
       }

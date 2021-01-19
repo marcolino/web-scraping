@@ -43,7 +43,7 @@ const winstonConsoleFormat = winston.format.combine(
   }),
   winston.format.printf(
     info => `${info.label} ${info.timestamp} ${info.level}: ${info.message}`
-  )
+  ),
 );
 
 // instantiate a new winston logger

@@ -18,6 +18,7 @@ Providers it:
 
 Mongo Database:
  - https://cloud.mongodb.com/ (login with google, username: "marco", password: "esticazzi!123", dbname: "web-scraping", connection: "mongodb+srv://<username>:<password>@cluster0.e76px.mongodb.net/<dbname>?retryWrites=true&w=majority")
+ - https://s3.mongobooster.com/download/releasesv6/nosqlbooster4mongo-6.2.8.AppImage (free GUI)
 
 Mongo import/export:
  - mongoimport 

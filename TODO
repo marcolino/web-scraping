@@ -1,4 +1,5 @@
  V remove mongodb-memory-server
+  - README.md
   - handle missing persons items, comparing date of last update and date of last scrape (use a virtual method)
   - protect system from multiple scrape requests (I think it's a good thing...)
   - in providers do avoid `document.querySelectorAll(...).something...`, but do `const el = document.querySelectorAll(...); if (el) { el.something... }`

@@ -9062,3 +9062,952 @@ TypeError: oObj[p].toIsoString is not a function
     at processTicksAndRejections (internal/process/task_queues.js:75:11)
     at runNextTicks (internal/process/task_queues.js:62:3)
     at processImmediate (internal/timers.js:434:9)
+2021-01-19 14:10:09.879 info: user: { _id: 6006d847fd6c5e1e6e40a174,
+  name: 'Marco',
+  email: 'marcoatorino@gmail.com',
+  dateCreated: 2021-01-19T13:01:59.823Z,
+  dateUpdated: 2021-01-19T13:01:59.823Z,
+  __v: 0,
+  role: 'system' }
+2021-01-19 14:10:36.132 info: user: { _id: 6006d847fd6c5e1e6e40a174,
+  name: 'Marco',
+  email: 'marcoatorino@gmail.com',
+  dateCreated: 2021-01-19T13:01:59.823Z,
+  dateUpdated: 2021-01-19T13:01:59.823Z,
+  __v: 0,
+  role: 'system' }
+2021-01-19 14:13:45.046 info: user: { _id: 6006d847fd6c5e1e6e40a174,
+  name: 'Marco',
+  email: 'marcoatorino@gmail.com',
+  dateCreated: 2021-01-19T13:01:59.823Z,
+  dateUpdated: 2021-01-19T13:01:59.823Z,
+  __v: 0,
+  role: 'system' }
+2021-01-19 14:13:54.485 info: user: { _id: 6006d847fd6c5e1e6e40a174,
+  name: 'Marco',
+  email: 'marcoatorino@gmail.com',
+  dateCreated: 2021-01-19T13:01:59.823Z,
+  dateUpdated: 2021-01-19T13:01:59.823Z,
+  __v: 0,
+  role: 'system' }
+2021-01-19 14:14:16.677 info: user: { _id: 6006d847fd6c5e1e6e40a174,
+  name: 'Marco',
+  email: 'marcoatorino@gmail.com',
+  dateCreated: 2021-01-19T13:01:59.823Z,
+  dateUpdated: 2021-01-19T13:01:59.823Z,
+  __v: 0,
+  role: 'system' }
+2021-01-19 14:14:24.112 info: decoded: %O
+2021-01-19 14:14:24.138 info: user: { _id: 6006d847fd6c5e1e6e40a174,
+  name: 'Marco',
+  email: 'marcoatorino@gmail.com',
+  dateCreated: 2021-01-19T13:01:59.823Z,
+  dateUpdated: 2021-01-19T13:01:59.823Z,
+  __v: 0,
+  role: 'system' }
+2021-01-19 14:15:16.285 info: decoded: %O
+2021-01-19 14:15:16.306 info: user: { _id: 6006d847fd6c5e1e6e40a174,
+  name: 'Marco',
+  email: 'marcoatorino@gmail.com',
+  dateCreated: 2021-01-19T13:01:59.823Z,
+  dateUpdated: 2021-01-19T13:01:59.823Z,
+  __v: 0,
+  role: 'system' }
+2021-01-19 14:15:19.801 info: decoded: %O
+2021-01-19 14:15:19.807 info: user: { _id: 6006d847fd6c5e1e6e40a174,
+  name: 'Marco',
+  email: 'marcoatorino@gmail.com',
+  dateCreated: 2021-01-19T13:01:59.823Z,
+  dateUpdated: 2021-01-19T13:01:59.823Z,
+  __v: 0,
+  role: 'system' }
+2021-01-19 14:15:52.977 info: decoded: 
+2021-01-19 14:15:53.013 info: user: { _id: 6006d847fd6c5e1e6e40a174,
+  name: 'Marco',
+  email: 'marcoatorino@gmail.com',
+  dateCreated: 2021-01-19T13:01:59.823Z,
+  dateUpdated: 2021-01-19T13:01:59.823Z,
+  __v: 0,
+  role: 'system' }
+2021-01-19 14:16:00.340 info: decoded: {"id":"6006d847fd6c5e1e6e40a174","iat":1611061338}
+2021-01-19 14:16:00.368 info: user: { _id: 6006d847fd6c5e1e6e40a174,
+  name: 'Marco',
+  email: 'marcoatorino@gmail.com',
+  dateCreated: 2021-01-19T13:01:59.823Z,
+  dateUpdated: 2021-01-19T13:01:59.823Z,
+  __v: 0,
+  role: 'system' }
+2021-01-19 14:16:51.901 info: decoded: {"id":"6006d847fd6c5e1e6e40a174","role":"system","iat":1611062197,"exp":1611090997}
+2021-01-19 14:16:51.905 info: user: { _id: 6006d847fd6c5e1e6e40a174,
+  name: 'Marco',
+  email: 'marcoatorino@gmail.com',
+  dateCreated: 2021-01-19T13:01:59.823Z,
+  dateUpdated: 2021-01-19T13:01:59.823Z,
+  __v: 0,
+  role: 'system' }
+2021-01-19 14:16:51.906 info: providers.scrapeProviders.starting.7b152a03-9997-463a-89ae-7285bc940c08
+2021-01-19 14:17:01.533 info: listPageEvaluate.provider.toe https://www.torinoerotica.com/annunci-escort-torino/
+2021-01-19 14:17:05.369 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13245
+2021-01-19 14:17:06.492 info: new toe 13245 italy.torino
+2021-01-19 14:17:06.582 info: providers.scrapeProviders.finishing.7b152a03-9997-463a-89ae-7285bc940c08.success: 1
+2021-01-19 14:17:06.582 info: finished scraping providers
+2021-01-19 14:18:16.313 info: providers.scrapeProviders.starting.50e6c494-bc67-4150-b7da-7998ce4fdce2
+2021-01-19 14:18:16.768 info: listPageEvaluate.provider.toe https://www.torinoerotica.com/annunci-escort-torino/
+2021-01-19 14:18:19.180 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13245
+2021-01-19 14:18:20.578 error: uncaughtException: oObj is not defined
+ReferenceError: oObj is not defined
+    at Object.keys.map.prop (/home/marco/apps.personal/web-scraping/src/controllers/providers.js:428:27)
+    at Array.map (<anonymous>)
+    at compareItemsHistoryes (/home/marco/apps.personal/web-scraping/src/controllers/providers.js:390:24)
+    at Items.findOne (/home/marco/apps.personal/web-scraping/src/controllers/providers.js:363:9)
+    at /home/marco/apps.personal/web-scraping/node_modules/mongoose/lib/model.js:4838:16
+    at /home/marco/apps.personal/web-scraping/node_modules/mongoose/lib/model.js:4838:16
+    at /home/marco/apps.personal/web-scraping/node_modules/mongoose/lib/helpers/promiseOrCallback.js:24:16
+    at /home/marco/apps.personal/web-scraping/node_modules/mongoose/lib/model.js:4861:21
+    at _hooks.execPost (/home/marco/apps.personal/web-scraping/node_modules/mongoose/lib/query.js:4407:11)
+    at /home/marco/apps.personal/web-scraping/node_modules/kareem/index.js:135:16
+    at processTicksAndRejections (internal/process/task_queues.js:79:9)
+    at runNextTicks (internal/process/task_queues.js:56:3)
+    at processImmediate (internal/timers.js:416:9)
+2021-01-19 14:18:20.579 error: uncaught exception ReferenceError: oObj is not defined
+    at Object.keys.map.prop (/home/marco/apps.personal/web-scraping/src/controllers/providers.js:428:27)
+    at Array.map (<anonymous>)
+    at compareItemsHistoryes (/home/marco/apps.personal/web-scraping/src/controllers/providers.js:390:24)
+    at Items.findOne (/home/marco/apps.personal/web-scraping/src/controllers/providers.js:363:9)
+    at /home/marco/apps.personal/web-scraping/node_modules/mongoose/lib/model.js:4838:16
+    at /home/marco/apps.personal/web-scraping/node_modules/mongoose/lib/model.js:4838:16
+    at /home/marco/apps.personal/web-scraping/node_modules/mongoose/lib/helpers/promiseOrCallback.js:24:16
+    at /home/marco/apps.personal/web-scraping/node_modules/mongoose/lib/model.js:4861:21
+    at _hooks.execPost (/home/marco/apps.personal/web-scraping/node_modules/mongoose/lib/query.js:4407:11)
+    at /home/marco/apps.personal/web-scraping/node_modules/kareem/index.js:135:16
+    at processTicksAndRejections (internal/process/task_queues.js:79:9)
+    at runNextTicks (internal/process/task_queues.js:56:3)
+    at processImmediate (internal/timers.js:416:9)
+2021-01-19 14:19:00.250 info: providers.scrapeProviders.starting.99b883f2-2ddb-4206-a9dd-9d539162de5b
+2021-01-19 14:19:00.581 info: listPageEvaluate.provider.toe https://www.torinoerotica.com/annunci-escort-torino/
+2021-01-19 14:19:02.779 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13245
+2021-01-19 14:19:03.820 info: toe 13245 italy.torino added 1 comments: [{"_id":"6006dbd211049a2828c65a2e","author":"inesperto","date":"2020-12-14T06:05:00.000Z","text":"Ciao, la ragazza mi ha accolto in un grande stabile nella zona di Mirafiori. Non ha fatto nessun gioco di portoni, indicandomi, una volta arrivato a destinazione, la porta del suo appartamento. Una volta entrato ho trovato una ragazza giovane con tacchi ed un abitino trasparente che metteva in risalto le sue forme (lato A e lato B direi parecchio sinuosi). Piacevole incontro di un'oretta che sicuramente ripeterei!"}]
+2021-01-19 14:19:03.881 info: providers.scrapeProviders.finishing.99b883f2-2ddb-4206-a9dd-9d539162de5b.success: 1
+2021-01-19 14:19:03.882 info: finished scraping providers
+2021-01-19 14:19:37.504 info: providers.scrapeProviders.starting.f74c9faa-98a3-4c13-b626-a823e9041e18
+2021-01-19 14:19:37.817 info: listPageEvaluate.provider.toe https://www.torinoerotica.com/annunci-escort-torino/
+2021-01-19 14:19:39.783 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13245
+2021-01-19 14:19:40.684 error: uncaughtException: itemOld._doc.lean is not a function
+TypeError: itemOld._doc.lean is not a function
+    at Items.findOne (/home/marco/apps.personal/web-scraping/src/controllers/providers.js:363:44)
+    at /home/marco/apps.personal/web-scraping/node_modules/mongoose/lib/model.js:4838:16
+    at /home/marco/apps.personal/web-scraping/node_modules/mongoose/lib/model.js:4838:16
+    at /home/marco/apps.personal/web-scraping/node_modules/mongoose/lib/helpers/promiseOrCallback.js:24:16
+    at /home/marco/apps.personal/web-scraping/node_modules/mongoose/lib/model.js:4861:21
+    at _hooks.execPost (/home/marco/apps.personal/web-scraping/node_modules/mongoose/lib/query.js:4407:11)
+    at /home/marco/apps.personal/web-scraping/node_modules/kareem/index.js:135:16
+    at processTicksAndRejections (internal/process/task_queues.js:79:9)
+    at runNextTicks (internal/process/task_queues.js:56:3)
+    at processImmediate (internal/timers.js:416:9)
+2021-01-19 14:19:40.686 error: uncaught exception TypeError: itemOld._doc.lean is not a function
+    at Items.findOne (/home/marco/apps.personal/web-scraping/src/controllers/providers.js:363:44)
+    at /home/marco/apps.personal/web-scraping/node_modules/mongoose/lib/model.js:4838:16
+    at /home/marco/apps.personal/web-scraping/node_modules/mongoose/lib/model.js:4838:16
+    at /home/marco/apps.personal/web-scraping/node_modules/mongoose/lib/helpers/promiseOrCallback.js:24:16
+    at /home/marco/apps.personal/web-scraping/node_modules/mongoose/lib/model.js:4861:21
+    at _hooks.execPost (/home/marco/apps.personal/web-scraping/node_modules/mongoose/lib/query.js:4407:11)
+    at /home/marco/apps.personal/web-scraping/node_modules/kareem/index.js:135:16
+    at processTicksAndRejections (internal/process/task_queues.js:79:9)
+    at runNextTicks (internal/process/task_queues.js:56:3)
+    at processImmediate (internal/timers.js:416:9)
+2021-01-19 14:19:53.207 info: providers.scrapeProviders.starting.4cd39293-ab70-4fce-b951-248f290b7a86
+2021-01-19 14:19:53.510 info: listPageEvaluate.provider.toe https://www.torinoerotica.com/annunci-escort-torino/
+2021-01-19 14:19:55.336 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13245
+2021-01-19 14:19:56.136 error: uncaughtException: itemOld.lean is not a function
+TypeError: itemOld.lean is not a function
+    at Items.findOne (/home/marco/apps.personal/web-scraping/src/controllers/providers.js:363:39)
+    at /home/marco/apps.personal/web-scraping/node_modules/mongoose/lib/model.js:4838:16
+    at /home/marco/apps.personal/web-scraping/node_modules/mongoose/lib/model.js:4838:16
+    at /home/marco/apps.personal/web-scraping/node_modules/mongoose/lib/helpers/promiseOrCallback.js:24:16
+    at /home/marco/apps.personal/web-scraping/node_modules/mongoose/lib/model.js:4861:21
+    at _hooks.execPost (/home/marco/apps.personal/web-scraping/node_modules/mongoose/lib/query.js:4407:11)
+    at /home/marco/apps.personal/web-scraping/node_modules/kareem/index.js:135:16
+    at processTicksAndRejections (internal/process/task_queues.js:79:9)
+    at runNextTicks (internal/process/task_queues.js:56:3)
+    at processImmediate (internal/timers.js:416:9)
+2021-01-19 14:19:56.137 error: uncaught exception TypeError: itemOld.lean is not a function
+    at Items.findOne (/home/marco/apps.personal/web-scraping/src/controllers/providers.js:363:39)
+    at /home/marco/apps.personal/web-scraping/node_modules/mongoose/lib/model.js:4838:16
+    at /home/marco/apps.personal/web-scraping/node_modules/mongoose/lib/model.js:4838:16
+    at /home/marco/apps.personal/web-scraping/node_modules/mongoose/lib/helpers/promiseOrCallback.js:24:16
+    at /home/marco/apps.personal/web-scraping/node_modules/mongoose/lib/model.js:4861:21
+    at _hooks.execPost (/home/marco/apps.personal/web-scraping/node_modules/mongoose/lib/query.js:4407:11)
+    at /home/marco/apps.personal/web-scraping/node_modules/kareem/index.js:135:16
+    at processTicksAndRejections (internal/process/task_queues.js:79:9)
+    at runNextTicks (internal/process/task_queues.js:56:3)
+    at processImmediate (internal/timers.js:416:9)
+2021-01-19 14:20:07.826 info: providers.scrapeProviders.starting.13cff1c7-3acf-4309-bbb8-1981bec92a49
+2021-01-19 14:20:08.270 info: listPageEvaluate.provider.toe https://www.torinoerotica.com/annunci-escort-torino/
+2021-01-19 14:20:12.014 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13245
+2021-01-19 14:20:13.106 info: toe 13245 italy.torino added 1 comments: [{"_id":"6006dc47d6571a29e53b8f71","author":"inesperto","date":"2020-12-14T06:05:00.000Z","text":"Ciao, la ragazza mi ha accolto in un grande stabile nella zona di Mirafiori. Non ha fatto nessun gioco di portoni, indicandomi, una volta arrivato a destinazione, la porta del suo appartamento. Una volta entrato ho trovato una ragazza giovane con tacchi ed un abitino trasparente che metteva in risalto le sue forme (lato A e lato B direi parecchio sinuosi). Piacevole incontro di un'oretta che sicuramente ripeterei!"}]
+2021-01-19 14:20:13.131 info: providers.scrapeProviders.finishing.13cff1c7-3acf-4309-bbb8-1981bec92a49.success: 1
+2021-01-19 14:20:13.131 info: finished scraping providers
+2021-01-19 14:21:08.702 info: providers.scrapeProviders.starting.471b84ff-219d-4977-b1eb-0c28f57219e2
+2021-01-19 14:21:09.075 info: listPageEvaluate.provider.toe https://www.torinoerotica.com/annunci-escort-torino/
+2021-01-19 14:21:10.626 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13245
+2021-01-19 14:21:11.582 info: toe 13245 italy.torino added 1 comments: [{"_id":"6006dc8d3f77d02b93850c1e","author":"inesperto","date":"2020-12-14T06:05:00.000Z","text":"Ciao, la ragazza mi ha accolto in un grande stabile nella zona di Mirafiori. Non ha fatto nessun gioco di portoni, indicandomi, una volta arrivato a destinazione, la porta del suo appartamento. Una volta entrato ho trovato una ragazza giovane con tacchi ed un abitino trasparente che metteva in risalto le sue forme (lato A e lato B direi parecchio sinuosi). Piacevole incontro di un'oretta che sicuramente ripeterei!"}]
+2021-01-19 14:21:11.633 info: providers.scrapeProviders.finishing.471b84ff-219d-4977-b1eb-0c28f57219e2.success: 1
+2021-01-19 14:21:11.633 info: finished scraping providers
+2021-01-19 14:21:39.334 error: uncaughtException: Unexpected token )
+/home/marco/apps.personal/web-scraping/src/controllers/providers.js:435
+                  console.warn(p, oObj[p], nObj[p], oObj[p].toString()), typeof oObj[p], typeof nObj[p]);
+                                                                                                       ^
+
+SyntaxError: Unexpected token )
+    at Module._compile (internal/modules/cjs/loader.js:760:23)
+    at Object.Module._extensions..js (internal/modules/cjs/loader.js:827:10)
+    at Module.load (internal/modules/cjs/loader.js:685:32)
+    at Function.Module._load (internal/modules/cjs/loader.js:620:12)
+    at Module.require (internal/modules/cjs/loader.js:723:19)
+    at require (internal/modules/cjs/helpers.js:14:16)
+    at Object.<anonymous> (/home/marco/apps.personal/web-scraping/src/routes/providers.js:4:66)
+    at Module._compile (internal/modules/cjs/loader.js:816:30)
+    at Object.Module._extensions..js (internal/modules/cjs/loader.js:827:10)
+    at Module.load (internal/modules/cjs/loader.js:685:32)
+    at Function.Module._load (internal/modules/cjs/loader.js:620:12)
+    at Module.require (internal/modules/cjs/loader.js:723:19)
+    at require (internal/modules/cjs/helpers.js:14:16)
+    at Object.<anonymous> (/home/marco/apps.personal/web-scraping/src/index.js:14:25)
+    at Module._compile (internal/modules/cjs/loader.js:816:30)
+    at Object.Module._extensions..js (internal/modules/cjs/loader.js:827:10)
+2021-01-19 14:21:39.338 error: uncaught exception /home/marco/apps.personal/web-scraping/src/controllers/providers.js:435
+                  console.warn(p, oObj[p], nObj[p], oObj[p].toString()), typeof oObj[p], typeof nObj[p]);
+                                                                                                       ^
+
+SyntaxError: Unexpected token )
+    at Module._compile (internal/modules/cjs/loader.js:760:23)
+    at Object.Module._extensions..js (internal/modules/cjs/loader.js:827:10)
+    at Module.load (internal/modules/cjs/loader.js:685:32)
+    at Function.Module._load (internal/modules/cjs/loader.js:620:12)
+    at Module.require (internal/modules/cjs/loader.js:723:19)
+    at require (internal/modules/cjs/helpers.js:14:16)
+    at Object.<anonymous> (/home/marco/apps.personal/web-scraping/src/routes/providers.js:4:66)
+    at Module._compile (internal/modules/cjs/loader.js:816:30)
+    at Object.Module._extensions..js (internal/modules/cjs/loader.js:827:10)
+    at Module.load (internal/modules/cjs/loader.js:685:32)
+    at Function.Module._load (internal/modules/cjs/loader.js:620:12)
+    at Module.require (internal/modules/cjs/loader.js:723:19)
+    at require (internal/modules/cjs/helpers.js:14:16)
+    at Object.<anonymous> (/home/marco/apps.personal/web-scraping/src/index.js:14:25)
+    at Module._compile (internal/modules/cjs/loader.js:816:30)
+    at Object.Module._extensions..js (internal/modules/cjs/loader.js:827:10)
+2021-01-19 14:21:47.516 info: providers.scrapeProviders.starting.2be3af28-9c76-4ed0-9311-77574ab8f538
+2021-01-19 14:21:47.878 info: listPageEvaluate.provider.toe https://www.torinoerotica.com/annunci-escort-torino/
+2021-01-19 14:21:50.114 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13245
+2021-01-19 14:21:51.030 info: toe 13245 italy.torino added 1 comments: [{"_id":"6006dcc7904a4f2c20b4b691","author":"inesperto","date":"2020-12-14T06:05:00.000Z","text":"Ciao, la ragazza mi ha accolto in un grande stabile nella zona di Mirafiori. Non ha fatto nessun gioco di portoni, indicandomi, una volta arrivato a destinazione, la porta del suo appartamento. Una volta entrato ho trovato una ragazza giovane con tacchi ed un abitino trasparente che metteva in risalto le sue forme (lato A e lato B direi parecchio sinuosi). Piacevole incontro di un'oretta che sicuramente ripeterei!"}]
+2021-01-19 14:21:51.085 info: providers.scrapeProviders.finishing.2be3af28-9c76-4ed0-9311-77574ab8f538.success: 1
+2021-01-19 14:21:51.085 info: finished scraping providers
+2021-01-19 14:23:56.592 info: providers.scrapeProviders.starting.bc29cd0a-c8dd-4443-9d28-1bd6a966c399
+2021-01-19 14:23:56.846 info: listPageEvaluate.provider.toe https://www.torinoerotica.com/annunci-escort-torino/
+2021-01-19 14:23:58.603 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13245
+2021-01-19 14:23:59.444 error: uncaughtException: string is not defined
+ReferenceError: string is not defined
+    at Object.keys.map.prop (/home/marco/apps.personal/web-scraping/src/controllers/providers.js:434:17)
+    at Array.map (<anonymous>)
+    at compareItemsHistoryes (/home/marco/apps.personal/web-scraping/src/controllers/providers.js:390:24)
+    at Items.findOne (/home/marco/apps.personal/web-scraping/src/controllers/providers.js:363:9)
+    at /home/marco/apps.personal/web-scraping/node_modules/mongoose/lib/model.js:4838:16
+    at /home/marco/apps.personal/web-scraping/node_modules/mongoose/lib/model.js:4838:16
+    at /home/marco/apps.personal/web-scraping/node_modules/mongoose/lib/helpers/promiseOrCallback.js:24:16
+    at /home/marco/apps.personal/web-scraping/node_modules/mongoose/lib/model.js:4861:21
+    at _hooks.execPost (/home/marco/apps.personal/web-scraping/node_modules/mongoose/lib/query.js:4407:11)
+    at /home/marco/apps.personal/web-scraping/node_modules/kareem/index.js:135:16
+    at processTicksAndRejections (internal/process/task_queues.js:79:9)
+    at runNextTicks (internal/process/task_queues.js:56:3)
+    at processImmediate (internal/timers.js:416:9)
+2021-01-19 14:23:59.446 error: uncaught exception ReferenceError: string is not defined
+    at Object.keys.map.prop (/home/marco/apps.personal/web-scraping/src/controllers/providers.js:434:17)
+    at Array.map (<anonymous>)
+    at compareItemsHistoryes (/home/marco/apps.personal/web-scraping/src/controllers/providers.js:390:24)
+    at Items.findOne (/home/marco/apps.personal/web-scraping/src/controllers/providers.js:363:9)
+    at /home/marco/apps.personal/web-scraping/node_modules/mongoose/lib/model.js:4838:16
+    at /home/marco/apps.personal/web-scraping/node_modules/mongoose/lib/model.js:4838:16
+    at /home/marco/apps.personal/web-scraping/node_modules/mongoose/lib/helpers/promiseOrCallback.js:24:16
+    at /home/marco/apps.personal/web-scraping/node_modules/mongoose/lib/model.js:4861:21
+    at _hooks.execPost (/home/marco/apps.personal/web-scraping/node_modules/mongoose/lib/query.js:4407:11)
+    at /home/marco/apps.personal/web-scraping/node_modules/kareem/index.js:135:16
+    at processTicksAndRejections (internal/process/task_queues.js:79:9)
+    at runNextTicks (internal/process/task_queues.js:56:3)
+    at processImmediate (internal/timers.js:416:9)
+2021-01-19 14:24:31.219 info: providers.scrapeProviders.starting.75bf1b09-5820-439a-b69d-1fc0d51b7eef
+2021-01-19 14:24:31.528 info: listPageEvaluate.provider.toe https://www.torinoerotica.com/annunci-escort-torino/
+2021-01-19 14:24:33.449 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13245
+2021-01-19 14:24:34.464 info: toe 13245 italy.torino added 1 comments: [{"_id":"6006dcefe746422cd7c52c54","author":"inesperto","date":"2020-12-14T06:05:00.000Z","text":"Ciao, la ragazza mi ha accolto in un grande stabile nella zona di Mirafiori. Non ha fatto nessun gioco di portoni, indicandomi, una volta arrivato a destinazione, la porta del suo appartamento. Una volta entrato ho trovato una ragazza giovane con tacchi ed un abitino trasparente che metteva in risalto le sue forme (lato A e lato B direi parecchio sinuosi). Piacevole incontro di un'oretta che sicuramente ripeterei!"}]
+2021-01-19 14:24:34.489 info: providers.scrapeProviders.finishing.75bf1b09-5820-439a-b69d-1fc0d51b7eef.success: 1
+2021-01-19 14:24:34.490 info: finished scraping providers
+2021-01-19 14:25:14.978 info: providers.scrapeProviders.starting.e8714efa-95b6-432a-a5a2-96b6ed99b774
+2021-01-19 14:25:15.264 info: listPageEvaluate.provider.toe https://www.torinoerotica.com/annunci-escort-torino/
+2021-01-19 14:25:16.979 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13245
+2021-01-19 14:25:17.923 info: toe 13245 italy.torino added 1 comments: [{"_id":"6006dd92a5290d2f3f7531e6","author":"inesperto","date":"2020-12-14T06:05:00.000Z","text":"Ciao, la ragazza mi ha accolto in un grande stabile nella zona di Mirafiori. Non ha fatto nessun gioco di portoni, indicandomi, una volta arrivato a destinazione, la porta del suo appartamento. Una volta entrato ho trovato una ragazza giovane con tacchi ed un abitino trasparente che metteva in risalto le sue forme (lato A e lato B direi parecchio sinuosi). Piacevole incontro di un'oretta che sicuramente ripeterei!"}]
+2021-01-19 14:25:17.975 info: providers.scrapeProviders.finishing.e8714efa-95b6-432a-a5a2-96b6ed99b774.success: 1
+2021-01-19 14:25:17.975 info: finished scraping providers
+2021-01-19 14:25:53.553 info: providers.scrapeProviders.starting.91fb1ec1-b6d2-4e79-b7a9-50d9a16b766b
+2021-01-19 14:25:53.833 info: listPageEvaluate.provider.toe https://www.torinoerotica.com/annunci-escort-torino/
+2021-01-19 14:25:55.361 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13245
+2021-01-19 14:25:56.300 info: toe 13245 italy.torino added 1 comments: [{"_id":"6006ddbd8032f92fdf147e52","author":"inesperto","date":"2020-12-14T06:05:00.000Z","text":"Ciao, la ragazza mi ha accolto in un grande stabile nella zona di Mirafiori. Non ha fatto nessun gioco di portoni, indicandomi, una volta arrivato a destinazione, la porta del suo appartamento. Una volta entrato ho trovato una ragazza giovane con tacchi ed un abitino trasparente che metteva in risalto le sue forme (lato A e lato B direi parecchio sinuosi). Piacevole incontro di un'oretta che sicuramente ripeterei!"}]
+2021-01-19 14:25:56.353 info: providers.scrapeProviders.finishing.91fb1ec1-b6d2-4e79-b7a9-50d9a16b766b.success: 1
+2021-01-19 14:25:56.353 info: finished scraping providers
+2021-01-19 16:41:07.081 info: providers.scrapeProviders.starting.3cd6ba99-46ef-4f9f-8ab6-fdb0c8375c55
+2021-01-19 16:41:14.291 info: listPageEvaluate.provider.toe https://www.torinoerotica.com/annunci-escort-torino/
+2021-01-19 16:41:16.517 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13245
+2021-01-19 16:41:17.840 info: toe 13245 italy.torino unchanged
+2021-01-19 16:41:17.848 info: providers.scrapeProviders.finishing.3cd6ba99-46ef-4f9f-8ab6-fdb0c8375c55.success: 1
+2021-01-19 16:41:17.849 info: finished scraping providers
+2021-01-19 16:41:59.091 info: providers.scrapeProviders.starting.c2c38a43-2e89-4d74-8c89-479a0aa292e3
+2021-01-19 16:41:59.367 info: listPageEvaluate.provider.toe https://www.torinoerotica.com/annunci-escort-torino/
+2021-01-19 16:42:01.175 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13245
+2021-01-19 16:42:02.287 info: toe 13245 italy.torino unchanged
+2021-01-19 16:42:02.290 info: providers.scrapeProviders.finishing.c2c38a43-2e89-4d74-8c89-479a0aa292e3.success: 1
+2021-01-19 16:42:02.290 info: finished scraping providers
+2021-01-19 16:43:06.517 info: providers.scrapeProviders.starting.dcfb4ccb-3379-4300-a7e3-f15e2bc784a3
+2021-01-19 16:43:06.758 info: listPageEvaluate.provider.toe https://www.torinoerotica.com/annunci-escort-torino/
+2021-01-19 16:43:08.376 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13245
+2021-01-19 16:43:09.402 info: toe 13245 italy.torino unchanged
+2021-01-19 16:43:09.410 info: providers.scrapeProviders.finishing.dcfb4ccb-3379-4300-a7e3-f15e2bc784a3.success: 1
+2021-01-19 16:43:09.410 info: finished scraping providers
+2021-01-19 16:47:02.761 info: providers.scrapeProviders.starting.14996f15-a502-48e1-baac-67f71dd53726
+2021-01-19 16:47:03.043 info: listPageEvaluate.provider.toe https://www.torinoerotica.com/annunci-escort-torino/
+2021-01-19 16:47:04.822 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13245
+2021-01-19 16:48:02.895 info: providers.scrapeProviders.starting.8a190cdf-4a87-4125-aa36-aaf7f226fde9
+2021-01-19 16:48:03.193 info: listPageEvaluate.provider.toe https://www.torinoerotica.com/annunci-escort-torino/
+2021-01-19 16:48:05.475 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13245
+2021-01-19 16:48:06.634 info: toe 13245 italy.torino unchanged
+2021-01-19 16:48:06.644 info: providers.scrapeProviders.finishing.8a190cdf-4a87-4125-aa36-aaf7f226fde9.success: 1
+2021-01-19 16:48:06.644 info: finished scraping providers
+2021-01-19 16:49:34.487 info: providers.scrapeProviders.starting.6683e504-29d9-4805-beec-dacff26f3ac4
+2021-01-19 16:49:34.744 info: listPageEvaluate.provider.toe https://www.torinoerotica.com/annunci-escort-torino/
+2021-01-19 16:49:36.508 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13245
+2021-01-19 16:49:37.702 info: toe 13245 italy.torino unchanged
+2021-01-19 16:49:37.710 info: providers.scrapeProviders.finishing.6683e504-29d9-4805-beec-dacff26f3ac4.success: 1
+2021-01-19 16:49:37.711 info: finished scraping providers
+2021-01-19 16:51:05.154 info: providers.scrapeProviders.starting.70bfe028-d834-4cf6-b373-45bfb305784f
+2021-01-19 16:51:05.400 info: listPageEvaluate.provider.toe https://www.torinoerotica.com/annunci-escort-torino/
+2021-01-19 16:51:07.072 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13245
+2021-01-19 16:51:08.106 info: toe 13245 italy.torino unchanged
+2021-01-19 16:51:08.115 info: providers.scrapeProviders.finishing.70bfe028-d834-4cf6-b373-45bfb305784f.success: 1
+2021-01-19 16:51:08.116 info: finished scraping providers
+2021-01-19 16:52:40.312 info: providers.scrapeProviders.starting.f54fb64a-c8ac-4c09-931f-8f6701b59542
+2021-01-19 16:52:40.554 info: listPageEvaluate.provider.toe https://www.torinoerotica.com/annunci-escort-torino/
+2021-01-19 16:52:42.290 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13245
+2021-01-19 16:52:43.286 info: toe 13245 italy.torino unchanged
+2021-01-19 16:52:43.296 info: providers.scrapeProviders.finishing.f54fb64a-c8ac-4c09-931f-8f6701b59542.success: 1
+2021-01-19 16:52:43.297 info: finished scraping providers
+2021-01-19 16:54:08.164 info: providers.scrapeProviders.starting.7b88ae5a-40d5-486c-8862-bc828348f3fb
+2021-01-19 16:54:08.417 info: listPageEvaluate.provider.toe https://www.torinoerotica.com/annunci-escort-torino/
+2021-01-19 16:54:10.056 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13245
+2021-01-19 16:54:10.737 info: toe 13245 italy.torino unchanged
+2021-01-19 16:54:10.758 info: providers.scrapeProviders.finishing.7b88ae5a-40d5-486c-8862-bc828348f3fb.success: 1
+2021-01-19 16:54:10.759 info: finished scraping providers
+2021-01-19 16:55:11.093 info: providers.scrapeProviders.starting.86a659b7-c22a-4533-a81c-66daa81dda58
+2021-01-19 16:55:11.442 info: listPageEvaluate.provider.toe https://www.torinoerotica.com/annunci-escort-torino/
+2021-01-19 16:55:13.013 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13245
+2021-01-19 16:55:56.763 info: providers.scrapeProviders.starting.731a2e6f-ec7b-4eb8-989a-229305588f57
+2021-01-19 16:55:57.067 info: listPageEvaluate.provider.toe https://www.torinoerotica.com/annunci-escort-torino/
+2021-01-19 16:55:58.717 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13245
+2021-01-19 16:55:59.644 info: toe 13245 italy.torino unchanged
+2021-01-19 16:55:59.672 info: providers.scrapeProviders.finishing.731a2e6f-ec7b-4eb8-989a-229305588f57.success: 1
+2021-01-19 16:55:59.673 info: finished scraping providers
+2021-01-19 16:57:23.372 info: providers.scrapeProviders.starting.0881dab0-040a-4ebb-b4b1-37a44a29e0e5
+2021-01-19 16:57:23.596 info: listPageEvaluate.provider.toe https://www.torinoerotica.com/annunci-escort-torino/
+2021-01-19 16:57:25.316 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13245
+2021-01-19 16:57:26.101 info: toe 13245 italy.torino unchanged
+2021-01-19 16:57:26.115 info: providers.scrapeProviders.finishing.0881dab0-040a-4ebb-b4b1-37a44a29e0e5.success: 1
+2021-01-19 16:57:26.116 info: finished scraping providers
+2021-01-19 16:58:42.026 info: providers.scrapeProviders.starting.4081ccc1-6b67-4a5a-8060-8f03dfdabfa0
+2021-01-19 16:58:42.262 info: listPageEvaluate.provider.toe https://www.torinoerotica.com/annunci-escort-torino/
+2021-01-19 16:58:43.883 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13245
+2021-01-19 16:58:44.791 info: toe 13245 italy.torino unchanged
+2021-01-19 16:58:44.809 info: providers.scrapeProviders.finishing.4081ccc1-6b67-4a5a-8060-8f03dfdabfa0.success: 1
+2021-01-19 16:58:44.809 info: finished scraping providers
+2021-01-19 16:59:23.429 info: providers.scrapeProviders.starting.771ad8c3-9c0c-43b4-9e15-a209facb7b43
+2021-01-19 16:59:23.713 info: listPageEvaluate.provider.toe https://www.torinoerotica.com/annunci-escort-torino/
+2021-01-19 16:59:25.529 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13245
+2021-01-19 16:59:26.327 info: toe 13245 italy.torino unchanged
+2021-01-19 16:59:26.339 info: providers.scrapeProviders.finishing.771ad8c3-9c0c-43b4-9e15-a209facb7b43.success: 1
+2021-01-19 16:59:26.339 info: finished scraping providers
+2021-01-19 17:00:08.174 info: providers.scrapeProviders.starting.fe85ff7f-df45-438a-9b12-e1689f89adfc
+2021-01-19 17:00:08.504 info: listPageEvaluate.provider.toe https://www.torinoerotica.com/annunci-escort-torino/
+2021-01-19 17:00:10.051 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13245
+2021-01-19 17:00:10.889 info: toe 13245 italy.torino unchanged
+2021-01-19 17:00:10.902 info: providers.scrapeProviders.finishing.fe85ff7f-df45-438a-9b12-e1689f89adfc.success: 1
+2021-01-19 17:00:10.902 info: finished scraping providers
+2021-01-19 17:00:40.174 info: providers.scrapeProviders.starting.15e8d05d-744b-4fb0-af73-4ca272f4c73a
+2021-01-19 17:00:40.409 info: listPageEvaluate.provider.toe https://www.torinoerotica.com/annunci-escort-torino/
+2021-01-19 17:00:41.966 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13245
+2021-01-19 17:00:42.888 info: toe 13245 italy.torino unchanged
+2021-01-19 17:00:42.893 info: providers.scrapeProviders.finishing.15e8d05d-744b-4fb0-af73-4ca272f4c73a.success: 1
+2021-01-19 17:00:42.894 info: finished scraping providers
+2021-01-19 17:04:22.332 info: providers.scrapeProviders.starting.c5b0f669-f4db-4bd9-a18d-d7530033fdfd
+2021-01-19 17:04:22.585 info: listPageEvaluate.provider.toe https://www.torinoerotica.com/annunci-escort-torino/
+2021-01-19 17:04:24.282 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13245
+2021-01-19 17:04:25.319 info: toe 13245 italy.torino unchanged
+2021-01-19 17:04:25.331 info: providers.scrapeProviders.finishing.c5b0f669-f4db-4bd9-a18d-d7530033fdfd.success: 1
+2021-01-19 17:04:25.331 info: finished scraping providers
+2021-01-19 17:05:18.586 info: providers.scrapeProviders.starting.1951cd53-8178-4885-b5bb-96cc20430155
+2021-01-19 17:05:18.853 info: listPageEvaluate.provider.toe https://www.torinoerotica.com/annunci-escort-torino/
+2021-01-19 17:05:20.656 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13245
+2021-01-19 17:05:21.362 info: toe 13245 italy.torino unchanged
+2021-01-19 17:05:21.374 info: providers.scrapeProviders.finishing.1951cd53-8178-4885-b5bb-96cc20430155.success: 1
+2021-01-19 17:05:21.374 info: finished scraping providers
+2021-01-19 17:10:55.644 info: providers.scrapeProviders.starting.1826c522-3ca6-41cc-98f0-5436dfd0c4cb
+2021-01-19 17:10:55.985 info: listPageEvaluate.provider.toe https://www.torinoerotica.com/annunci-escort-torino/
+2021-01-19 17:10:57.532 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13245
+2021-01-19 17:10:58.319 error: uncaughtException: itemNew.set is not a function
+TypeError: itemNew.set is not a function
+    at Items.findOne (/home/marco/apps.personal/web-scraping/src/controllers/providers.js:364:17)
+    at /home/marco/apps.personal/web-scraping/node_modules/mongoose/lib/model.js:4838:16
+    at /home/marco/apps.personal/web-scraping/node_modules/mongoose/lib/model.js:4838:16
+    at /home/marco/apps.personal/web-scraping/node_modules/mongoose/lib/helpers/promiseOrCallback.js:24:16
+    at /home/marco/apps.personal/web-scraping/node_modules/mongoose/lib/model.js:4861:21
+    at _hooks.execPost (/home/marco/apps.personal/web-scraping/node_modules/mongoose/lib/query.js:4407:11)
+    at /home/marco/apps.personal/web-scraping/node_modules/kareem/index.js:135:16
+    at processTicksAndRejections (internal/process/task_queues.js:79:9)
+    at runNextTicks (internal/process/task_queues.js:56:3)
+    at processImmediate (internal/timers.js:416:9)
+2021-01-19 17:10:58.320 error: uncaught exception TypeError: itemNew.set is not a function
+    at Items.findOne (/home/marco/apps.personal/web-scraping/src/controllers/providers.js:364:17)
+    at /home/marco/apps.personal/web-scraping/node_modules/mongoose/lib/model.js:4838:16
+    at /home/marco/apps.personal/web-scraping/node_modules/mongoose/lib/model.js:4838:16
+    at /home/marco/apps.personal/web-scraping/node_modules/mongoose/lib/helpers/promiseOrCallback.js:24:16
+    at /home/marco/apps.personal/web-scraping/node_modules/mongoose/lib/model.js:4861:21
+    at _hooks.execPost (/home/marco/apps.personal/web-scraping/node_modules/mongoose/lib/query.js:4407:11)
+    at /home/marco/apps.personal/web-scraping/node_modules/kareem/index.js:135:16
+    at processTicksAndRejections (internal/process/task_queues.js:79:9)
+    at runNextTicks (internal/process/task_queues.js:56:3)
+    at processImmediate (internal/timers.js:416:9)
+2021-01-19 17:12:20.881 info: providers.scrapeProviders.starting.03ee9971-db33-489a-99d7-08db1499aa54
+2021-01-19 17:12:21.174 info: listPageEvaluate.provider.toe https://www.torinoerotica.com/annunci-escort-torino/
+2021-01-19 17:12:22.713 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13245
+2021-01-19 17:12:23.470 info: new toe 13245 italy.torino
+2021-01-19 17:12:23.519 info: providers.scrapeProviders.finishing.03ee9971-db33-489a-99d7-08db1499aa54.success: 1
+2021-01-19 17:12:23.520 info: finished scraping providers
+2021-01-19 17:12:47.105 info: providers.scrapeProviders.starting.e339f03c-f88d-415f-8b9b-ebe0bd418e32
+2021-01-19 17:12:47.359 info: listPageEvaluate.provider.toe https://www.torinoerotica.com/annunci-escort-torino/
+2021-01-19 17:12:49.072 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13245
+2021-01-19 17:12:49.909 info: new toe 13245 italy.torino
+2021-01-19 17:12:49.947 info: providers.scrapeProviders.finishing.e339f03c-f88d-415f-8b9b-ebe0bd418e32.success: 1
+2021-01-19 17:12:49.947 info: finished scraping providers
+2021-01-19 17:13:51.087 info: providers.scrapeProviders.starting.320a46ad-5fc5-453d-a13e-3355fc1465eb
+2021-01-19 17:13:51.341 info: listPageEvaluate.provider.toe https://www.torinoerotica.com/annunci-escort-torino/
+2021-01-19 17:13:53.118 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13245
+2021-01-19 17:13:53.813 info: new toe 13245 italy.torino
+2021-01-19 17:13:53.825 info: providers.scrapeProviders.finishing.320a46ad-5fc5-453d-a13e-3355fc1465eb.success: 1
+2021-01-19 17:13:53.825 info: finished scraping providers
+2021-01-19 17:14:39.223 info: providers.scrapeProviders.starting.a1ae508d-c9f2-49af-bc10-98ec59888dd6
+2021-01-19 17:14:39.550 info: listPageEvaluate.provider.toe https://www.torinoerotica.com/annunci-escort-torino/
+2021-01-19 17:14:41.099 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13245
+2021-01-19 17:14:41.951 info: new toe 13245 italy.torino
+2021-01-19 17:14:41.970 info: providers.scrapeProviders.finishing.a1ae508d-c9f2-49af-bc10-98ec59888dd6.success: 1
+2021-01-19 17:14:41.971 info: finished scraping providers
+2021-01-19 17:15:16.196 info: providers.scrapeProviders.starting.907a1ab5-3a42-4fc8-96b2-40e1ed4a37dd
+2021-01-19 17:15:16.515 info: listPageEvaluate.provider.toe https://www.torinoerotica.com/annunci-escort-torino/
+2021-01-19 17:15:18.112 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13245
+2021-01-19 17:15:18.991 info: toe 13245 italy.torino unchanged
+2021-01-19 17:15:19.005 info: providers.scrapeProviders.finishing.907a1ab5-3a42-4fc8-96b2-40e1ed4a37dd.success: 1
+2021-01-19 17:15:19.005 info: finished scraping providers
+2021-01-19 17:15:33.784 info: providers.scrapeProviders.starting.ac3e4098-9bca-413a-a4ae-416cb5819881
+2021-01-19 17:15:34.051 info: listPageEvaluate.provider.toe https://www.torinoerotica.com/annunci-escort-torino/
+2021-01-19 17:15:35.668 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13245
+2021-01-19 17:15:36.494 info: toe 13245 italy.torino unchanged
+2021-01-19 17:15:36.499 info: providers.scrapeProviders.finishing.ac3e4098-9bca-413a-a4ae-416cb5819881.success: 1
+2021-01-19 17:15:36.499 info: finished scraping providers
+2021-01-19 17:17:05.472 info: providers.scrapeProviders.starting.d22217f4-8f56-439a-9072-22fe05cef184
+2021-01-19 17:17:05.722 info: listPageEvaluate.provider.toe https://www.torinoerotica.com/annunci-escort-torino/
+2021-01-19 17:17:07.269 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13245
+2021-01-19 17:17:08.045 info: toe 13245 italy.torino unchanged
+2021-01-19 17:17:08.056 info: providers.scrapeProviders.finishing.d22217f4-8f56-439a-9072-22fe05cef184.success: 1
+2021-01-19 17:17:08.056 info: finished scraping providers
+2021-01-19 17:19:08.474 info: providers.scrapeProviders.starting.bbd97266-6c1d-4799-8c9a-cb7525e4d358
+2021-01-19 17:19:08.790 info: listPageEvaluate.provider.toe https://www.torinoerotica.com/annunci-escort-torino/
+2021-01-19 17:19:10.305 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13245
+2021-01-19 17:19:11.091 info: toe 13245 italy.torino unchanged
+2021-01-19 17:19:11.103 info: providers.scrapeProviders.finishing.bbd97266-6c1d-4799-8c9a-cb7525e4d358.success: 1
+2021-01-19 17:19:11.103 info: finished scraping providers
+2021-01-19 17:20:41.498 info: providers.scrapeProviders.starting.a41805d5-672a-49fa-8281-e3b73dfd97b9
+2021-01-19 17:20:41.750 info: listPageEvaluate.provider.toe https://www.torinoerotica.com/annunci-escort-torino/
+2021-01-19 17:20:43.347 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13245
+2021-01-19 17:20:44.125 info: toe 13245 italy.torino unchanged
+2021-01-19 17:20:44.144 info: providers.scrapeProviders.finishing.a41805d5-672a-49fa-8281-e3b73dfd97b9.success: 1
+2021-01-19 17:20:44.145 info: finished scraping providers
+2021-01-19 17:22:57.039 info: providers.scrapeProviders.starting.680972c3-5571-46e7-854c-0ee39e2ee651
+2021-01-19 17:22:57.318 info: listPageEvaluate.provider.toe https://www.torinoerotica.com/annunci-escort-torino/
+2021-01-19 17:22:58.989 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13245
+2021-01-19 17:22:59.762 error: uncaughtException: Object.getOwnKeys is not a function
+TypeError: Object.getOwnKeys is not a function
+    at Object.keys.map.prop (/home/marco/apps.personal/web-scraping/src/controllers/providers.js:439:32)
+    at Array.map (<anonymous>)
+    at compareItemsHistoryes (/home/marco/apps.personal/web-scraping/src/controllers/providers.js:392:24)
+    at itemOld.save (/home/marco/apps.personal/web-scraping/src/controllers/providers.js:370:11)
+    at /home/marco/apps.personal/web-scraping/node_modules/mongoose/lib/model.js:4838:16
+    at /home/marco/apps.personal/web-scraping/node_modules/mongoose/lib/helpers/promiseOrCallback.js:24:16
+    at /home/marco/apps.personal/web-scraping/node_modules/mongoose/lib/model.js:4861:21
+    at model.$__save.error (/home/marco/apps.personal/web-scraping/node_modules/mongoose/lib/model.js:502:7)
+    at /home/marco/apps.personal/web-scraping/node_modules/kareem/index.js:315:21
+    at next (/home/marco/apps.personal/web-scraping/node_modules/kareem/index.js:209:27)
+    at /home/marco/apps.personal/web-scraping/node_modules/kareem/index.js:182:9
+    at process.nextTick (/home/marco/apps.personal/web-scraping/node_modules/kareem/index.js:507:38)
+    at processTicksAndRejections (internal/process/task_queues.js:79:9)
+2021-01-19 17:22:59.762 error: uncaught exception TypeError: Object.getOwnKeys is not a function
+    at Object.keys.map.prop (/home/marco/apps.personal/web-scraping/src/controllers/providers.js:439:32)
+    at Array.map (<anonymous>)
+    at compareItemsHistoryes (/home/marco/apps.personal/web-scraping/src/controllers/providers.js:392:24)
+    at itemOld.save (/home/marco/apps.personal/web-scraping/src/controllers/providers.js:370:11)
+    at /home/marco/apps.personal/web-scraping/node_modules/mongoose/lib/model.js:4838:16
+    at /home/marco/apps.personal/web-scraping/node_modules/mongoose/lib/helpers/promiseOrCallback.js:24:16
+    at /home/marco/apps.personal/web-scraping/node_modules/mongoose/lib/model.js:4861:21
+    at model.$__save.error (/home/marco/apps.personal/web-scraping/node_modules/mongoose/lib/model.js:502:7)
+    at /home/marco/apps.personal/web-scraping/node_modules/kareem/index.js:315:21
+    at next (/home/marco/apps.personal/web-scraping/node_modules/kareem/index.js:209:27)
+    at /home/marco/apps.personal/web-scraping/node_modules/kareem/index.js:182:9
+    at process.nextTick (/home/marco/apps.personal/web-scraping/node_modules/kareem/index.js:507:38)
+    at processTicksAndRejections (internal/process/task_queues.js:79:9)
+2021-01-19 17:24:01.050 info: providers.scrapeProviders.starting.a9d09084-29ac-4891-a8ac-3775408e4041
+2021-01-19 17:24:01.416 info: listPageEvaluate.provider.toe https://www.torinoerotica.com/annunci-escort-torino/
+2021-01-19 17:24:03.355 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13245
+2021-01-19 17:24:04.136 error: uncaughtException: Object.getOwnKeys is not a function
+TypeError: Object.getOwnKeys is not a function
+    at Object.keys.map.prop (/home/marco/apps.personal/web-scraping/src/controllers/providers.js:439:32)
+    at Array.map (<anonymous>)
+    at compareItemsHistoryes (/home/marco/apps.personal/web-scraping/src/controllers/providers.js:392:24)
+    at itemOld.save (/home/marco/apps.personal/web-scraping/src/controllers/providers.js:370:11)
+    at /home/marco/apps.personal/web-scraping/node_modules/mongoose/lib/model.js:4838:16
+    at /home/marco/apps.personal/web-scraping/node_modules/mongoose/lib/helpers/promiseOrCallback.js:24:16
+    at /home/marco/apps.personal/web-scraping/node_modules/mongoose/lib/model.js:4861:21
+    at model.$__save.error (/home/marco/apps.personal/web-scraping/node_modules/mongoose/lib/model.js:502:7)
+    at /home/marco/apps.personal/web-scraping/node_modules/kareem/index.js:315:21
+    at next (/home/marco/apps.personal/web-scraping/node_modules/kareem/index.js:209:27)
+    at /home/marco/apps.personal/web-scraping/node_modules/kareem/index.js:182:9
+    at process.nextTick (/home/marco/apps.personal/web-scraping/node_modules/kareem/index.js:507:38)
+    at processTicksAndRejections (internal/process/task_queues.js:79:9)
+2021-01-19 17:24:04.137 error: uncaught exception TypeError: Object.getOwnKeys is not a function
+    at Object.keys.map.prop (/home/marco/apps.personal/web-scraping/src/controllers/providers.js:439:32)
+    at Array.map (<anonymous>)
+    at compareItemsHistoryes (/home/marco/apps.personal/web-scraping/src/controllers/providers.js:392:24)
+    at itemOld.save (/home/marco/apps.personal/web-scraping/src/controllers/providers.js:370:11)
+    at /home/marco/apps.personal/web-scraping/node_modules/mongoose/lib/model.js:4838:16
+    at /home/marco/apps.personal/web-scraping/node_modules/mongoose/lib/helpers/promiseOrCallback.js:24:16
+    at /home/marco/apps.personal/web-scraping/node_modules/mongoose/lib/model.js:4861:21
+    at model.$__save.error (/home/marco/apps.personal/web-scraping/node_modules/mongoose/lib/model.js:502:7)
+    at /home/marco/apps.personal/web-scraping/node_modules/kareem/index.js:315:21
+    at next (/home/marco/apps.personal/web-scraping/node_modules/kareem/index.js:209:27)
+    at /home/marco/apps.personal/web-scraping/node_modules/kareem/index.js:182:9
+    at process.nextTick (/home/marco/apps.personal/web-scraping/node_modules/kareem/index.js:507:38)
+    at processTicksAndRejections (internal/process/task_queues.js:79:9)
+2021-01-19 17:24:26.181 info: providers.scrapeProviders.starting.c60687ad-9714-482b-ad29-2dc31c26cc6d
+2021-01-19 17:24:26.425 info: listPageEvaluate.provider.toe https://www.torinoerotica.com/annunci-escort-torino/
+2021-01-19 17:24:28.154 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13245
+2021-01-19 17:24:29.073 info: toe 13245 italy.torino unchanged
+2021-01-19 17:24:29.085 info: providers.scrapeProviders.finishing.c60687ad-9714-482b-ad29-2dc31c26cc6d.success: 1
+2021-01-19 17:24:29.085 info: finished scraping providers
+2021-01-19 17:37:05.632 info: providers.scrapeProviders.starting.579df098-0041-4d35-b4fb-cb7bf568fa44
+2021-01-19 17:37:05.937 info: listPageEvaluate.provider.toe https://www.torinoerotica.com/annunci-escort-torino/
+2021-01-19 17:37:07.842 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13245
+2021-01-19 17:37:08.635 info: toe 13245 italy.torino unchanged
+2021-01-19 17:37:08.648 info: providers.scrapeProviders.finishing.579df098-0041-4d35-b4fb-cb7bf568fa44.success: 1
+2021-01-19 17:37:08.648 info: finished scraping providers
+2021-01-19 17:37:49.610 info: providers.scrapeProviders.starting.1c0a3a38-96b2-4ff5-b395-fe664dd7fc94
+2021-01-19 17:37:49.860 info: listPageEvaluate.provider.toe https://www.torinoerotica.com/annunci-escort-torino/
+2021-01-19 17:37:51.566 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13245
+2021-01-19 17:37:52.478 info: toe 13245 italy.torino unchanged
+2021-01-19 17:37:52.490 info: providers.scrapeProviders.finishing.1c0a3a38-96b2-4ff5-b395-fe664dd7fc94.success: 1
+2021-01-19 17:37:52.491 info: finished scraping providers
+2021-01-19 17:38:30.684 info: providers.scrapeProviders.starting.0c07f870-0212-4a32-b55c-68c9b4b647cb
+2021-01-19 17:38:30.959 info: listPageEvaluate.provider.toe https://www.torinoerotica.com/annunci-escort-torino/
+2021-01-19 17:38:32.546 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13245
+2021-01-19 17:38:33.477 info: toe 13245 italy.torino unchanged
+2021-01-19 17:38:33.493 info: providers.scrapeProviders.finishing.0c07f870-0212-4a32-b55c-68c9b4b647cb.success: 1
+2021-01-19 17:38:33.494 info: finished scraping providers
+2021-01-19 17:39:24.430 info: providers.scrapeProviders.starting.de3fb912-420b-4ff2-946e-0c4358c9ce52
+2021-01-19 17:39:24.682 info: listPageEvaluate.provider.toe https://www.torinoerotica.com/annunci-escort-torino/
+2021-01-19 17:39:26.391 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13245
+2021-01-19 17:39:27.383 info: toe 13245 italy.torino unchanged
+2021-01-19 17:39:27.395 info: providers.scrapeProviders.finishing.de3fb912-420b-4ff2-946e-0c4358c9ce52.success: 1
+2021-01-19 17:39:27.396 info: finished scraping providers
+2021-01-19 17:40:22.323 info: providers.scrapeProviders.starting.5389cff7-88cb-491c-880d-c536fe883d10
+2021-01-19 17:40:22.647 info: listPageEvaluate.provider.toe https://www.torinoerotica.com/annunci-escort-torino/
+2021-01-19 17:40:24.283 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13245
+2021-01-19 17:40:25.024 info: new toe 13245 italy.torino
+2021-01-19 17:40:25.047 info: providers.scrapeProviders.finishing.5389cff7-88cb-491c-880d-c536fe883d10.success: 1
+2021-01-19 17:40:25.047 info: finished scraping providers
+2021-01-19 17:42:59.660 info: providers.scrapeProviders.starting.745bef93-4d2f-4849-8689-a099a9ef428c
+2021-01-19 17:42:59.983 info: listPageEvaluate.provider.toe https://www.torinoerotica.com/annunci-escort-torino/
+2021-01-19 17:43:01.592 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13245
+2021-01-19 17:43:02.780 info: toe 13245 italy.torino unchanged
+2021-01-19 17:43:02.795 info: providers.scrapeProviders.finishing.745bef93-4d2f-4849-8689-a099a9ef428c.success: 1
+2021-01-19 17:43:02.796 info: finished scraping providers
+2021-01-19 17:44:26.278 info: providers.scrapeProviders.starting.3e1f20e1-b22b-4478-a6e0-777c948258fc
+2021-01-19 17:44:26.514 info: listPageEvaluate.provider.toe https://www.torinoerotica.com/annunci-escort-torino/
+2021-01-19 17:44:28.178 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13245
+2021-01-19 17:44:29.018 info: toe 13245 italy.torino unchanged
+2021-01-19 17:44:29.030 info: providers.scrapeProviders.finishing.3e1f20e1-b22b-4478-a6e0-777c948258fc.success: 1
+2021-01-19 17:44:29.030 info: finished scraping providers
+2021-01-19 17:44:45.567 info: providers.scrapeProviders.starting.67ec6f94-124e-484b-9341-0221d4a9813b
+2021-01-19 17:44:45.813 info: listPageEvaluate.provider.toe https://www.torinoerotica.com/annunci-escort-torino/
+2021-01-19 17:44:47.873 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13245
+2021-01-19 17:44:48.618 error: uncaughtException: nObj_doc is not defined
+ReferenceError: nObj_doc is not defined
+    at Object.keys.map.prop (/home/marco/apps.personal/web-scraping/src/controllers/providers.js:449:52)
+    at Array.map (<anonymous>)
+    at compareItemsHistoryes (/home/marco/apps.personal/web-scraping/src/controllers/providers.js:392:24)
+    at itemOld.save (/home/marco/apps.personal/web-scraping/src/controllers/providers.js:370:11)
+    at /home/marco/apps.personal/web-scraping/node_modules/mongoose/lib/model.js:4838:16
+    at /home/marco/apps.personal/web-scraping/node_modules/mongoose/lib/helpers/promiseOrCallback.js:24:16
+    at /home/marco/apps.personal/web-scraping/node_modules/mongoose/lib/model.js:4861:21
+    at model.$__save.error (/home/marco/apps.personal/web-scraping/node_modules/mongoose/lib/model.js:502:7)
+    at /home/marco/apps.personal/web-scraping/node_modules/kareem/index.js:315:21
+    at next (/home/marco/apps.personal/web-scraping/node_modules/kareem/index.js:209:27)
+    at /home/marco/apps.personal/web-scraping/node_modules/kareem/index.js:182:9
+    at process.nextTick (/home/marco/apps.personal/web-scraping/node_modules/kareem/index.js:507:38)
+    at processTicksAndRejections (internal/process/task_queues.js:79:9)
+2021-01-19 17:44:48.619 error: uncaught exception ReferenceError: nObj_doc is not defined
+    at Object.keys.map.prop (/home/marco/apps.personal/web-scraping/src/controllers/providers.js:449:52)
+    at Array.map (<anonymous>)
+    at compareItemsHistoryes (/home/marco/apps.personal/web-scraping/src/controllers/providers.js:392:24)
+    at itemOld.save (/home/marco/apps.personal/web-scraping/src/controllers/providers.js:370:11)
+    at /home/marco/apps.personal/web-scraping/node_modules/mongoose/lib/model.js:4838:16
+    at /home/marco/apps.personal/web-scraping/node_modules/mongoose/lib/helpers/promiseOrCallback.js:24:16
+    at /home/marco/apps.personal/web-scraping/node_modules/mongoose/lib/model.js:4861:21
+    at model.$__save.error (/home/marco/apps.personal/web-scraping/node_modules/mongoose/lib/model.js:502:7)
+    at /home/marco/apps.personal/web-scraping/node_modules/kareem/index.js:315:21
+    at next (/home/marco/apps.personal/web-scraping/node_modules/kareem/index.js:209:27)
+    at /home/marco/apps.personal/web-scraping/node_modules/kareem/index.js:182:9
+    at process.nextTick (/home/marco/apps.personal/web-scraping/node_modules/kareem/index.js:507:38)
+    at processTicksAndRejections (internal/process/task_queues.js:79:9)
+2021-01-19 17:45:00.586 info: providers.scrapeProviders.starting.72e3419c-21dd-4838-a21c-0159e74b639f
+2021-01-19 17:45:00.827 info: listPageEvaluate.provider.toe https://www.torinoerotica.com/annunci-escort-torino/
+2021-01-19 17:45:02.360 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13245
+2021-01-19 17:45:03.172 info: toe 13245 italy.torino unchanged
+2021-01-19 17:45:03.181 info: providers.scrapeProviders.finishing.72e3419c-21dd-4838-a21c-0159e74b639f.success: 1
+2021-01-19 17:45:03.181 info: finished scraping providers
+2021-01-19 17:47:45.484 info: providers.scrapeProviders.starting.71a64060-141a-4eca-a775-53c713001813
+2021-01-19 17:47:45.793 info: listPageEvaluate.provider.toe https://www.torinoerotica.com/annunci-escort-torino/
+2021-01-19 17:47:48.441 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13245
+2021-01-19 17:47:49.279 info: toe 13245 italy.torino unchanged
+2021-01-19 17:47:49.289 info: providers.scrapeProviders.finishing.71a64060-141a-4eca-a775-53c713001813.success: 1
+2021-01-19 17:47:49.289 info: finished scraping providers
+2021-01-19 17:50:01.184 info: providers.scrapeProviders.starting.31e7c565-a17f-4a48-b520-d4ddfd4f1fc0
+2021-01-19 17:50:01.524 info: listPageEvaluate.provider.toe https://www.torinoerotica.com/annunci-escort-torino/
+2021-01-19 17:50:03.446 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13245
+2021-01-19 17:50:04.528 info: toe 13245 italy.torino added 10 images: [{"_id":"60070d35b2862b179901d686","url":"photo-escort/122266-13245/s/1-640755774-3814863694.jpeg","category":"main"},{"_id":"60070d35b2862b179901d687","url":"photo-escort/122266-13245/1-1062668486-3811939692.jpeg","category":"full"},{"_id":"60070d35b2862b179901d688","url":"photo-escort/122266-13245/1-1062668486-3811939704.JPG","category":"full"},{"_id":"60070d35b2862b179901d689","url":"photo-escort/122266-13245/1-640755774-3814863694.jpeg","category":"full"},{"_id":"60070d35b2862b179901d68a","url":"photo-escort/122266-13245/2-1062668486-3811939692.JPG","category":"full"},{"_id":"60070d35b2862b179901d68b","url":"photo-escort/122266-13245/2-640755774-3814863694.JPG","category":"full"},{"_id":"60070d35b2862b179901d68c","url":"photo-escort/122266-13245/3-1062668486-3811939692.JPG","category":"full"},{"_id":"60070d35b2862b179901d68d","url":"photo-escort/122266-13245/3-640755774-3814863694.JPG","category":"full"},{"_id":"60070d35b2862b179901d68e","url":"photo-escort/122266-13245/4-1062668486-3811939692.JPG","category":"full"},{"_id":"60070d35b2862b179901d68f","url":"photo-escort/122266-13245/5-1062668486-3811939693.JPG","category":"full"}]
+2021-01-19 17:50:04.605 info: toe 13245 italy.torino added 1 comments: [{"_id":"60070d35b2862b179901d690","author":"inesperto","date":"2020-12-14T06:05:00.000Z","text":"Ciao, la ragazza mi ha accolto in un grande stabile nella zona di Mirafiori. Non ha fatto nessun gioco di portoni, indicandomi, una volta arrivato a destinazione, la porta del suo appartamento. Una volta entrato ho trovato una ragazza giovane con tacchi ed un abitino trasparente che metteva in risalto le sue forme (lato A e lato B direi parecchio sinuosi). Piacevole incontro di un'oretta che sicuramente ripeterei!"}]
+2021-01-19 17:50:04.614 info: providers.scrapeProviders.finishing.31e7c565-a17f-4a48-b520-d4ddfd4f1fc0.success: 1
+2021-01-19 17:50:04.614 info: finished scraping providers
+2021-01-19 17:51:03.136 info: providers.scrapeProviders.starting.5a5b5c7e-3463-4e67-9f27-108b6767cd0a
+2021-01-19 17:51:03.392 info: listPageEvaluate.provider.toe https://www.torinoerotica.com/annunci-escort-torino/
+2021-01-19 17:51:05.620 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13245
+2021-01-19 17:51:06.744 info: toe 13245 italy.torino added 1 comments: [{"_id":"60070dbc05e18918b999c66f","author":"inesperto","date":"2020-12-14T06:05:00.000Z","text":"Ciao, la ragazza mi ha accolto in un grande stabile nella zona di Mirafiori. Non ha fatto nessun gioco di portoni, indicandomi, una volta arrivato a destinazione, la porta del suo appartamento. Una volta entrato ho trovato una ragazza giovane con tacchi ed un abitino trasparente che metteva in risalto le sue forme (lato A e lato B direi parecchio sinuosi). Piacevole incontro di un'oretta che sicuramente ripeterei!"}]
+2021-01-19 17:51:06.793 info: providers.scrapeProviders.finishing.5a5b5c7e-3463-4e67-9f27-108b6767cd0a.success: 1
+2021-01-19 17:51:06.795 info: finished scraping providers
+2021-01-19 17:52:17.776 info: providers.scrapeProviders.starting.afcf8c7d-e352-4030-9bad-f9c1bb3206bf
+2021-01-19 17:52:18.167 info: listPageEvaluate.provider.toe https://www.torinoerotica.com/annunci-escort-torino/
+2021-01-19 17:52:19.921 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13245
+2021-01-19 17:52:20.695 info: toe 13245 italy.torino added 1 comments: [{"_id":"60070dfaf3c4001966bdc3be","author":"inesperto","date":"2020-12-14T06:05:00.000Z","text":"Ciao, la ragazza mi ha accolto in un grande stabile nella zona di Mirafiori. Non ha fatto nessun gioco di portoni, indicandomi, una volta arrivato a destinazione, la porta del suo appartamento. Una volta entrato ho trovato una ragazza giovane con tacchi ed un abitino trasparente che metteva in risalto le sue forme (lato A e lato B direi parecchio sinuosi). Piacevole incontro di un'oretta che sicuramente ripeterei!"}]
+2021-01-19 17:52:20.717 info: providers.scrapeProviders.finishing.afcf8c7d-e352-4030-9bad-f9c1bb3206bf.success: 1
+2021-01-19 17:52:20.717 info: finished scraping providers
+2021-01-19 17:54:05.184 info: providers.scrapeProviders.starting.c75e13da-aa05-4a73-badf-a36963132617
+2021-01-19 17:54:05.436 info: listPageEvaluate.provider.toe https://www.torinoerotica.com/annunci-escort-torino/
+2021-01-19 17:54:07.003 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13245
+2021-01-19 17:54:07.702 info: toe 13245 italy.torino added 1 comments: [{"_id":"60070e445857891a1a7570c1","author":"inesperto","date":"2020-12-14T06:05:00.000Z","text":"Ciao, la ragazza mi ha accolto in un grande stabile nella zona di Mirafiori. Non ha fatto nessun gioco di portoni, indicandomi, una volta arrivato a destinazione, la porta del suo appartamento. Una volta entrato ho trovato una ragazza giovane con tacchi ed un abitino trasparente che metteva in risalto le sue forme (lato A e lato B direi parecchio sinuosi). Piacevole incontro di un'oretta che sicuramente ripeterei!"}]
+2021-01-19 17:54:07.708 info: providers.scrapeProviders.finishing.c75e13da-aa05-4a73-badf-a36963132617.success: 1
+2021-01-19 17:54:07.713 info: finished scraping providers
+2021-01-19 17:54:25.000 info: providers.scrapeProviders.starting.26b80573-333b-4310-b821-4d61165d8130
+2021-01-19 17:54:25.338 info: listPageEvaluate.provider.toe https://www.torinoerotica.com/annunci-escort-torino/
+2021-01-19 17:54:26.816 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13245
+2021-01-19 17:54:27.618 info: toe 13245 italy.torino added 1 comments: [{"_id":"60070eaf8d35361ad3735811","author":"inesperto","date":"2020-12-14T06:05:00.000Z","text":"Ciao, la ragazza mi ha accolto in un grande stabile nella zona di Mirafiori. Non ha fatto nessun gioco di portoni, indicandomi, una volta arrivato a destinazione, la porta del suo appartamento. Una volta entrato ho trovato una ragazza giovane con tacchi ed un abitino trasparente che metteva in risalto le sue forme (lato A e lato B direi parecchio sinuosi). Piacevole incontro di un'oretta che sicuramente ripeterei!"}]
+2021-01-19 17:54:27.646 info: providers.scrapeProviders.finishing.26b80573-333b-4310-b821-4d61165d8130.success: 1
+2021-01-19 17:54:27.647 info: finished scraping providers
+2021-01-19 17:55:15.572 info: providers.scrapeProviders.starting.8669b25c-b0bd-4d93-84c8-6fa71cd8762e
+2021-01-19 17:55:15.813 info: listPageEvaluate.provider.toe https://www.torinoerotica.com/annunci-escort-torino/
+2021-01-19 17:55:17.375 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13245
+2021-01-19 17:55:18.135 info: toe 13245 italy.torino added 1 comments: [{"_id":"60070ec33407411b4f838d28","author":"inesperto","date":"2020-12-14T06:05:00.000Z","text":"Ciao, la ragazza mi ha accolto in un grande stabile nella zona di Mirafiori. Non ha fatto nessun gioco di portoni, indicandomi, una volta arrivato a destinazione, la porta del suo appartamento. Una volta entrato ho trovato una ragazza giovane con tacchi ed un abitino trasparente che metteva in risalto le sue forme (lato A e lato B direi parecchio sinuosi). Piacevole incontro di un'oretta che sicuramente ripeterei!"}]
+2021-01-19 17:55:18.166 info: providers.scrapeProviders.finishing.8669b25c-b0bd-4d93-84c8-6fa71cd8762e.success: 1
+2021-01-19 17:55:18.166 info: finished scraping providers
+2021-01-19 17:56:13.665 info: providers.scrapeProviders.starting.f806acfc-2d4a-44a4-a7e4-57626a8ce532
+2021-01-19 17:56:13.912 info: listPageEvaluate.provider.toe https://www.torinoerotica.com/annunci-escort-torino/
+2021-01-19 17:56:15.421 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13245
+2021-01-19 17:56:16.510 info: toe 13245 italy.torino added 1 comments: [{"_id":"60070ef68ad6591bef46d842","author":"inesperto","date":"2020-12-14T06:05:00.000Z","text":"Ciao, la ragazza mi ha accolto in un grande stabile nella zona di Mirafiori. Non ha fatto nessun gioco di portoni, indicandomi, una volta arrivato a destinazione, la porta del suo appartamento. Una volta entrato ho trovato una ragazza giovane con tacchi ed un abitino trasparente che metteva in risalto le sue forme (lato A e lato B direi parecchio sinuosi). Piacevole incontro di un'oretta che sicuramente ripeterei!"}]
+2021-01-19 17:56:16.536 info: providers.scrapeProviders.finishing.f806acfc-2d4a-44a4-a7e4-57626a8ce532.success: 1
+2021-01-19 17:56:16.536 info: finished scraping providers
+2021-01-19 17:56:26.073 info: providers.scrapeProviders.starting.bdbb976f-3ed0-4089-947d-631c1177904f
+2021-01-19 17:56:26.368 info: listPageEvaluate.provider.toe https://www.torinoerotica.com/annunci-escort-torino/
+2021-01-19 17:56:27.984 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13245
+2021-01-19 17:56:28.833 info: toe 13245 italy.torino added 1 comments: [{"_id":"60070f30b41a191c7ab95583","author":"inesperto","date":"2020-12-14T06:05:00.000Z","text":"Ciao, la ragazza mi ha accolto in un grande stabile nella zona di Mirafiori. Non ha fatto nessun gioco di portoni, indicandomi, una volta arrivato a destinazione, la porta del suo appartamento. Una volta entrato ho trovato una ragazza giovane con tacchi ed un abitino trasparente che metteva in risalto le sue forme (lato A e lato B direi parecchio sinuosi). Piacevole incontro di un'oretta che sicuramente ripeterei!"}]
+2021-01-19 17:56:28.862 info: providers.scrapeProviders.finishing.bdbb976f-3ed0-4089-947d-631c1177904f.success: 1
+2021-01-19 17:56:28.862 info: finished scraping providers
+2021-01-19 17:57:00.906 info: providers.scrapeProviders.starting.83d59d00-86de-4230-8776-732e8694f65e
+2021-01-19 17:57:01.159 info: listPageEvaluate.provider.toe https://www.torinoerotica.com/annunci-escort-torino/
+2021-01-19 17:57:02.721 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13245
+2021-01-19 17:57:03.756 info: toe 13245 italy.torino added 1 comments: [{"_id":"60070f3cdb658c1d26b3e85e","author":"inesperto","date":"2020-12-14T06:05:00.000Z","text":"Ciao, la ragazza mi ha accolto in un grande stabile nella zona di Mirafiori. Non ha fatto nessun gioco di portoni, indicandomi, una volta arrivato a destinazione, la porta del suo appartamento. Una volta entrato ho trovato una ragazza giovane con tacchi ed un abitino trasparente che metteva in risalto le sue forme (lato A e lato B direi parecchio sinuosi). Piacevole incontro di un'oretta che sicuramente ripeterei!"}]
+2021-01-19 17:57:03.785 info: providers.scrapeProviders.finishing.83d59d00-86de-4230-8776-732e8694f65e.success: 1
+2021-01-19 17:57:03.785 info: finished scraping providers
+2021-01-19 17:57:53.980 error: uncaughtException: Unexpected token )
+/home/marco/apps.personal/web-scraping/src/controllers/providers.js:447
+                  if (oObj[p].toString() != nObj[p].toString())) {
+                                                               ^
+
+SyntaxError: Unexpected token )
+    at Module._compile (internal/modules/cjs/loader.js:760:23)
+    at Object.Module._extensions..js (internal/modules/cjs/loader.js:827:10)
+    at Module.load (internal/modules/cjs/loader.js:685:32)
+    at Function.Module._load (internal/modules/cjs/loader.js:620:12)
+    at Module.require (internal/modules/cjs/loader.js:723:19)
+    at require (internal/modules/cjs/helpers.js:14:16)
+    at Object.<anonymous> (/home/marco/apps.personal/web-scraping/src/routes/providers.js:4:66)
+    at Module._compile (internal/modules/cjs/loader.js:816:30)
+    at Object.Module._extensions..js (internal/modules/cjs/loader.js:827:10)
+    at Module.load (internal/modules/cjs/loader.js:685:32)
+    at Function.Module._load (internal/modules/cjs/loader.js:620:12)
+    at Module.require (internal/modules/cjs/loader.js:723:19)
+    at require (internal/modules/cjs/helpers.js:14:16)
+    at Object.<anonymous> (/home/marco/apps.personal/web-scraping/src/index.js:14:25)
+    at Module._compile (internal/modules/cjs/loader.js:816:30)
+    at Object.Module._extensions..js (internal/modules/cjs/loader.js:827:10)
+2021-01-19 17:57:53.983 error: uncaught exception /home/marco/apps.personal/web-scraping/src/controllers/providers.js:447
+                  if (oObj[p].toString() != nObj[p].toString())) {
+                                                               ^
+
+SyntaxError: Unexpected token )
+    at Module._compile (internal/modules/cjs/loader.js:760:23)
+    at Object.Module._extensions..js (internal/modules/cjs/loader.js:827:10)
+    at Module.load (internal/modules/cjs/loader.js:685:32)
+    at Function.Module._load (internal/modules/cjs/loader.js:620:12)
+    at Module.require (internal/modules/cjs/loader.js:723:19)
+    at require (internal/modules/cjs/helpers.js:14:16)
+    at Object.<anonymous> (/home/marco/apps.personal/web-scraping/src/routes/providers.js:4:66)
+    at Module._compile (internal/modules/cjs/loader.js:816:30)
+    at Object.Module._extensions..js (internal/modules/cjs/loader.js:827:10)
+    at Module.load (internal/modules/cjs/loader.js:685:32)
+    at Function.Module._load (internal/modules/cjs/loader.js:620:12)
+    at Module.require (internal/modules/cjs/loader.js:723:19)
+    at require (internal/modules/cjs/helpers.js:14:16)
+    at Object.<anonymous> (/home/marco/apps.personal/web-scraping/src/index.js:14:25)
+    at Module._compile (internal/modules/cjs/loader.js:816:30)
+    at Object.Module._extensions..js (internal/modules/cjs/loader.js:827:10)
+2021-01-19 17:58:00.350 info: providers.scrapeProviders.starting.6e8edb9d-fae3-4240-be5c-5befaac2bd7a
+2021-01-19 17:58:00.706 info: listPageEvaluate.provider.toe https://www.torinoerotica.com/annunci-escort-torino/
+2021-01-19 17:58:02.508 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13245
+2021-01-19 17:58:03.276 info: toe 13245 italy.torino added 1 comments: [{"_id":"60070f5f05702e1da313c175","author":"inesperto","date":"2020-12-14T06:05:00.000Z","text":"Ciao, la ragazza mi ha accolto in un grande stabile nella zona di Mirafiori. Non ha fatto nessun gioco di portoni, indicandomi, una volta arrivato a destinazione, la porta del suo appartamento. Una volta entrato ho trovato una ragazza giovane con tacchi ed un abitino trasparente che metteva in risalto le sue forme (lato A e lato B direi parecchio sinuosi). Piacevole incontro di un'oretta che sicuramente ripeterei!"}]
+2021-01-19 17:58:03.285 info: providers.scrapeProviders.finishing.6e8edb9d-fae3-4240-be5c-5befaac2bd7a.success: 1
+2021-01-19 17:58:03.286 info: finished scraping providers
+2021-01-19 18:02:30.222 info: providers.scrapeProviders.starting.f267a6c5-d96c-4c9f-a648-37502de9cacd
+2021-01-19 18:02:30.532 info: listPageEvaluate.provider.toe https://www.torinoerotica.com/annunci-escort-torino/
+2021-01-19 18:02:32.270 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13245
+2021-01-19 18:02:33.062 error: uncaughtException: itemOldClone is not defined
+ReferenceError: itemOldClone is not defined
+    at Items.findOne (/home/marco/apps.personal/web-scraping/src/controllers/providers.js:364:30)
+    at /home/marco/apps.personal/web-scraping/node_modules/mongoose/lib/model.js:4838:16
+    at /home/marco/apps.personal/web-scraping/node_modules/mongoose/lib/model.js:4838:16
+    at /home/marco/apps.personal/web-scraping/node_modules/mongoose/lib/helpers/promiseOrCallback.js:24:16
+    at /home/marco/apps.personal/web-scraping/node_modules/mongoose/lib/model.js:4861:21
+    at _hooks.execPost (/home/marco/apps.personal/web-scraping/node_modules/mongoose/lib/query.js:4407:11)
+    at /home/marco/apps.personal/web-scraping/node_modules/kareem/index.js:135:16
+    at processTicksAndRejections (internal/process/task_queues.js:79:9)
+    at runNextTicks (internal/process/task_queues.js:56:3)
+    at processImmediate (internal/timers.js:416:9)
+2021-01-19 18:02:33.063 error: uncaught exception ReferenceError: itemOldClone is not defined
+    at Items.findOne (/home/marco/apps.personal/web-scraping/src/controllers/providers.js:364:30)
+    at /home/marco/apps.personal/web-scraping/node_modules/mongoose/lib/model.js:4838:16
+    at /home/marco/apps.personal/web-scraping/node_modules/mongoose/lib/model.js:4838:16
+    at /home/marco/apps.personal/web-scraping/node_modules/mongoose/lib/helpers/promiseOrCallback.js:24:16
+    at /home/marco/apps.personal/web-scraping/node_modules/mongoose/lib/model.js:4861:21
+    at _hooks.execPost (/home/marco/apps.personal/web-scraping/node_modules/mongoose/lib/query.js:4407:11)
+    at /home/marco/apps.personal/web-scraping/node_modules/kareem/index.js:135:16
+    at processTicksAndRejections (internal/process/task_queues.js:79:9)
+    at runNextTicks (internal/process/task_queues.js:56:3)
+    at processImmediate (internal/timers.js:416:9)
+2021-01-19 18:02:52.818 info: providers.scrapeProviders.starting.51a2466b-9726-4065-bfb5-89d99133a07f
+2021-01-19 18:02:53.077 info: listPageEvaluate.provider.toe https://www.torinoerotica.com/annunci-escort-torino/
+2021-01-19 18:02:54.749 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13245
+2021-01-19 18:02:55.480 error: uncaughtException: Cannot convert undefined or null to object
+TypeError: Cannot convert undefined or null to object
+    at Function.getOwnPropertyNames (<anonymous>)
+    at Object.keys.map.prop (/home/marco/apps.personal/web-scraping/src/controllers/providers.js:442:36)
+    at Array.map (<anonymous>)
+    at compareItemsHistoryes (/home/marco/apps.personal/web-scraping/src/controllers/providers.js:393:24)
+    at itemOld.save (/home/marco/apps.personal/web-scraping/src/controllers/providers.js:371:11)
+    at /home/marco/apps.personal/web-scraping/node_modules/mongoose/lib/model.js:4838:16
+    at /home/marco/apps.personal/web-scraping/node_modules/mongoose/lib/helpers/promiseOrCallback.js:24:16
+    at /home/marco/apps.personal/web-scraping/node_modules/mongoose/lib/model.js:4861:21
+    at model.$__save.error (/home/marco/apps.personal/web-scraping/node_modules/mongoose/lib/model.js:502:7)
+    at /home/marco/apps.personal/web-scraping/node_modules/kareem/index.js:315:21
+    at next (/home/marco/apps.personal/web-scraping/node_modules/kareem/index.js:209:27)
+    at /home/marco/apps.personal/web-scraping/node_modules/kareem/index.js:182:9
+    at process.nextTick (/home/marco/apps.personal/web-scraping/node_modules/kareem/index.js:507:38)
+    at processTicksAndRejections (internal/process/task_queues.js:79:9)
+2021-01-19 18:02:55.482 error: uncaught exception TypeError: Cannot convert undefined or null to object
+    at Function.getOwnPropertyNames (<anonymous>)
+    at Object.keys.map.prop (/home/marco/apps.personal/web-scraping/src/controllers/providers.js:442:36)
+    at Array.map (<anonymous>)
+    at compareItemsHistoryes (/home/marco/apps.personal/web-scraping/src/controllers/providers.js:393:24)
+    at itemOld.save (/home/marco/apps.personal/web-scraping/src/controllers/providers.js:371:11)
+    at /home/marco/apps.personal/web-scraping/node_modules/mongoose/lib/model.js:4838:16
+    at /home/marco/apps.personal/web-scraping/node_modules/mongoose/lib/helpers/promiseOrCallback.js:24:16
+    at /home/marco/apps.personal/web-scraping/node_modules/mongoose/lib/model.js:4861:21
+    at model.$__save.error (/home/marco/apps.personal/web-scraping/node_modules/mongoose/lib/model.js:502:7)
+    at /home/marco/apps.personal/web-scraping/node_modules/kareem/index.js:315:21
+    at next (/home/marco/apps.personal/web-scraping/node_modules/kareem/index.js:209:27)
+    at /home/marco/apps.personal/web-scraping/node_modules/kareem/index.js:182:9
+    at process.nextTick (/home/marco/apps.personal/web-scraping/node_modules/kareem/index.js:507:38)
+    at processTicksAndRejections (internal/process/task_queues.js:79:9)
+2021-01-19 18:03:35.105 info: providers.scrapeProviders.starting.7d936f1b-e5f8-4b64-89f5-e037e440537e
+2021-01-19 18:03:35.358 info: listPageEvaluate.provider.toe https://www.torinoerotica.com/annunci-escort-torino/
+2021-01-19 18:03:37.031 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13245
+2021-01-19 18:03:37.873 info: toe 13245 italy.torino unchanged
+2021-01-19 18:03:37.890 info: providers.scrapeProviders.finishing.7d936f1b-e5f8-4b64-89f5-e037e440537e.success: 1
+2021-01-19 18:03:37.890 info: finished scraping providers
+2021-01-19 18:04:03.872 info: providers.scrapeProviders.starting.dd3302fd-83b2-48fe-904e-b3e360b0a6cf
+2021-01-19 18:04:04.223 info: listPageEvaluate.provider.toe https://www.torinoerotica.com/annunci-escort-torino/
+2021-01-19 18:04:05.734 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13245
+2021-01-19 18:04:06.498 info: toe 13245 italy.torino added 1 comments: [{"_id":"600710e9a4a5d521a5e59461","author":"inesperto2","date":"2020-12-14T06:05:00.000Z","text":"Ciao, la ragazza mi ha accolto in un grande stabile nella zona di Mirafiori. Non ha fatto nessun gioco di portoni, indicandomi, una volta arrivato a destinazione, la porta del suo appartamento. Una volta entrato ho trovato una ragazza giovane con tacchi ed un abitino trasparente che metteva in risalto le sue forme (lato A e lato B direi parecchio sinuosi). Piacevole incontro di un'oretta che sicuramente ripeterei!"}]
+2021-01-19 18:04:06.546 info: providers.scrapeProviders.finishing.dd3302fd-83b2-48fe-904e-b3e360b0a6cf.success: 1
+2021-01-19 18:04:06.546 info: finished scraping providers
+2021-01-19 18:04:58.916 info: providers.scrapeProviders.starting.f108e696-a918-4665-9f70-7f3b2569fe18
+2021-01-19 18:04:59.215 info: listPageEvaluate.provider.toe https://www.torinoerotica.com/annunci-escort-torino/
+2021-01-19 18:05:00.759 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13245
+2021-01-19 18:05:01.420 info: toe 13245 italy.torino unchanged
+2021-01-19 18:05:01.458 info: providers.scrapeProviders.finishing.f108e696-a918-4665-9f70-7f3b2569fe18.success: 1
+2021-01-19 18:05:01.459 info: finished scraping providers
+2021-01-19 18:06:15.663 info: providers.scrapeProviders.starting.8b07b4d3-604f-412b-96b4-a72f4dfadce7
+2021-01-19 18:06:15.910 info: listPageEvaluate.provider.toe https://www.torinoerotica.com/annunci-escort-torino/
+2021-01-19 18:06:17.692 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13245
+2021-01-19 18:06:18.523 info: toe 13245 italy.torino added 10 images: [{"_id":"6007113d515c7022c80e544d","url":"photo-escort/122266-13245/s/1-640755774-3814863694.jpeg","category":"main"},{"_id":"6007113d515c7022c80e544e","url":"photo-escort/122266-13245/1-1062668486-3811939692.jpeg","category":"full"},{"_id":"6007113d515c7022c80e544f","url":"photo-escort/122266-13245/1-1062668486-3811939704.JPG","category":"full"},{"_id":"6007113d515c7022c80e5450","url":"photo-escort/122266-13245/1-640755774-3814863694.jpeg","category":"full"},{"_id":"6007113d515c7022c80e5451","url":"photo-escort/122266-13245/2-1062668486-3811939692.JPG","category":"full"},{"_id":"6007113d515c7022c80e5452","url":"photo-escort/122266-13245/2-640755774-3814863694.JPG","category":"full"},{"_id":"6007113d515c7022c80e5453","url":"photo-escort/122266-13245/3-1062668486-3811939692.JPG","category":"full"},{"_id":"6007113d515c7022c80e5454","url":"photo-escort/122266-13245/3-640755774-3814863694.JPG","category":"full"},{"_id":"6007113d515c7022c80e5455","url":"photo-escort/122266-13245/4-1062668486-3811939692.JPG","category":"full"},{"_id":"6007113d515c7022c80e5456","url":"photo-escort/122266-13245/5-1062668486-3811939693.JPG","category":"full"}]
+2021-01-19 18:06:18.525 info: toe 13245 italy.torino added 1 comments: [{"_id":"6007113d515c7022c80e5457","author":"inesperto","date":"2020-12-14T06:05:00.000Z","text":"Ciao, la ragazza mi ha accolto in un grande stabile nella zona di Mirafiori. Non ha fatto nessun gioco di portoni, indicandomi, una volta arrivato a destinazione, la porta del suo appartamento. Una volta entrato ho trovato una ragazza giovane con tacchi ed un abitino trasparente che metteva in risalto le sue forme (lato A e lato B direi parecchio sinuosi). Piacevole incontro di un'oretta che sicuramente ripeterei!"}]
+2021-01-19 18:06:18.534 info: providers.scrapeProviders.finishing.8b07b4d3-604f-412b-96b4-a72f4dfadce7.success: 1
+2021-01-19 18:06:18.534 info: finished scraping providers
+2021-01-19 18:07:44.149 info: providers.scrapeProviders.starting.68cf868a-00bc-42b8-aeb2-1d9a2e6c11ab
+2021-01-19 18:07:44.394 info: listPageEvaluate.provider.toe https://www.torinoerotica.com/annunci-escort-torino/
+2021-01-19 18:07:46.051 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13245
+2021-01-19 18:07:46.945 info: toe 13245 italy.torino added 10 images: [{"_id":"6007118a41faf823768cc98c","url":"photo-escort/122266-13245/s/1-640755774-3814863694.jpeg","category":"main"},{"_id":"6007118a41faf823768cc98d","url":"photo-escort/122266-13245/1-1062668486-3811939692.jpeg","category":"full"},{"_id":"6007118a41faf823768cc98e","url":"photo-escort/122266-13245/1-1062668486-3811939704.JPG","category":"full"},{"_id":"6007118a41faf823768cc98f","url":"photo-escort/122266-13245/1-640755774-3814863694.jpeg","category":"full"},{"_id":"6007118a41faf823768cc990","url":"photo-escort/122266-13245/2-1062668486-3811939692.JPG","category":"full"},{"_id":"6007118a41faf823768cc991","url":"photo-escort/122266-13245/2-640755774-3814863694.JPG","category":"full"},{"_id":"6007118a41faf823768cc992","url":"photo-escort/122266-13245/3-1062668486-3811939692.JPG","category":"full"},{"_id":"6007118a41faf823768cc993","url":"photo-escort/122266-13245/3-640755774-3814863694.JPG","category":"full"},{"_id":"6007118a41faf823768cc994","url":"photo-escort/122266-13245/4-1062668486-3811939692.JPG","category":"full"},{"_id":"6007118a41faf823768cc995","url":"photo-escort/122266-13245/5-1062668486-3811939693.JPG","category":"full"}]
+2021-01-19 18:07:46.946 info: toe 13245 italy.torino added 1 comments: [{"_id":"6007118a41faf823768cc996","author":"inesperto","date":"2020-12-14T06:05:00.000Z","text":"Ciao, la ragazza mi ha accolto in un grande stabile nella zona di Mirafiori. Non ha fatto nessun gioco di portoni, indicandomi, una volta arrivato a destinazione, la porta del suo appartamento. Una volta entrato ho trovato una ragazza giovane con tacchi ed un abitino trasparente che metteva in risalto le sue forme (lato A e lato B direi parecchio sinuosi). Piacevole incontro di un'oretta che sicuramente ripeterei!"}]
+2021-01-19 18:07:46.964 info: providers.scrapeProviders.finishing.68cf868a-00bc-42b8-aeb2-1d9a2e6c11ab.success: 1
+2021-01-19 18:07:46.965 info: finished scraping providers
+2021-01-19 18:08:02.333 info: providers.scrapeProviders.starting.5fce08c8-d785-47a3-9a0a-287151626d34
+2021-01-19 18:08:02.587 info: listPageEvaluate.provider.toe https://www.torinoerotica.com/annunci-escort-torino/
+2021-01-19 18:08:04.165 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13245
+2021-01-19 18:08:05.182 info: toe 13245 italy.torino added 10 images: [{"_id":"600711e24025a0243236e051","url":"photo-escort/122266-13245/s/1-640755774-3814863694.jpeg","category":"main"},{"_id":"600711e24025a0243236e052","url":"photo-escort/122266-13245/1-1062668486-3811939692.jpeg","category":"full"},{"_id":"600711e24025a0243236e053","url":"photo-escort/122266-13245/1-1062668486-3811939704.JPG","category":"full"},{"_id":"600711e24025a0243236e054","url":"photo-escort/122266-13245/1-640755774-3814863694.jpeg","category":"full"},{"_id":"600711e24025a0243236e055","url":"photo-escort/122266-13245/2-1062668486-3811939692.JPG","category":"full"},{"_id":"600711e24025a0243236e056","url":"photo-escort/122266-13245/2-640755774-3814863694.JPG","category":"full"},{"_id":"600711e24025a0243236e057","url":"photo-escort/122266-13245/3-1062668486-3811939692.JPG","category":"full"},{"_id":"600711e24025a0243236e058","url":"photo-escort/122266-13245/3-640755774-3814863694.JPG","category":"full"},{"_id":"600711e24025a0243236e059","url":"photo-escort/122266-13245/4-1062668486-3811939692.JPG","category":"full"},{"_id":"600711e24025a0243236e05a","url":"photo-escort/122266-13245/5-1062668486-3811939693.JPG","category":"full"}]
+2021-01-19 18:08:05.183 info: toe 13245 italy.torino added 1 comments: [{"_id":"600711e24025a0243236e05b","author":"inesperto","date":"2020-12-14T06:05:00.000Z","text":"Ciao, la ragazza mi ha accolto in un grande stabile nella zona di Mirafiori. Non ha fatto nessun gioco di portoni, indicandomi, una volta arrivato a destinazione, la porta del suo appartamento. Una volta entrato ho trovato una ragazza giovane con tacchi ed un abitino trasparente che metteva in risalto le sue forme (lato A e lato B direi parecchio sinuosi). Piacevole incontro di un'oretta che sicuramente ripeterei!"}]
+2021-01-19 18:08:05.194 info: providers.scrapeProviders.finishing.5fce08c8-d785-47a3-9a0a-287151626d34.success: 1
+2021-01-19 18:08:05.194 info: finished scraping providers
+2021-01-19 18:08:44.019 info: providers.scrapeProviders.starting.0630419a-b3ef-4fc0-bfef-e9f07c54b3bf
+2021-01-19 18:08:44.345 info: listPageEvaluate.provider.toe https://www.torinoerotica.com/annunci-escort-torino/
+2021-01-19 18:08:46.152 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13245
+2021-01-19 18:08:46.990 info: toe 13245 italy.torino added 10 images: [{"_id":"600711f565c47924b2aea957","url":"photo-escort/122266-13245/s/1-640755774-3814863694.jpeg","category":"main"},{"_id":"600711f565c47924b2aea958","url":"photo-escort/122266-13245/1-1062668486-3811939692.jpeg","category":"full"},{"_id":"600711f565c47924b2aea959","url":"photo-escort/122266-13245/1-1062668486-3811939704.JPG","category":"full"},{"_id":"600711f565c47924b2aea95a","url":"photo-escort/122266-13245/1-640755774-3814863694.jpeg","category":"full"},{"_id":"600711f565c47924b2aea95b","url":"photo-escort/122266-13245/2-1062668486-3811939692.JPG","category":"full"},{"_id":"600711f565c47924b2aea95c","url":"photo-escort/122266-13245/2-640755774-3814863694.JPG","category":"full"},{"_id":"600711f565c47924b2aea95d","url":"photo-escort/122266-13245/3-1062668486-3811939692.JPG","category":"full"},{"_id":"600711f565c47924b2aea95e","url":"photo-escort/122266-13245/3-640755774-3814863694.JPG","category":"full"},{"_id":"600711f565c47924b2aea95f","url":"photo-escort/122266-13245/4-1062668486-3811939692.JPG","category":"full"},{"_id":"600711f565c47924b2aea960","url":"photo-escort/122266-13245/5-1062668486-3811939693.JPG","category":"full"}]
+2021-01-19 18:08:46.991 info: toe 13245 italy.torino added 1 comments: [{"_id":"600711f565c47924b2aea961","author":"inesperto","date":"2020-12-14T06:05:00.000Z","text":"Ciao, la ragazza mi ha accolto in un grande stabile nella zona di Mirafiori. Non ha fatto nessun gioco di portoni, indicandomi, una volta arrivato a destinazione, la porta del suo appartamento. Una volta entrato ho trovato una ragazza giovane con tacchi ed un abitino trasparente che metteva in risalto le sue forme (lato A e lato B direi parecchio sinuosi). Piacevole incontro di un'oretta che sicuramente ripeterei!"}]
+2021-01-19 18:08:47.000 info: providers.scrapeProviders.finishing.0630419a-b3ef-4fc0-bfef-e9f07c54b3bf.success: 1
+2021-01-19 18:08:47.000 info: finished scraping providers
+2021-01-19 18:09:14.812 info: providers.scrapeProviders.starting.c0533441-cb1b-4497-a3b2-26a590f02185
+2021-01-19 18:09:15.040 info: listPageEvaluate.provider.toe https://www.torinoerotica.com/annunci-escort-torino/
+2021-01-19 18:09:16.525 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13245
+2021-01-19 18:09:17.240 info: toe 13245 italy.torino added 10 images: [{"_id":"6007121e0a11032533207658","url":"photo-escort/122266-13245/s/1-640755774-3814863694.jpeg","category":"main"},{"_id":"6007121e0a11032533207659","url":"photo-escort/122266-13245/1-1062668486-3811939692.jpeg","category":"full"},{"_id":"6007121e0a1103253320765a","url":"photo-escort/122266-13245/1-1062668486-3811939704.JPG","category":"full"},{"_id":"6007121e0a1103253320765b","url":"photo-escort/122266-13245/1-640755774-3814863694.jpeg","category":"full"},{"_id":"6007121e0a1103253320765c","url":"photo-escort/122266-13245/2-1062668486-3811939692.JPG","category":"full"},{"_id":"6007121e0a1103253320765d","url":"photo-escort/122266-13245/2-640755774-3814863694.JPG","category":"full"},{"_id":"6007121e0a1103253320765e","url":"photo-escort/122266-13245/3-1062668486-3811939692.JPG","category":"full"},{"_id":"6007121e0a1103253320765f","url":"photo-escort/122266-13245/3-640755774-3814863694.JPG","category":"full"},{"_id":"6007121e0a11032533207660","url":"photo-escort/122266-13245/4-1062668486-3811939692.JPG","category":"full"},{"_id":"6007121e0a11032533207661","url":"photo-escort/122266-13245/5-1062668486-3811939693.JPG","category":"full"}]
+2021-01-19 18:09:17.253 info: toe 13245 italy.torino added 1 comments: [{"_id":"6007121e0a11032533207662","author":"inesperto","date":"2020-12-14T06:05:00.000Z","text":"Ciao, la ragazza mi ha accolto in un grande stabile nella zona di Mirafiori. Non ha fatto nessun gioco di portoni, indicandomi, una volta arrivato a destinazione, la porta del suo appartamento. Una volta entrato ho trovato una ragazza giovane con tacchi ed un abitino trasparente che metteva in risalto le sue forme (lato A e lato B direi parecchio sinuosi). Piacevole incontro di un'oretta che sicuramente ripeterei!"}]
+2021-01-19 18:09:17.261 info: providers.scrapeProviders.finishing.c0533441-cb1b-4497-a3b2-26a590f02185.success: 1
+2021-01-19 18:09:17.261 info: finished scraping providers
+2021-01-19 18:09:31.659 info: providers.scrapeProviders.starting.2bc140a6-fd65-4c6d-b6bc-1b7c2c3f9e79
+2021-01-19 18:09:31.916 info: listPageEvaluate.provider.toe https://www.torinoerotica.com/annunci-escort-torino/
+2021-01-19 18:09:33.583 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13245
+2021-01-19 18:09:34.363 info: toe 13245 italy.torino unchanged
+2021-01-19 18:09:34.371 info: providers.scrapeProviders.finishing.2bc140a6-fd65-4c6d-b6bc-1b7c2c3f9e79.success: 1
+2021-01-19 18:09:34.371 info: finished scraping providers
+2021-01-19 18:10:40.459 info: providers.scrapeProviders.starting.b10822b3-e55c-4530-a387-32bb7a10a0c7
+2021-01-19 18:10:40.711 info: listPageEvaluate.provider.toe https://www.torinoerotica.com/annunci-escort-torino/
+2021-01-19 18:10:42.354 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13245
+2021-01-19 18:10:43.152 info: toe 13245 italy.torino unchanged
+2021-01-19 18:10:43.159 info: providers.scrapeProviders.finishing.b10822b3-e55c-4530-a387-32bb7a10a0c7.success: 1
+2021-01-19 18:10:43.159 info: finished scraping providers
+2021-01-19 18:11:26.391 info: providers.scrapeProviders.starting.7eb2a09f-44eb-4d10-9c6f-260aba7e72cb
+2021-01-19 18:11:26.639 info: listPageEvaluate.provider.toe https://www.torinoerotica.com/annunci-escort-torino/
+2021-01-19 18:11:28.161 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13245
+2021-01-19 18:11:28.800 info: toe 13245 italy.torino added 1 comments: [{"_id":"60071293ee53a22726c9d198","author":"inesperto2","date":"2020-12-14T06:05:00.000Z","text":"Ciao, la ragazza mi ha accolto in un grande stabile nella zona di Mirafiori. Non ha fatto nessun gioco di portoni, indicandomi, una volta arrivato a destinazione, la porta del suo appartamento. Una volta entrato ho trovato una ragazza giovane con tacchi ed un abitino trasparente che metteva in risalto le sue forme (lato A e lato B direi parecchio sinuosi). Piacevole incontro di un'oretta che sicuramente ripeterei!"}]
+2021-01-19 18:11:28.838 info: providers.scrapeProviders.finishing.7eb2a09f-44eb-4d10-9c6f-260aba7e72cb.success: 1
+2021-01-19 18:11:28.839 info: finished scraping providers
+2021-01-19 18:13:19.691 info: providers.scrapeProviders.starting.8892a4b0-b4f0-4f31-a1ba-45ed55fa9f39
+2021-01-19 18:13:19.910 info: listPageEvaluate.provider.toe https://www.torinoerotica.com/annunci-escort-torino/
+2021-01-19 18:13:21.465 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13245
+2021-01-19 18:13:22.220 info: toe 13245 italy.torino unchanged
+2021-01-19 18:13:22.246 info: providers.scrapeProviders.finishing.8892a4b0-b4f0-4f31-a1ba-45ed55fa9f39.success: 1
+2021-01-19 18:13:22.247 info: finished scraping providers
+2021-01-19 18:13:51.312 info: providers.scrapeProviders.starting.19421b3c-6ec4-4036-83c1-4a577f0a2a22
+2021-01-19 18:13:51.576 info: listPageEvaluate.provider.toe https://www.torinoerotica.com/annunci-escort-torino/
+2021-01-19 18:13:53.195 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13245
+2021-01-19 18:13:53.867 error: uncaughtException: changed.push is not a function
+TypeError: changed.push is not a function
+    at Object.keys.map.prop (/home/marco/apps.personal/web-scraping/src/controllers/providers.js:449:23)
+    at Array.map (<anonymous>)
+    at compareItemsHistoryes (/home/marco/apps.personal/web-scraping/src/controllers/providers.js:390:24)
+    at itemOld.save (/home/marco/apps.personal/web-scraping/src/controllers/providers.js:370:11)
+    at /home/marco/apps.personal/web-scraping/node_modules/mongoose/lib/model.js:4838:16
+    at /home/marco/apps.personal/web-scraping/node_modules/mongoose/lib/helpers/promiseOrCallback.js:24:16
+    at /home/marco/apps.personal/web-scraping/node_modules/mongoose/lib/model.js:4861:21
+    at model.$__save.error (/home/marco/apps.personal/web-scraping/node_modules/mongoose/lib/model.js:502:7)
+    at /home/marco/apps.personal/web-scraping/node_modules/kareem/index.js:315:21
+    at next (/home/marco/apps.personal/web-scraping/node_modules/kareem/index.js:209:27)
+    at /home/marco/apps.personal/web-scraping/node_modules/kareem/index.js:182:9
+    at process.nextTick (/home/marco/apps.personal/web-scraping/node_modules/kareem/index.js:507:38)
+    at processTicksAndRejections (internal/process/task_queues.js:79:9)
+2021-01-19 18:13:53.868 error: uncaught exception TypeError: changed.push is not a function
+    at Object.keys.map.prop (/home/marco/apps.personal/web-scraping/src/controllers/providers.js:449:23)
+    at Array.map (<anonymous>)
+    at compareItemsHistoryes (/home/marco/apps.personal/web-scraping/src/controllers/providers.js:390:24)
+    at itemOld.save (/home/marco/apps.personal/web-scraping/src/controllers/providers.js:370:11)
+    at /home/marco/apps.personal/web-scraping/node_modules/mongoose/lib/model.js:4838:16
+    at /home/marco/apps.personal/web-scraping/node_modules/mongoose/lib/helpers/promiseOrCallback.js:24:16
+    at /home/marco/apps.personal/web-scraping/node_modules/mongoose/lib/model.js:4861:21
+    at model.$__save.error (/home/marco/apps.personal/web-scraping/node_modules/mongoose/lib/model.js:502:7)
+    at /home/marco/apps.personal/web-scraping/node_modules/kareem/index.js:315:21
+    at next (/home/marco/apps.personal/web-scraping/node_modules/kareem/index.js:209:27)
+    at /home/marco/apps.personal/web-scraping/node_modules/kareem/index.js:182:9
+    at process.nextTick (/home/marco/apps.personal/web-scraping/node_modules/kareem/index.js:507:38)
+    at processTicksAndRejections (internal/process/task_queues.js:79:9)
+2021-01-19 18:15:27.811 info: providers.scrapeProviders.starting.644eb4ff-4b8b-4ee9-917a-20c46622fca3
+2021-01-19 18:15:28.103 info: listPageEvaluate.provider.toe https://www.torinoerotica.com/annunci-escort-torino/
+2021-01-19 18:15:29.611 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13245
+2021-01-19 18:15:30.258 info: toe 13245 italy.torino unchanged
+2021-01-19 18:15:30.271 info: providers.scrapeProviders.finishing.644eb4ff-4b8b-4ee9-917a-20c46622fca3.success: 1
+2021-01-19 18:15:30.271 info: finished scraping providers
+2021-01-19 18:15:42.382 info: providers.scrapeProviders.starting.b860c7df-ff2c-4b18-abaf-b39242181c72
+2021-01-19 18:15:42.615 info: listPageEvaluate.provider.toe https://www.torinoerotica.com/annunci-escort-torino/
+2021-01-19 18:15:44.717 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13245
+2021-01-19 18:15:45.548 info: toe 13245 italy.torino unchanged
+2021-01-19 18:15:45.604 info: providers.scrapeProviders.finishing.b860c7df-ff2c-4b18-abaf-b39242181c72.success: 1
+2021-01-19 18:15:45.604 info: finished scraping providers
+2021-01-19 18:15:54.519 info: providers.scrapeProviders.starting.1994fe37-1899-4e43-9b87-cbe4a14ff91c
+2021-01-19 18:15:54.768 info: listPageEvaluate.provider.toe https://www.torinoerotica.com/annunci-escort-torino/
+2021-01-19 18:15:56.520 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13245
+2021-01-19 18:15:57.225 info: toe 13245 italy.torino added 1 comments: [{"row":{"_id":"600713b2a649e72996b6b216","author":"inesperto2","date":"2020-12-14T06:05:00.000Z","text":"Ciao, la ragazza mi ha accolto in un grande stabile nella zona di Mirafiori. Non ha fatto nessun gioco di portoni, indicandomi, una volta arrivato a destinazione, la porta del suo appartamento. Una volta entrato ho trovato una ragazza giovane con tacchi ed un abitino trasparente che metteva in risalto le sue forme (lato A e lato B direi parecchio sinuosi). Piacevole incontro di un'oretta che sicuramente ripeterei!"},"prop":"author"}]
+2021-01-19 18:15:57.262 info: providers.scrapeProviders.finishing.1994fe37-1899-4e43-9b87-cbe4a14ff91c.success: 1
+2021-01-19 18:15:57.262 info: finished scraping providers
+2021-01-19 18:17:00.204 info: providers.scrapeProviders.starting.f8dcf052-7c34-4b56-8f31-5ace88027c6e
+2021-01-19 18:17:00.479 info: listPageEvaluate.provider.toe https://www.torinoerotica.com/annunci-escort-torino/
+2021-01-19 18:17:02.253 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13245
+2021-01-19 18:17:05.606 info: toe 13245 italy.torino unchanged
+2021-01-19 18:17:05.632 info: providers.scrapeProviders.finishing.f8dcf052-7c34-4b56-8f31-5ace88027c6e.success: 1
+2021-01-19 18:17:05.633 info: finished scraping providers
+2021-01-19 18:17:27.748 info: providers.scrapeProviders.starting.aecb2f80-7fa4-4892-a78c-8cdce6def764
+2021-01-19 18:17:28.023 info: listPageEvaluate.provider.toe https://www.torinoerotica.com/annunci-escort-torino/
+2021-01-19 18:17:30.530 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13245
+2021-01-19 18:17:31.237 info: toe 13245 italy.torino added 1 comments: [{"firstChangedProperty":"author","row":{"_id":"600713cda649e72996b6b22c","author":"inesperto2","date":"2020-12-14T06:05:00.000Z","text":"Ciao, la ragazza mi ha accolto in un grande stabile nella zona di Mirafiori. Non ha fatto nessun gioco di portoni, indicandomi, una volta arrivato a destinazione, la porta del suo appartamento. Una volta entrato ho trovato una ragazza giovane con tacchi ed un abitino trasparente che metteva in risalto le sue forme (lato A e lato B direi parecchio sinuosi). Piacevole incontro di un'oretta che sicuramente ripeterei!"}}]
+2021-01-19 18:17:31.256 info: providers.scrapeProviders.finishing.aecb2f80-7fa4-4892-a78c-8cdce6def764.success: 1
+2021-01-19 18:17:31.256 info: finished scraping providers
+2021-01-19 18:18:59.271 info: providers.scrapeProviders.starting.52865eb9-6275-43f7-9018-b81ddb5d1f8c
+2021-01-19 18:18:59.575 info: listPageEvaluate.provider.toe https://www.torinoerotica.com/annunci-escort-torino/
+2021-01-19 18:19:01.277 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13245
+2021-01-19 18:19:02.015 info: toe 13245 italy.torino unchanged
+2021-01-19 18:19:02.037 info: providers.scrapeProviders.finishing.52865eb9-6275-43f7-9018-b81ddb5d1f8c.success: 1
+2021-01-19 18:19:02.037 info: finished scraping providers
+2021-01-19 18:21:07.832 info: providers.scrapeProviders.starting.68bc6e6e-4c93-4d38-8c37-3966e43e0248
+2021-01-19 18:21:08.164 info: listPageEvaluate.provider.toe https://www.torinoerotica.com/annunci-escort-torino/
+2021-01-19 18:21:09.919 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13245
+2021-01-19 18:21:10.932 info: toe 13245 italy.torino unchanged
+2021-01-19 18:21:10.944 info: providers.scrapeProviders.finishing.68bc6e6e-4c93-4d38-8c37-3966e43e0248.success: 1
+2021-01-19 18:21:10.944 info: finished scraping providers
+2021-01-19 18:22:22.065 info: providers.scrapeProviders.starting.3e9f6d00-78d9-407e-a7a6-9eb5bcad7470
+2021-01-19 18:22:22.307 info: listPageEvaluate.provider.toe https://www.torinoerotica.com/annunci-escort-torino/
+2021-01-19 18:22:23.976 info: itemPageEvaluate.provider.toe https://www.torinoerotica.com/annuncio?id=13245
+2021-01-19 18:22:24.672 info: toe 13245 italy.torino unchanged
+2021-01-19 18:22:24.714 info: providers.scrapeProviders.finishing.3e9f6d00-78d9-407e-a7a6-9eb5bcad7470.success: 1
+2021-01-19 18:22:24.714 info: finished scraping providers
