@@ -18,9 +18,9 @@ const info = {
   mediumPricePerHalfHour: 120,
   mediumPricePerHour: 200,
   immutable: false,
-  disableScraping: true,
 };
 
+const config = require('../config');
 const logger = require('../logger');
 
 async function listPageEvaluate(region, page) {
@@ -46,7 +46,7 @@ async function listPageEvaluate(region, page) {
     }
 
     try {
-      const items = await page.evaluate(async (info, url, imagesUrl, region) => {
+      const items = await page.evaluate(async (config, info, url, imagesUrl, region) => {
         const list = [];
         document.querySelector("div.escorts").querySelectorAll("div.escort").forEach(item => {
           const data = {};
@@ -67,6 +67,11 @@ async function listPageEvaluate(region, page) {
             data.id = data.url.replace(/accompagnatrici\//, '');
           } catch (err) {
             throw (new Error(`reading url ${url} looking for id: ${err.message}`));
+          }
+
+          if (config.scrape.onlyItemId.length && !config.scrape.onlyItemId.includes(data.id)) {
+            logger.debug('BREAK DUE TO scrape.onlyItemId');
+            return;
           }
 
           try { // title
@@ -126,7 +131,7 @@ async function listPageEvaluate(region, page) {
           list.push(data);
         });
         return list;
-      }, info, url, imagesUrl, region);
+      }, config, info, url, imagesUrl, region);
       return resolve(items);
     } catch (err) {
       return reject(err);
@@ -153,7 +158,7 @@ const itemPageEvaluate = async (region, page, item) => {
     }
 
     try {
-      await page.goto(url);
+      const response = await page.goto(url);
     } catch (err) {
       return reject(`goto error: ${err.message}`);
     }

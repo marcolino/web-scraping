@@ -70,7 +70,7 @@ const verifyUserPassword = (user, password) => {
         role: user.role
       },
       process.env.JWT_SECRET_TOKEN,
-      config.roles.find(r => r.name === user.role && r.neverExpires) ? { expiresIn: config.jwtTokenExpiresIn } : {} // some roles will never expire
+      config.roles.find(r => r.name === user.role && r.neverExpires) ? {} : { expiresIn: config.jwtTokenExpiresIn } // some roles will never expire
       //user.role !== 'system' ? { expiresIn: config.jwtTokenExpiresIn } : {} // 'system' user role will never expire
     );
     return token;

@@ -181,7 +181,7 @@ const schemaPersons = new Schema({
 }, { timestamps: {createdAt: 'dateCreated', updatedAt: 'dateUpdated'} }); // timestamps option: automatically add 'createdAt' and 'updatedAt' timestamps
 
 // indexes
-schemaPersons.index({ id: 1, provider: 1, region: 1 }, { unique: true });
+schemaPersons.index({ id: 1, provider: 1/*, region: 1*/ }, { unique: true });
 
 // schemaPersons.pre('save', function(next) {
 //   this.wasNew = this.isNew;

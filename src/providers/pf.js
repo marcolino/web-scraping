@@ -24,9 +24,9 @@ const info = {
     passwordSelector: "[name='password']",
     submitSelector: "[type='submit']",
   },
-  disableScraping: true,
 };
 
+const config = require('../config');
 const logger = require('../logger');
 
 async function listPageEvaluate(region, page, nextListPage) {
@@ -43,7 +43,7 @@ async function listPageEvaluate(region, page, nextListPage) {
       return reject(err.message);
     }
     try {
-      const items = await page.evaluate(async (info, url, imagesUrl, region) => {
+      const items = await page.evaluate(async (config, info, url, imagesUrl, region) => {
         const list = [];
         let nextListPage = null;
 
@@ -68,6 +68,11 @@ async function listPageEvaluate(region, page, nextListPage) {
             data.id = data.url.replace(/^.*\./, '').replace(/\/$/, '');
           } catch (err) {
             throw (new Error(`reading url ${url} looking for id: ${err.message}`));
+          }
+
+          if (config.scrape.onlyItemId.length && !config.scrape.onlyItemId.includes(data.id)) {
+            logger.debug('BREAK DUE TO scrape.onlyItemId ' + config.scrape.onlyItemId.length);
+            return;
           }
 
           try {
@@ -107,7 +112,7 @@ async function listPageEvaluate(region, page, nextListPage) {
         if (nextListPage) list.push({nextListPage}); // adding a list element with only nextListPage
 
         return list;
-      }, info, url, imagesUrl, region);
+      }, config, info, url, imagesUrl, region);
       return resolve(items);
     } catch (err) {
       return reject(err);
@@ -126,7 +131,7 @@ const itemPageEvaluate = async (region, page, item) => {
     const url = baseUrl + itemUrl;
     logger.info(`itemPageEvaluate.provider.${info.key} ${url}`);
     try {
-      await page.goto(url);
+      const response = await page.goto(url);
     } catch (err) {
       return reject(err);
     }
@@ -171,7 +176,7 @@ const itemPageEvaluate = async (region, page, item) => {
             if (!articleElement) { // wrong or empty page
               return null;
             }
-            article = articleElement.innerHTML;
+            article = articleElement.innerHTML.replace(/<blockquote.*?<\/blockquote>/gsi, ''); // remove all quotes from article
           } catch (err) {
             throw(new Error(`reading url ${url} looking for article: ${err.message}`));
           }  
@@ -223,21 +228,22 @@ const itemPageEvaluate = async (region, page, item) => {
           }
 
           try { // text
-            const textElement = block.querySelector("article.message-body");
-            data.comments[index].text = textElement ? textElement.innerText.replace(/\n/gm, 'ˬ').replace(/.*DATI DELL'INSERZIONISTA\s*:?\s*(.*)\s*ˬ*$/gm, '$1').replace(/ˬ/gm, '\n').replace(/\n*/, '').replace(/\s*/, '').replace(/\n*$/, '').replace(/\s*$/, '') : null;
+            //const textElement = block.querySelector("article.message-body");
+            //data.comments[index].text = textElement ? textElement.innerText.replace(/\n/gm, 'ˬ').replace(/.*DATI DELL'INSERZIONISTA\s*:?\s*(.*)\s*ˬ*$/gm, '$1').replace(/ˬ/gm, '\n').replace(/\n*/, '').replace(/\s*/, '').replace(/\n*$/, '').replace(/\s*$/, '') : null;
+            const articleText = $("<div>").html(article).text();
+            data.comments[index].text = articleText.replace(/\n/gm, 'ˬ').replace(/.*DATI DELL'INSERZIONISTA\s*:?\s*(.*)\s*ˬ*$/gm, '$1').replace(/ˬ/gm, '\n').replace(/\n*/, '').replace(/\s*/, '').replace(/\n*$/, '').replace(/\s*$/, '');
           } catch (err) {
             throw(new Error(`reading url ${url} looking for text: ${err.message}`));
           }
 
           try { // vote ([1-5] / 5 stars)
-            const voteElements = block.querySelectorAll("img[alt='🌟']");
-            if (voteElements) { // vote was expressed with star images
-              // TODO: check if 0 stars is an acceptable vote (and how)... if not, 1 stars => 0, 5 stars => 1 (vote = (n-1)/4); otherwise, 0 stars => 0, 5 stars => 1 (vote = n/5)
-              data.comments[index].vote = (voteElements.length - 1) / 4;
-console.log(`VOTE (IMG) for person ${data.provider} ${data.id} comment ${index}: ${data.comments[index].vote}`);
+            const voteElements = (article.match(/alt=.⭐./sgi) || []);
+            if (voteElements && voteElements.length) { // vote was expressed with star images
+              data.comments[index].vote = voteElements.length / 5;
+//console.log(`VOTE (IMG) for person ${data.provider} ${data.id} comment ${index}: ${data.comments[index].vote}`);
             } else { // vote was expressed with unicode stars
-              const starsOn = (block.innerText.match(/★?/gm) || []).length;
-              const starsOff = (block.innerText.match(/☆?/gm) || []).length;
+              let starsOn = (article.match(/★+/gm) || [])[0]; starsOn = starsOn ? starsOn.length : 0;
+              let starsOff = (article.match(/☆+/gm) || [])[0]; starsOff = starsOff ? starsOff.length : 0;
               if (starsOn > 0 || starsOff > 0) { // a meaningful result (for example: "★★★★☆")
                 // 0, 5 => 0 / 5 (0.0)
                 // 1, 4 => 1 / 5 (0.2)
@@ -246,9 +252,9 @@ console.log(`VOTE (IMG) for person ${data.provider} ${data.id} comment ${index}:
                 // 4, 1 => 4 / 5 (0.8)
                 // 5, 0 => 5 / 5 (1.0)
                 data.comments[index].vote = starsOn / (starsOn + starsOff);
-console.log(`VOTE (UNICODE) for person ${data.provider} ${data.id} comment ${index}: ${data.comments[index].vote}`);
+//console.log(`VOTE (UNICODE) for person ${data.provider} ${data.id} comment ${index}: ${data.comments[index].vote}`);
               }
-else {console.log(`VOTE (NOT FOUND) for person ${data.provider} ${data.id} comment ${index}`);}
+//else {console.log(`VOTE (UNICODE) for person ${data.provider} ${data.id} comment ${index}: NOT FOUND`);}
             }
           } catch (err) {
             throw (new Error(`reading url ${url} looking for vote: ${err.message}`));
@@ -263,7 +269,6 @@ else {console.log(`VOTE (NOT FOUND) for person ${data.provider} ${data.id} comme
     }
   })
 }
-
 
 module.exports = {
   info,

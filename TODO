@@ -1,15 +1,18 @@
  V remove mongodb-memory-server
-  - README.md
+  - write a rag of a README.md
   - handle missing persons items, comparing date of last update and date of last scrape (use a virtual method)
   - protect system from multiple scrape requests (I think it's a good thing...)
   - in providers do avoid `document.querySelectorAll(...).something...`, but do `const el = document.querySelectorAll(...); if (el) { el.something... }`
-  - review mongodb network access list (https://cloud.mongodb.com/v2/5ffc6bd7ff8754133fc84727#security/network/accessList)
+  - review cloud.mongodb.com network access list (https://cloud.mongodb.com/v2/5ffc6bd7ff8754133fc84727#security/network/accessList)
   - auth endpointRoles better to be in database ?
+  V add etag to item.persons (unuseful, no etag arrives on html pages...)
+  - remove region from key, use only for filtering
+  - dateCreated, dateUpdated => dfault names
   - test:
     V login with password unselectable in model
     - what happens if an item has no main image in getItems (should be returned nonetheless)
-    - stars in PF providerScraping (temporarily enable only PF provider, and set it as not immutable)
+    V stars in PF providerScraping (temporarily enable only PF provider, and set it as not immutable)
+    - extraction of comments votes from getItems query
     - filterFresh in getItems
     - filterMissing (check on holiday items, missing items, and immutable items) in getItems
-    - extraction of comments votes from getItems query
-    - groupItems()
+    - groupItems() (use js to group after mongo db find())

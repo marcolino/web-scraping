@@ -8,7 +8,6 @@ const info = {
   url: "https://www.liberliber.it/",
   listUrl: "https://www.liberliber.it/online/opere/audiolibri/elenco-per-opere/",
   immutable: false,
-  disableScraping: true,
 };
 
 async function listPageEvaluate(region, page) {

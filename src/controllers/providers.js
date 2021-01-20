@@ -28,7 +28,7 @@ exports.scrapeProviders = async(req) => {
     const data = (await Promise.all(
       Object.keys(providers)
       .filter(index => providers[index].info.type === config.type)
-      .filter(index => !providers[index].info.disableScraping)
+      .filter(index => !(config.scrape.onlyProvider.length && !config.scrape.onlyProvider.includes(providers[index].info.key)))
       .map(async index => {
         const provider = providers[index];
         const regions = getProviderRegions(provider, regionDescriptor);
@@ -61,8 +61,10 @@ exports.scrapeProvidersImages = async (req) => {
     const regionDescriptor = req.body.regionDescriptor || '*';
     const providers = getProvidersByRegion(regionDescriptor);
     const count = (await Promise.all(
-      Object.keys(providers).filter(providerKey => !providers[providerKey].info.disableScraping).map(async providerKey => {
-        const provider = providers[providerKey];
+      Object.keys(providers)
+      .filter(index => !(config.scrape.onlyProvider.length && !config.scrape.onlyProvider.includes(providers[index].info.key)))
+      .map(async index => {
+        const provider = providers[index];
         const regions = getProviderRegions(provider, regionDescriptor);
         let results = 0;
         for (let r = 0; r < regions.length; r++) {
@@ -94,17 +96,17 @@ groupItems = async (req) => {
     itemsAll.foreach(async(itemAll) => {
       itemsNew.foreach(async(itemNew) => {
         if (sameGroup(itemAll, itemNew)) { // check if the two items should be grouped
-          if (itemNew.group) logger.warn(`new item ${itemNew.provider} ${itemNew.id} ${itemNew.region}' has already a group!`);
+          if (itemNew.group) logger.warn(`new item ${itemNew.provider} ${itemNew.id}' has already a group!`);
           if (!itemAll.group) {
             itemAll.group = uuid.v4();
             await Items.updateOne(
-              { id: itemAll.id, provider: itemAll.provider, regionAll: itemAll.region },
+              { id: itemAll.id, provider: itemAll.provider },
               { ...itemAll }
             );
           }
           itemNew.group = itemAll.group;
           await Items.updateOne(
-            { id: itemNew.id, provider: itemNew.provider, region: itemNew.region },
+            { id: itemNew.id, provider: itemNew.provider },
             { ...itemNew }
           );
         }
@@ -119,11 +121,15 @@ groupItems = async (req) => {
 }
 
 scrapeProvider = async (provider, region, user) => {
+  if (config.scrape.onlyProvider.length && !config.scrape.onlyProvider.includes(provider.info.key)) {
+    logger.debug('BREAK DUE TO scrape.onlyProvider');
+    return;
+  }
   try {
     const browser = await browserLaunch();
     const page = await browserPageNew(browser);
 
-    if (config.debug) page.on('console', msg => {
+    if (config.scrape.debug) page.on('console', msg => {
       logger.debug(msg.text())
     }); // do use logger.debug() inside page.evaluate
 
@@ -150,7 +156,10 @@ const scrapeProviderMultiListAndItems = async (provider, region, page) => {
       nextListPage = null; // break loop
     }
     itemsMultiPage = itemsMultiPage.concat(items);
-break;
+    if (config.scrape.onlyFirstPage) {
+      logger.debug('BREAK DUE TO scrape.onlyFirstPage');
+      break;
+    }
   } while (nextListPage);
   return itemsMultiPage;
 }
@@ -198,7 +207,10 @@ const scrapeItems = async (provider, region, page, list) => {
             console.warn(`null item from page`);
           }
         }
-//break;
+        if (config.scrape.onlyFirstItem) {
+          logger.debug('BREAK DUE TO scrape.onlyFirstItem');
+          break;
+        }
       }
     }
     return itemsFull;
@@ -334,7 +346,7 @@ const itemExists = async(item) => {
     const retval = await Items.exists({
       id: item.id,
       provider: item.provider,
-      region: item.region
+      //region: item.region
     });
     return retval; 
   } catch (err) {
@@ -345,7 +357,7 @@ const itemExists = async(item) => {
 const saveItem = async(item) => {
   const Items = require("../models/Items" + "." + item.type);
   Items.findOne(
-    { id: item.id, provider: item.provider, region: item.region },
+    { id: item.id, provider: item.provider/*, region: item.region*/ },
     (err, itemOld) => {
       if (err) {
         throw (`error finding item to save: ${err}`);
@@ -376,19 +388,19 @@ const saveItem = async(item) => {
 }
 
 const compareItemsHistoryes = (itemOld, itemNew) => {
-  const key = `${itemNew.provider} ${itemNew.id} ${itemNew.region}`;
+  const key = `${itemNew.provider} ${itemNew.id}`;
   if (!itemOld && !itemNew) { // should not happen
     logger.warn(`${key} neither new nor old item is set!`);
     return;
   }
   if (!itemOld) { // a new item
-    logger.info(`new ${key}`);
+    logger.info(`${key} new`);
     return;
   }
   // a changed item
   let changed = false;
   Object.keys(itemOld).map(prop => {
-    if (!['__v', '_id', 'provider', 'region', 'id', 'dateCreated', 'dateUpdated', /*'wasNew', 'wasModified'*//*'services', 'adUrlReferences', 'spokenLanguages', 'images', 'comments'*/].includes(prop)) {
+    if (!['__v', '_id', 'provider', 'region', 'id', 'dateCreated', 'dateUpdated'].includes(prop)) {
       //logger.debug(`--- ${prop} ---`);
       const type = Array.isArray(itemOld[prop]) ? 'array' : typeof itemOld[prop];
 //logger.debug(`typeof itemOld[${prop}]: ${type}`);

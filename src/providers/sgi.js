@@ -18,9 +18,9 @@ const info = {
   mediumPricePerHalfHour: 70,
   mediumPricePerHour: 120,
   immutable: false,
-  disableScraping: true,
 };
 
+const config = require('../config');
 const logger = require('../logger');
 
 async function listPageEvaluate(region, page) {
@@ -61,6 +61,11 @@ async function listPageEvaluate(region, page) {
             throw(new Error(`reading url ${url} looking for id: ${err.message}`));
           }
 
+          if (config.scrape.onlyItemId.length && !config.scrape.onlyItemId.includes(data.id)) {
+            logger.debug('BREAK DUE TO scrape.onlyItemId');
+            return;
+          }
+
           try { // title
             const titleElement = item.querySelector("span#content_nome, span.testo_generale_bold");
             if (titleElement) {
@@ -97,7 +102,7 @@ async function listPageEvaluate(region, page) {
           list.push(data);
         });
         return list;
-      }, info, url, imagesUrl, region);
+      }, config, info, url, imagesUrl, region);
       return resolve(items);
     } catch (err) {
       return reject(err);
@@ -115,7 +120,7 @@ const itemPageEvaluate = async (region, page, item) => {
     const url = baseUrl + itemUrl;
     logger.info(`itemPageEvaluate.provider.${info.key} ${url}`);
     try {
-      await page.goto(url);
+      const response = await page.goto(url);
     } catch (err) {
       return reject(err);
     }

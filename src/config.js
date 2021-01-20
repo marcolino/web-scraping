@@ -10,7 +10,13 @@ exports.roles = [ // roles we recognize
   { name: "guest" },
 ];
 exports.imagesBaseFolder = "./cache/persons/images/";
-exports.debug = false; // debug puppeteer providers scraping
+exports.scrape = {
+  debug: false, // debug puppeteer while scraping providers
+  onlyProvider: ['toe'], // scrape only a subset of providers
+  onlyItemId: [], // scrape only a subset of items id's
+  onlyFirstPage: false, // scrape olny first pages
+  onlyFirstItem: false, // scrape olny first items
+}
 
 if (process.env.DB === "cloud") { // TODO: put MONGO_URI in environment, in production
   const MONGO_USER = "marco";
