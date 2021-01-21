@@ -169,16 +169,20 @@ const schemaPersons = new Schema({
   suspicious: {
     type: Boolean,
   },
-  wasNew: {
-    type: Boolean,
-  },
-  wasModified: {
-    type: Boolean,
-  },
+  // wasNew: {
+  //   type: Boolean,
+  // },
+  // wasModified: {
+  //   type: Boolean,
+  // },
   // isPresent: {
   //   type: Boolean,
   // }
-}, { timestamps: {createdAt: 'dateCreated', updatedAt: 'dateUpdated'} }); // timestamps option: automatically add 'createdAt' and 'updatedAt' timestamps
+  changedAt: {
+    type: Date,
+  }
+
+}, { timestamps: { createdAt: 'createdAt', updatedAt: 'updatedAt'} }); // timestamps option: automatically add 'createdAt' and 'updatedAt' timestamps
 
 // indexes
 schemaPersons.index({ id: 1, provider: 1/*, region: 1*/ }, { unique: true });
@@ -259,7 +263,7 @@ schemaPersons.index({ id: 1, provider: 1/*, region: 1*/ }, { unique: true });
 // // static class (model) methods
 // schemaPersons.statics.isPresent = async(item) => {
 //     try {
-//       const result = mongoose.model('Globals').findOne({ key: `lastScrapeTimestamp-${item.provider}`).exec();
+//       const result = mongoose.model('Globals').findOne({ key: `lastScrapeTimestamp`/*-${item.provider}`*/).exec();
 //       cons item = this.model('items.persons').findOne({provider: item.provider, id: item.id}).exec();
 //       return result.value <= item.dateUpdated;
 //     });
@@ -272,7 +276,7 @@ schemaPersons.index({ id: 1, provider: 1/*, region: 1*/ }, { unique: true });
 // object (instance) methods
 schemaPersons.methods.isPresent = async() => {
   try {
-    const lastScrapeTimestamp = await mongoose.model('Globals').findOne({ key: `lastScrapeTimestamp-${this.provider}` }).exec();
+    const lastScrapeTimestamp = await mongoose.model('Globals').findOne({ key: `lastScrapeTimestamp`/*-${this.provider}`*/ }).exec();
     //logger.debug(`lastScrapeTimestamp: ${lastScrapeTimestamp.value} <= this.dateUpdated: ${this.dateUpdated}`);
     return this.dateUpdated >= lastScrapeTimestamp.value;
   } catch (err) {
@@ -280,9 +284,9 @@ schemaPersons.methods.isPresent = async() => {
   }
 };
 
-schemaPersons.methods.isFreshy = async() => { // TODO: possibly unused, if isFresh workls as expected...
+schemaPersons.methods.isFreshy = async() => { // TODO: possibly unused, if isFresh works as expected...
   try {
-    const lastScrapeTimestamp = await mongoose.model('Globals').findOne({ key: `lastScrapeTimestamp-${this.provider}` }).exec();
+    const lastScrapeTimestamp = await mongoose.model('Globals').findOne({ key: `lastScrapeTimestamp`/*-${this.provider}`*/ }).exec();
 logger.debug(`this.dateInserted: ${this.dateInserted} >=? lastScrapeTimestamp: ${lastScrapeTimestamp.value}`);
     return this.dateInserted >= lastScrapeTimestamp.value;
   } catch (err) {

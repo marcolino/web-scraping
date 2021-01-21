@@ -7,7 +7,7 @@ const schemaGlobals = new Schema([
       type: String,
     },
     value: {
-      type: Date,
+      type: Schema.Types.Mixed,
     },
   }
 ]);

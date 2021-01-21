@@ -1,3 +1,4 @@
+const { getCountryCallingCode } = require('libphonenumber-js');
 const { ObjectID } = require('mongodb');
 const logger = require('../logger');
 const globals = require('../models/Globals');
@@ -8,21 +9,26 @@ async function getItems(req, res, next) {
     const filter = req.body.filter;
     const flags = req.body.flags;
 
+    // let hrstart = hrend = null;
+    // hrstart = process.hrtime();
+    // call();
+    // hrend = process.hrtime(hrstart);
+    // logger.info(`call execution time (hr): ${hrend[1] / 1000000}ms`);
+
     const lastScrapeTimestamp = await globals.findOne({ key: 'lastScrapeTimestamp' }).exec();
-    //const oldest = 1;
-    //const lastScrapeTimestamp = // TODO: use the second solution after lastScrapeTimestamp exists in globals
-    //  await globals.findOne({ key: { $regex: /^lastScrapeTimestamp-/ } }, {}, { sort: { 'value': oldest } }).exec()
+    //logger.info('lastScrapeTimestamp value:', lastScrapeTimestamp.value);
 
-    const filterFresh = flags && flags.onlyFresh ? { isFresh: true } : {}; // select only fresh items, if requested
-  //const filterFresh = flags && flags.onlyFresh ? { dateInserted: { $ge: lastScrapeTimestamp.value } } : {}, // select only fresh items, if requested
-    const filterMissing = flags && flags.missingToo ? {} : { onHoliday: false, $or: [ { dateUpdated: { $gte: lastScrapeTimestamp.value } }, { immutable: true } ] }; // select missing items, too, if requested
+    const filterOnlyNew = flags && flags.onlyNew ? { createdAt: { $gte: lastScrapeTimestamp.value } } : {}; // select only new items, if requested
+    const filterOnlyNewAndChanged = flags && flags.onlyNewAndChanged ? { $or: [ { createdAt: { $gte: lastScrapeTimestamp.value } }, { changedAt: { $gte: lastScrapeTimestamp.value } } ] } : {}; // select only new items, if requested
+    const filterMissingToo = flags && flags.missingToo ? {} : { onHoliday: { $ne: true }, $or: [ { updatedAt: { $gte: lastScrapeTimestamp.value } }, { immutable: true } ] }; // select missing items, too, if requested
 
-    const itemsList = await items.
+    let itemsList = await items.
       find(
         {
           ...filter,
-          ...filterFresh,
-          //...filterMissing,
+          ...filterOnlyNew,
+          ...filterOnlyNewAndChanged,
+          ...filterMissingToo,
         },
         {
           _id: 0,
@@ -34,18 +40,40 @@ async function getItems(req, res, next) {
           title: 1,
           phone: 1,
           suspicious: 1,
-          isFresh: 1,
-          images: { $size: "$images" },
-          comments: { $size: "$comments" },
+          images: 1,
+          comments: 1,
+          createdAt: 1,
+          updatedAt: 1,
+          changedAt: 1,
           //group: 1,
         }
-      ).
-      select({ // TODO: what happens if an item has no main image? we want it too...
-        images: 1, //{ $elemMatch: { category: 'main' }},
+      )
+      .select({ // TODO: what happens if an item has no main image? we want it too...
+        images: 1,
         comments: 1,
-      }).
-      sort({dateInserted: 'descending', dateUpdated: 'descending'})
+      })
+      .sort({dateInserted: 'ascending', dateChanged: 'ascending', dateUpdated: 'ascending'})
+      .lean()
     ;
+
+    // return only main images if requested
+    if (flags && flags.onlyMainImages) {
+      itemsList = itemsList.map(item => {
+        item.images = item.images.filter(image => image.category === 'main');
+        return item;
+      });
+    }
+
+    // return only commentsCount if requested
+    if (flags && flags.onlyCommentsCount) {
+      itemsList = itemsList.map(item => {
+        item.commentsCount = item.comments ? item.comments.length : 0;
+        //item.votesAverage = 0.5;
+        item.commentsVoteAverage = item.comments.filter(c => {console.log(c.vote); return typeof c.vote !== 'undefined'}).reduce((total, next) => {console.log('next.vote, total:', next.vote, total); return total + next.vote}, 0); // / item.comments.length;
+        //delete item.comments;
+        return item;
+      });
+    }
 
     // TODO: check how long does this take for big queries...
     // calculate average vote for each item in list
@@ -61,7 +89,7 @@ async function getItems(req, res, next) {
 // //logger.debug(`itemsList: ${itemsList}`);
 // logger.debug(`itemsList for end  : ${new Date()}`);
 
-    const itemsListGrouped = groupBy(itemsList, item => item.group); // group items list (return only first item in each group)
+    //itemsList = groupBy(itemsList, item => item.group); // group items list (return only first item in each group)
 
     res.status(200).json({ message: `${itemsList.length} items found`, data: itemsList });
   } catch (err) {

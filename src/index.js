@@ -9,6 +9,7 @@ const swaggerUi = require('swagger-ui-express');
 const swaggerSpec = require('../swagger');
 
 const { dbConnect } = require('./utils/db');
+const { addRequestId } = require('./auth');
 const usersRoutes = require('./routes/users');
 const itemsRoutes = require('./routes/items');
 const providersRoutes = require('./routes/providers');
@@ -51,15 +52,18 @@ app.use((req, res) => {
 
 // error handler middleware
 app.use((error, req, res, next) => {
-  console.error(error.stack);
+  logger.error(error.stack);
   res.status(500).json({ message: `internal server error: ${error}`, stack: error.stack }); // error.stack is available only if dev
 })
 
+// any route middleware
+app.all('*', addRequestId);
+
 // connect to the database instance
-dbConnect().then(async () => {
+ dbConnect().then(async () => {
   // start the server
   const port = process.env.PORT || config.defaultServerPort;
   app.listen(port, async () => {
-    console.log(`listening on port ${port}`);
+    logger.info(`listening on port ${port}`);
   });
 });

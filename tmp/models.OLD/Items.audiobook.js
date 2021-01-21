@@ -50,7 +50,7 @@ const schema = new Schema({
       revision: String,
     },
   },
-}, { timestamps: {createdAt: 'dateCreated', updatedAt: 'dateUpdated'} }); // timestamps option: automatically add 'createdAt' and 'updatedAt' timestamps
+}, { timestamps: { createdAt: 'createdAt', updatedAt: 'updatedAt'} }); // timestamps option: automatically add 'createdAt' and 'updatedAt' timestamps
 
 schema.index({ id: 1, provider: 1 }, { unique: true });
 

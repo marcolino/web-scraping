@@ -25,7 +25,7 @@ const schema = new Schema({
   hide: {
     type: Boolean,
   }
-}, { timestamps: {createdAt: 'dateCreated', updatedAt: 'dateUpdated'} }); // timestamps option: automatically add "createdAt" and "updatedAt" timestamps
+}, { timestamps: { createdAt: 'createdAt', updatedAt: 'updatedAt'} }); // timestamps option: automatically add "createdAt" and "updatedAt" timestamps
 
 schema.index({ user: 1, item: 1 }, { unique: true });
 

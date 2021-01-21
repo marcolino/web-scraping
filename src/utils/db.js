@@ -1,10 +1,10 @@
  
-const config = require("../config");
 const mongoose = require("mongoose");
+const logger = require("../logger");
+const config = require("../config");
 
 exports.dbConnect = async () => {
   try {
-    console.log(`connecting to database at ${config.MONGO_URI}`);
     await mongoose
       .connect(config.MONGO_URI, { // TODO: use process.env.MONGO_URI in production
         useUnifiedTopology: true,
@@ -14,8 +14,9 @@ exports.dbConnect = async () => {
         autoIndex: true,
       })
     ;
+    logger.info(`connected to database at ${config.MONGO_URI}`);
   } catch (err) {
-    console.error(`error connecting to database: ${err}`);
+    logger.error(`error connecting to database: ${err}`);
   }
 }
 
@@ -23,6 +24,6 @@ exports.dbClose = async() => {
   try {
     await mongoose.connection.close();
   } catch (err) {
-    console.error(`error disconnecting from database: ${err}`);
+    logger.error(`error disconnecting from database: ${err}`);
   }
 }

@@ -5,9 +5,9 @@
   - in providers do avoid `document.querySelectorAll(...).something...`, but do `const el = document.querySelectorAll(...); if (el) { el.something... }`
   - review cloud.mongodb.com network access list (https://cloud.mongodb.com/v2/5ffc6bd7ff8754133fc84727#security/network/accessList)
   - auth endpointRoles better to be in database ?
-  V add etag to item.persons (unuseful, no etag arrives on html pages...)
-  - remove region from key, use only for filtering
-  - dateCreated, dateUpdated => dfault names
+  V add etag to item.persons (unuseful, no etag arrives for html pages...)
+  - remove region from key, use only for filtering (done, be sure it is not used nowhere anymore)
+  V dateCreated, dateUpdated => default names
   - test:
     V login with password unselectable in model
     - what happens if an item has no main image in getItems (should be returned nonetheless)

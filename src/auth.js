@@ -11,6 +11,12 @@ const endpointRoles = {
   '/providers/scrapeSchedule': [ 'admin', 'system' ],
 };
 
+// middleware for any route
+function addRequestId(req, res, next) {
+  req.requestId = uuid.v4(); // add uniq id to request
+  next();
+}
+
 function public(req, res, next) {
   // add unique id to request
   req.requestId = uuid.v4();
@@ -79,6 +85,7 @@ const verifyUserPassword = (user, password) => {
 }
 
 module.exports = {
+  addRequestId,
   public,
   private,
   verifyUserPassword,

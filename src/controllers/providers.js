@@ -21,6 +21,9 @@ const config = require('../config');
 exports.scrapeProviders = async(req) => {
   logger.info(`providers.scrapeProviders.starting.${req.requestId}`);
   try {
+    const lastScrapeTimestamp = new Date().toISOString();
+    globalsSet(`lastScrapeStatus`, `started`);
+    globalsSet(`lastScrapeTimestampStart`, lastScrapeTimestamp);
     const regionDescriptor = req.body.regionDescriptor || '*';
 //logger.debug('regionDescriptor:', regionDescriptor);
     const providers = getProvidersByRegion(regionDescriptor);
@@ -39,18 +42,18 @@ exports.scrapeProviders = async(req) => {
           const result = await scrapeProvider(provider, regions[r])
           results = results.concat(result);
         }
-        // save last scrape timestamp for this provider in globals
-        await globalsSet(`lastScrapeTimestamp-${provider.info.key}`, new Date().toISOString());
         return results;
       })
     )).flat(); // we flat-out due to Promise.All
     // save last scrape timestamp in globals
-    await globalsSet(`lastScrapeTimestamp`, new Date().toISOString());
+    globalsSet(`lastScrapeTimestamp`, lastScrapeTimestamp);
     //logger.debug(`Request ${req.requestId} successful: ${data.length} providers scraped`); // TODO
     logger.info(`providers.scrapeProviders.finishing.${req.requestId}.success: ${data.length}`);
   } catch (err) {
     //logger.debug(`Request ${req.requestId} unsuccessful: ${err}`); // TODO
     logger.error(`providers.scrapeProviders.finishing.${req.requestId}.error: ${err}`);
+  } finally {
+    globalsSet(`lastScrapeStatus`, `finished`);
   }
 }
 
@@ -368,18 +371,18 @@ const saveItem = async(item) => {
           if (err) {
             throw (`error saving new item: ${err}`);
           }
-          compareItemsHistoryes(null, itemNew);
+          compareItemsHistoryes(null, itemNew, itemNew);
           //logger.debug(`item ${itemNew.title} inserted`);
         });
       } else { // an existing item
-        const itemOldFlat = JSON.parse(JSON.stringify(itemOld));
+        const itemOldLean = JSON.parse(JSON.stringify(itemOld));
         itemOld.set({...item});
         itemOld.save((err, itemNew) => {
           if (err) {
             throw (`error updating item: ${err}`);
           }
-          const itemNewFlat = JSON.parse(JSON.stringify(itemNew._doc));
-          compareItemsHistoryes(itemOldFlat, itemNewFlat);
+          const itemNewLean = JSON.parse(JSON.stringify(itemNew._doc));
+          compareItemsHistoryes(itemOldLean, itemNewLean, itemNew);
           //logger.debug(`item ${itemNew.title} updated`);
         });
       }
@@ -387,124 +390,127 @@ const saveItem = async(item) => {
   );
 }
 
-const compareItemsHistoryes = (itemOld, itemNew) => {
-  const key = `${itemNew.provider} ${itemNew.id}`;
-  if (!itemOld && !itemNew) { // should not happen
+const compareItemsHistoryes = (itemOldLean, itemNewLean, itemNew) => {
+  const key = `${itemNewLean.provider} ${itemNewLean.id}`;
+  if (!itemOldLean && !itemNewLean) { // safety check, should not happen
     logger.warn(`${key} neither new nor old item is set!`);
     return;
   }
-  if (!itemOld) { // a new item
+  let added = changed = false;
+  if (!itemOldLean) { // a new item
     logger.info(`${key} new`);
-    return;
-  }
-  // a changed item
-  let changed = false;
-  Object.keys(itemOld).map(prop => {
-    if (!['__v', '_id', 'provider', 'region', 'id', 'dateCreated', 'dateUpdated'].includes(prop)) {
-      //logger.debug(`--- ${prop} ---`);
-      const type = Array.isArray(itemOld[prop]) ? 'array' : typeof itemOld[prop];
-//logger.debug(`typeof itemOld[${prop}]: ${type}`);
-      switch (type) {
-        case 'boolean':
-          //logger.warn(itemNew[prop]);
-          if (itemOld[prop] != itemNew[prop]) {
-            logger.info(`${key} changed ${prop}: ${itemNew[prop] ? 'false => true' : 'true => false'}`);
-            changed = true;
-          }
-          break;
-        case 'string':
-        case 'number':
-          if (itemOld[prop] !== itemNew[prop]) {
-            require('colors');
-            const diff = require('diff');
-            const differences = diff.diffChars(itemOld[prop], itemNew[prop]);
-            let difference = '';
-            differences.forEach((part) => {
-              // green for additions, red for deletionn, grey for common parts
-              const color = part.added ? 'bgGreen' :
-                part.removed ? 'bgRed' :
-                'grey'
-              ;
-              difference += part.value[color];
-            });
-            logger.info(`${key} changed ${prop}: ${difference}`);
-
-            // logger.info(`${key} changed ${prop}: ${itemOld[prop]} => ${itemNew[prop]}`);
-
-            changed = true;
-          }
-          break;
-        case 'array': // we assume one level only arrays (shallow compare)
-//if(prop !== 'comments') break;
-//console.log('PROP:', prop);
-          const o = itemOld[prop];
-          const n = itemNew[prop];
-
-          // check for removed elements in array
-          const removed = [];
-//console.log('COMMENTS old length:', o.length);
-          for (var oi = 0; oi < o.length; oi++) {
-            const oObj = o[oi];
-            let found = false;
-            for (var ni = 0; ni < n.length; ni++) {
-              const nObj = n[ni];
-//console.log('COMPARING:', nObj, oObj);
-              if (areEquivalent(nObj, oObj, ['_id'])) {
-                found = true;
-                break;
-              }
+    added = true;
+  } else {
+    // a changed item
+    Object.keys(itemOldLean).map(prop => {
+      if (!['__v', '_id', 'provider', 'region', 'id', 'createdAt', 'updatedAt'].includes(prop)) {
+        //logger.debug(`--- ${prop} ---`);
+        const type = Array.isArray(itemOldLean[prop]) ? 'array' : typeof itemOldLean[prop];
+  //logger.debug(`typeof itemOldLean[${prop}]: ${type}`);
+        switch (type) {
+          case 'boolean':
+            //logger.warn(itemNewLean[prop]);
+            if (itemOldLean[prop] != itemNewLean[prop]) {
+              logger.info(`${key} changed ${prop}: ${itemNewLean[prop] ? 'false => true' : 'true => false'}`);
+              changed = true;
             }
-            if (!found) { // this old item was not found or was different in new items
-              removed.push(oObj);
-            }
-          }
-          if (removed.length) {
-            logger.info(`${key} removed ${removed.length} ${prop}: ${JSON.stringify(removed)}`);
-            changed = true;
-          }
+            break;
+          case 'string':
+          case 'number':
+            if (itemOldLean[prop] !== itemNewLean[prop]) {
+              require('colors');
+              const diff = require('diff');
+              const differences = diff.diffChars(itemOldLean[prop], itemNewLean[prop]);
+              let difference = '';
+              differences.forEach((part) => {
+                // green for additions, red for deletionn, grey for common parts
+                const color = part.added ? 'bgGreen' :
+                  part.removed ? 'bgRed' :
+                  'grey'
+                ;
+                difference += part.value[color];
+              });
+              logger.info(`${key} changed ${prop}: ${difference}`);
 
-          // check for added elements in array
-          const added = [];
-//console.log('COMMENTS new length:', o.length);
-          for (var ni = 0; ni < n.length; ni++) {
-            const nObj = n[ni];
-            let found = false;
+              // logger.info(`${key} changed ${prop}: ${itemOldLean[prop]} => ${itemNewLean[prop]}`);
+
+              changed = true;
+            }
+            break;
+          case 'array': // we assume one level only arrays (shallow compare)
+  //if(prop !== 'comments') break;
+  //console.log('PROP:', prop);
+            const o = itemOldLean[prop];
+            const n = itemNewLean[prop];
+
+            // check for removed elements in array
+            const removed = [];
+  //console.log('COMMENTS old length:', o.length);
             for (var oi = 0; oi < o.length; oi++) {
               const oObj = o[oi];
-//console.log('COMPARING:', oObj, mObj);
-              if (areEquivalent(oObj, nObj, ['_id'])) {
-                found = true;
-                break;
+              let found = false;
+              for (var ni = 0; ni < n.length; ni++) {
+                const nObj = n[ni];
+  //console.log('COMPARING:', nObj, oObj);
+                if (areEquivalent(nObj, oObj, ['_id'])) {
+                  found = true;
+                  break;
+                }
+              }
+              if (!found) { // this old item was not found or was different in new items
+                removed.push(oObj);
               }
             }
-            if (!found) { // this new item was not found or was different in old items
-              added.push(nObj);
+            if (removed.length) {
+              logger.info(`${key} removed ${removed.length} ${prop}: ${JSON.stringify(removed)}`);
+              changed = true;
             }
-          }
-          if (added.length) {
-            logger.info(`${key} added ${added.length} ${prop}: ${JSON.stringify(added)}`);
-            changed = true;
-          }
 
-          break;
-        case 'object': // we assume one level only objects (shallow compare)
-          // if (prop == 'comments') {
-          //   logger.warn(`itemOld[${prop}]: ` + JSON.stringify(itemOld[prop]));
-          //   logger.warn(`itemNew[${prop}]: ` + JSON.stringify(itemNew[prop]));
-          // }          
-          break;
-          // if (!itemOld[prop] || !itemNew[prop] || itemOld[prop].length != itemNew[prop].length) {
-          //   changed = true;
-          //   logger.debug(`${key} ${itemNew.title} changed prop ${prop} length`)
-          // }
-          // break;
-        default:
-          logger.warn(`${prop}: type ${type} diff is not yet implemented`);
-          break;
+            // check for added elements in array
+            const added = [];
+  //console.log('COMMENTS new length:', o.length);
+            for (var ni = 0; ni < n.length; ni++) {
+              const nObj = n[ni];
+              let found = false;
+              for (var oi = 0; oi < o.length; oi++) {
+                const oObj = o[oi];
+  //console.log('COMPARING:', oObj, mObj);
+                if (areEquivalent(oObj, nObj, ['_id'])) {
+                  found = true;
+                  break;
+                }
+              }
+              if (!found) { // this new item was not found or was different in old items
+                added.push(nObj);
+              }
+            }
+            if (added.length) {
+              logger.info(`${key} added ${added.length} ${prop}: ${JSON.stringify(added)}`);
+              changed = true;
+            }
+
+            break;
+          case 'object': // we assume one level only objects (shallow compare)
+            // if (prop == 'comments') {
+            //   logger.warn(`itemOldLean[${prop}]: ` + JSON.stringify(itemOldLean[prop]));
+            //   logger.warn(`itemNewLean[${prop}]: ` + JSON.stringify(itemNewLean[prop]));
+            // }          
+            break;
+            // if (!itemOldLean[prop] || !itemNewLean[prop] || itemOldLean[prop].length != itemNewLean[prop].length) {
+            //   changed = true;
+            //   logger.debug(`${key} ${itemNewLean.title} changed prop ${prop} length`)
+            // }
+            // break;
+          default:
+            logger.warn(`${prop}: type ${type} diff is not yet implemented`);
+            break;
+        }
       }
-    }
-  });
-  if (!changed) {
+    });
+  }
+  if (added || changed) { // save changetAt now timestamp
+    itemNew.update({ changedAt: new Date() });
+  } else {
     logger.info(`${key} unchanged`)
   }
 }
