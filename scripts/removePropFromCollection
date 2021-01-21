@@ -5,6 +5,6 @@
 prop="${1:-missing}"
 db="${2-web-scraping}"
 
-echo 'db.items.persons.update({}, {$unset: {missing:1}}, false, true)' | \
+echo 'db.items.persons.update({}, {$unset: {'$prop':1}}, false, true)' | \
 mongo "$db" --quiet | \
 grep -v '^bye$'
