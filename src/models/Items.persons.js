@@ -181,10 +181,12 @@ const schemaPersons = new Schema({
   // isPresent: {
   //   type: Boolean,
   // }
+  group: {
+    type: String,
+  },
   changedAt: {
     type: Date,
   }
-
 }, { timestamps: { createdAt: 'createdAt', updatedAt: 'updatedAt'} }); // timestamps option: automatically add 'createdAt' and 'updatedAt' timestamps
 
 // indexes

@@ -1,7 +1,7 @@
 {
   "name": "web-scraping",
-  "version": "0.0.9",
-  "description": "",
+  "version": "0.0.13",
+  "description": "Web scraping",
   "main": "node src/",
   "scripts": {
     "dev": "nodemon --quiet node src/",

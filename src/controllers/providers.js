@@ -1,12 +1,12 @@
-//const { ObjectID } = require('mongodb');
-//const items = require('../models/Items.' + 'persons'); // TODO: make persons a variable...
-
 const cron = require('node-cron');
 const fetch = require('node-fetch');
 const fs = require('fs');
 const mime = require('mime-types');
 const crypto = require('crypto');
 const uuid = require('uuid');
+const Items = require('../models/Items.' + 'persons'); // TODO: make persons a variable...
+const UserStatuses = require("../models/UserStatuses");
+const Globals = require("../models/Globals");
 const { phoneNormalize } = require('../utils/providers');
 //const { dbConnect, dbClose } = require('../utils/db');
 const { browserLaunch, browserPageNew, browserPageClose, browserClose } = require('../utils/browser');
@@ -16,8 +16,6 @@ const { calculatePHash, comparePHashes } = require('../utils/image');
 const globals = require('../models/Globals');
 const logger = require('../logger');
 const config = require('../config');
-
-// TODO: const Items = require("../models/Items");
 
 exports.scrapeProviders = async(req) => {
   logger.info(`providers.scrapeProviders.starting.${req.requestId}`);
@@ -58,8 +56,6 @@ exports.scrapeProviders = async(req) => {
   }
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////
-
 exports.scrapeProvidersImages = async (req) => {
   try {
     const regionDescriptor = req.body.regionDescriptor || '*';
@@ -86,44 +82,51 @@ exports.scrapeProvidersImages = async (req) => {
   }
 }
 
-/**
- * Group all items from database, according to some grouping function
- */
-groupItems = async (req) => {
-  const type = "persons";
-  const Items = require("../models/Items" + "." + type);
-
+exports.groupProvidersItems = async() => {
+  const sameGroup = (a, b) => {
+    return (a.phone && b.phone && a.phone === b.phone);
+  }
   try {
-    const lastScrapeTimestamp = await mongoose.model('Globals').findOne({ key: `lastScrapeTimestamp` }).exec();
-
-    const itemsAll = await Items.find({});
+    const lastScrapeTimestamp = await Globals.findOne({ key: `lastScrapeTimestamp` }).exec();
+    const itemsAll = await Items.find({}).exec(); // all items
     const itemsNew = await Items.find({
-      dateInserted: { $ge: lastScrapeTimestamp }, // is new
-    });
-    itemsAll.foreach(async(itemAll) => {
-      itemsNew.foreach(async(itemNew) => {
+      dateCreated: { $gte: lastScrapeTimestamp.value }, // new items
+    }).exec();
+    for (var i = 0, lenI = itemsAll.length; i < lenI; i++) {
+      const itemAll = itemsAll[i];
+logger.warn(`------ i: ${i}`);
+      for (var j = 0, lenJ = itemsNew.length; j < lenJ; j++) {
+        const itemNew = itemsNew[j];
+logger.warn(`--- j: ${j}`);
+        if (itemNew.id === itemAll.id && itemNew.provider === itemAll.provider) { // skip same item
+          continue;
+        }
         if (sameGroup(itemAll, itemNew)) { // check if the two items should be grouped
-          if (itemNew.group) logger.warn(`new item ${itemNew.provider} ${itemNew.id}' has already a group!`);
-          if (!itemAll.group) {
+          if (!itemAll.group) { // all item has no group
             itemAll.group = uuid.v4();
+logger.warn(`item all:${itemAll.provider} ${itemAll.id} ${itemAll.title}, ${itemAll.phone} group: ${itemAll.group}`);
             await Items.updateOne(
               { id: itemAll.id, provider: itemAll.provider },
-              { ...itemAll }
+              { group: itemAll.group }
             );
+          } else { // all item has already a group
+logger.warn(`item all ${itemAll.provider} ${itemAll.id} ${itemAll.title}, ${itemAll.phone} has a group: ${itemAll.group}`);
           }
-          itemNew.group = itemAll.group;
-          await Items.updateOne(
-            { id: itemNew.id, provider: itemNew.provider },
-            { ...itemNew }
-          );
+          if (!itemNew.group) {
+            itemNew.group = itemAll.group;
+logger.warn(`item new ${itemNew.provider} ${itemNew.id} ${itemNew.title}, ${itemNew.phone} group: ${itemNew.group}`);
+            await Items.updateOne(
+              { id: itemNew.id, provider: itemNew.provider },
+              { group: itemNew.group }
+            );
+          } else { // item new has a group already
+logger.warn(`item new ${itemNew.provider} ${itemNew.id} ${itemNew.title}, ${itemNew.phone} has a group: ${itemNew.group}`);
+          }
         }
-      });
-    });
-    const sameGroup = (a, b) => {
-      return (a.phone === b.phone);
+      }
     }
   } catch (err) {
-    throw (new Error(`error grouping item: ${err}`));
+    throw (new Error(`error grouping providers items: ${err}`));
   }
 }
 
@@ -167,8 +170,11 @@ exports.debugSomeCommonImages = async (req) => {
 
   try {
     const lastScrapeTimestamp = await globalsGet(`lastScrapeTimestamp`);
-    const itemsAll = await Items.find({ /*'id': '13245'*/ }, { title: 1, images: 1 }); // any item
-    const itemsNew = await Items.find({ /*'id': '13008',*/ createdAt: { $lte: lastScrapeTimestamp } }, { title: 1, images: 1 }); // new items
+console.log('lastScrapeTimestamp:', lastScrapeTimestamp);
+    const itemsAll = await Items.find({ provider: 'toe', /*'id': '13245'*/ }, { title: 1, images: 1 }); // any item
+console.log('itemsAll len:', itemsAll.length);
+    const itemsNew = await Items.find({ provider: 'toe', /*'id': '13008',*/ createdAt: { $gte: lastScrapeTimestamp } }, { title: 1, images: 1 }); // new items
+console.log('itemsNew len:', itemsNew.length);
     itemsAll.forEach(async (itemAll) => {
       itemsNew.forEach(async (itemNew) => {
         if (someCommonImages(itemAll, itemNew)) {
@@ -284,9 +290,6 @@ const scrapeItems = async (provider, region, page, list) => {
 
 scrapeProviderImages = async (provider, region) => {
   try {
-    const type = "persons";
-    const Items = require("../models/Items" + "." + type);
-
     const items = await Items.find({
       provider: provider.info.key,
       region: region
@@ -411,7 +414,7 @@ downloadImage = async (provider, region, item, image) => {
 
 const itemExists = async(item) => {
   try {
-    const Items = require("../models/Items" + "." + item.type);
+    //const Items = require("../models/Items" + "." + item.type);
     const retval = await Items.exists({
       id: item.id,
       provider: item.provider,
@@ -424,7 +427,6 @@ const itemExists = async(item) => {
 }
 
 const saveItem = async(item) => {
-  const Items = require("../models/Items" + "." + item.type);
   Items.findOne(
     { id: item.id, provider: item.provider/*, region: item.region*/ },
     (err, itemOld) => {
@@ -612,29 +614,11 @@ const areEquivalent = (a, b, ignoredProps) => {
   return true;
 }
 
-const updateItem_UNUSED_SINCE_PRE_UPDATE_HAS_NO_ACCESS_TO_OLD_DOC = async(item) => {
-  try {
-    const Items = require("../models/Items" + "." + item.type);
-//logger.info(`saveItem ${item.id}, ${item.provider}, ${item.region}, ${item.title}`);
-logger.info(`saveItem ${item}`);
-    const retval = await Items.updateOne(
-      { id: item.id, provider: item.provider, region: item.region },
-      { ...item, __v: 0 },
-      { upsert: true, /*new: true,*/ },
-    ).exec();
-    logger.info(`saveItem retval: ` + JSON.stringify(retval));
-    logger.info(`saveItem updateOne nModified: ${retval.nModified}`);
-    return retval; 
-  } catch (err) {
-    throw (new Error(`error saving item: ${err}`));
-  }
-}
-
 const saveItemImage = async(item, imageDownloaded) => {
   delete imageDownloaded.success;
   //logger.debug('saveItemImage - imageDownloaded:', imageDownloaded);
   try {
-    const Items = require("../models/Items" + "." + item.type);
+    //const Items = require("../models/Items" + "." + item.type);
     const retval = await Items.updateOne(
       { id: item.id, provider: item.provider, "images": { "$elemMatch": { "url": imageDownloaded.url } }  },
       { $set: { "images.$": imageDownloaded } },
@@ -654,8 +638,7 @@ const saveItemImage = async(item, imageDownloaded) => {
 
 updateUserStatus = async (user) => { // TODO: DEBUG ME !
   try {
-    const UserStatuses = require("./models/UserStatuses");
-    const Items = require("../models/Items");
+    //const Items = require("../models/Items");
 logger.debug('updateUserStatus started for user:', user.name, user.role);
     const items = await Items.find({}).exec();
 
@@ -676,9 +659,6 @@ updateUserProps = async (user, item, props) => { // TODO: DEBUG ME !
   logger.debug('updateUserProps started for user:', props);
   process.exit();
   try {
-    const UserStatuses = require("./models/UserStatuses");
-    const Items = require("../models/Items");
-
     const userDoc = await login(user.email, user.password);
     if (userDoc.role !== 'user' && userDoc.role != 'admin') {
       throw('user is not enabled for this action');
