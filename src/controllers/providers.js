@@ -242,15 +242,16 @@ scrapeProviderImages = async (provider, region) => {
       for (let j = 0; j < item.images.length; j++) {
         let image = item.images[j];
         if (!image.localPath) { // only download missing images
+logger.debug(`IMAGE: ${JSON.stringify(image)}`);
 //logger.debug(`--- downloading images of person ${item.provider} ${item.id} - n° ${1+i} / ${items.length} ---`);
           const imageDownloaded = await downloadImage(provider, region, item, image);
           if (imageDownloaded && imageDownloaded.success) {
-
-            // TODO: debug me!!!
-            imageDownloaded.phash = getPHash(imageDownloaded.localPath);
-            logger.debug(`--- PHASH - imageDownloaded: ${imageDownloaded}, typeof phash: ${typeof imageDownloaded.phash}: ---`);
-
+logger.debug(`image phash: ${JSON.stringify(image.phash)}`);
+            if (!image.phash) {  // calculate image perceptual hash, if not present yet
+logger.debug(`image phash being calculated`);
+              imageDownloaded.phash = await getPHash(imageDownloaded.localPath);
 //logger.debug(`--- saving image ${j} of ${item.images.length} -------------`);
+            }
             await saveItemImage(item, imageDownloaded);
             count++;
           }

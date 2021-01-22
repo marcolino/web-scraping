@@ -106,7 +106,7 @@ const schemaPersons = new Schema({
       type: String
     },
     phash: {
-      type: Object,
+      type: String,
     },
     localPath: {
       type: String

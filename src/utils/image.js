@@ -35,9 +35,9 @@ exports.phashesAreEqual = (phash1, phash2, threshold = 0.25) => {
 
 
 
-(async() => {
-  const phash1 = await exports.getPHash("./img1.jpg");
-  const phash2 = await exports.getPHash("./img1-bordered.jpg");
-  const result = exports.phashesAreEqual(phash1, phash2);
-  console.log(`images 1 and 2 are considered ${result ? 'equal' : 'different'}`);
-})();
+// (async() => {
+//   const phash1 = await exports.getPHash("./img1.jpg");
+//   const phash2 = await exports.getPHash("./img1-bordered.jpg");
+//   const result = exports.phashesAreEqual(phash1, phash2);
+//   console.log(`images 1 and 2 are considered ${result ? 'equal' : 'different'}`);
+// })();
