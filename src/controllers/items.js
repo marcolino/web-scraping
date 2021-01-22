@@ -12,8 +12,7 @@ async function getItems(req, res, next) {
     // let hrstart = hrend = null;
     // hrstart = process.hrtime();
     // call();
-    // hrend = process.hrtime(hrstart);
-    // logger.info(`call execution time (hr): ${hrend[1] / 1000000}ms`);
+    // hrend = process.hrtime(hrstart); logger.info(`call() execution time (hr): ${hrend[1] / 1000000} ms`);
 
     const lastScrapeTimestamp = await globals.findOne({ key: 'lastScrapeTimestamp' }).exec();
     //logger.info('lastScrapeTimestamp value:', lastScrapeTimestamp.value);
