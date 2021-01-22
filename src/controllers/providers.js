@@ -11,6 +11,7 @@ const { phoneNormalize } = require('../utils/providers');
 //const { dbConnect, dbClose } = require('../utils/db');
 const { browserLaunch, browserPageNew, browserPageClose, browserClose } = require('../utils/browser');
 const { mimeImage } = require('../utils/misc');
+const { getPHash } = require('../utils/image');
 //const { register, login } = require('./user');
 const globals = require('../models/Globals');
 const logger = require('../logger');
@@ -244,6 +245,11 @@ scrapeProviderImages = async (provider, region) => {
 //logger.debug(`--- downloading images of person ${item.provider} ${item.id} - n° ${1+i} / ${items.length} ---`);
           const imageDownloaded = await downloadImage(provider, region, item, image);
           if (imageDownloaded && imageDownloaded.success) {
+
+            // TODO: debug me!!!
+            imageDownloaded.phash = getPHash(imageDownloaded.localPath);
+            logger.debug(`--- PHASH - imageDownloaded: ${imageDownloaded}, typeof phash: ${typeof imageDownloaded.phash}: ---`);
+
 //logger.debug(`--- saving image ${j} of ${item.images.length} -------------`);
             await saveItemImage(item, imageDownloaded);
             count++;
@@ -418,21 +424,21 @@ const compareItemsHistoryes = (itemOldLean, itemNewLean, itemNew) => {
           case 'string':
           case 'number':
             if (itemOldLean[prop] !== itemNewLean[prop]) {
-              require('colors');
-              const diff = require('diff');
-              const differences = diff.diffChars(itemOldLean[prop], itemNewLean[prop]);
-              let difference = '';
-              differences.forEach((part) => {
-                // green for additions, red for deletionn, grey for common parts
-                const color = part.added ? 'bgGreen' :
-                  part.removed ? 'bgRed' :
-                  'grey'
-                ;
-                difference += part.value[color];
-              });
-              logger.info(`${key} changed ${prop}: ${difference}`);
+              // require('colors');
+              // const diff = require('diff');
+              // const differences = diff.diffChars(itemOldLean[prop], itemNewLean[prop]);
+              // let difference = '';
+              // differences.forEach((part) => {
+              //   // green for additions, red for deletionn, grey for common parts
+              //   const color = part.added ? 'bgGreen' :
+              //     part.removed ? 'bgRed' :
+              //     'grey'
+              //   ;
+              //   difference += part.value[color];
+              // });
+              // logger.info(`${key} changed ${prop}: ${difference}`);
 
-              // logger.info(`${key} changed ${prop}: ${itemOldLean[prop]} => ${itemNewLean[prop]}`);
+              logger.info(`${key} changed ${prop}: ${itemOldLean[prop]} => ${itemNewLean[prop]}`);
 
               changed = true;
             }

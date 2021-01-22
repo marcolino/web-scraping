@@ -105,6 +105,9 @@ const schemaPersons = new Schema({
     etag: {
       type: String
     },
+    phash: {
+      type: Object,
+    },
     localPath: {
       type: String
     },
