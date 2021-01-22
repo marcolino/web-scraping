@@ -1,6 +1,6 @@
 {
   "name": "web-scraping",
-  "version": "0.0.15",
+  "version": "0.0.16",
   "description": "Web scraping",
   "main": "node src/",
   "scripts": {
