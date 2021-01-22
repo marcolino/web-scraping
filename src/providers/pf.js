@@ -34,7 +34,7 @@ async function listPageEvaluate(region, page, nextListPage) {
     const url = nextListPage ? nextListPage : info.regions[region].listUrl;
     const imagesUrl = info.regions[region].imagesUrl;
     if (!url) {
-      throw(`region ${region} for provider ${info.key} has no list url`);
+      throw (new Error(`region ${region} for provider ${info.key} has no list url`));
     }
     logger.info(`listPageEvaluate.provider.${info.key} ${url}`);
     try {
@@ -67,7 +67,7 @@ async function listPageEvaluate(region, page, nextListPage) {
           try { // id
             data.id = data.url.replace(/^.*\./, '').replace(/\/$/, '');
           } catch (err) {
-            throw (new Error(`reading url ${url} looking for id: ${err.message}`));
+            throw(new Error(`reading url ${url} looking for id: ${err.message}`));
           }
 
           if (config.scrape.onlyItemId.length && !config.scrape.onlyItemId.includes(data.id)) {
@@ -257,7 +257,7 @@ const itemPageEvaluate = async (region, page, item) => {
 //else {console.log(`VOTE (UNICODE) for person ${data.provider} ${data.id} comment ${index}: NOT FOUND`);}
             }
           } catch (err) {
-            throw (new Error(`reading url ${url} looking for vote: ${err.message}`));
+            throw(new Error(`reading url ${url} looking for vote: ${err.message}`));
           }
 
         });

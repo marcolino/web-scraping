@@ -293,7 +293,7 @@ schemaPersons.methods.isFreshy = async() => { // TODO: possibly unused, if isFre
 logger.debug(`this.dateInserted: ${this.dateInserted} >=? lastScrapeTimestamp: ${lastScrapeTimestamp.value}`);
     return this.dateInserted >= lastScrapeTimestamp.value;
   } catch (err) {
-    throw (new Error(`error in schemaPersons.methods.isFreshy: ${err}`));
+    throw(new Error(`error in schemaPersons.methods.isFreshy: ${err}`));
   }
 };
 

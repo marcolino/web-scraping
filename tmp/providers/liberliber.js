@@ -14,7 +14,7 @@ async function listPageEvaluate(region, page) {
   return new Promise(async (resolve, reject) => {
     const url = info.listUrl;
     if (!url) {
-      throw (`list url ${info.listUrl} not found for provider ${info.key}`);
+      throw (new Error(`list url ${info.listUrl} not found for provider ${info.key}`));
     }
     console.log('listPageEvaluate provider:', info.key, url);
 
@@ -37,7 +37,7 @@ async function listPageEvaluate(region, page) {
           try { // url book
             data.book.url = item.querySelector("em > a").getAttribute("href");
           } catch (err) {
-            throw (new Error(`reading url ${url} looking for book url: ${err.message}`));
+            throw(new Error(`reading url ${url} looking for book url: ${err.message}`));
           }
 
           // url id
@@ -47,20 +47,20 @@ async function listPageEvaluate(region, page) {
           try { // title book
             data.book.title = item.querySelector("em > a").innerText.trim();
           } catch (err) {
-            throw (new Error(`reading url ${url} looking for book title: ${err.message}`));
+            throw(new Error(`reading url ${url} looking for book title: ${err.message}`));
           }
 
           data.author = {}
           try { // url author
             data.author.url = item.querySelector("a").getAttribute("href");
           } catch (err) {
-            throw (new Error(`reading url ${url} looking for author url: ${err.message}`));
+            throw(new Error(`reading url ${url} looking for author url: ${err.message}`));
           }
 
           try { // name author
             data.author.name = item.querySelector("a").innerText.trim();
           } catch (err) {
-            throw (new Error(`reading url ${url} looking for author name: ${err.message}`));
+            throw(new Error(`reading url ${url} looking for author name: ${err.message}`));
           }
 
           list.push(data);
@@ -79,7 +79,7 @@ const itemPageEvaluate = async (region, page, item) => {
   return new Promise(async (resolve, reject) => {
     const itemUrl = item.book.url;
     if (!itemUrl) {
-      throw(`url not defined for provider ${info.key} at region region ${region}`);
+      throw (new Error(`url not defined for provider ${info.key} at region region ${region}`));
     }
     const url = itemUrl;
 console.log('itemPageEvaluate url:', url);
@@ -104,7 +104,7 @@ console.log('itemPageEvaluate url:', url);
         try { // cover
           data.book.coverUrl = document.querySelector('ul.slides').querySelector('img').getAttribute('src');
         } catch (err) {
-          throw (new Error(`reading url ${url} looking for cover: ${err.message}`));
+          throw(new Error(`reading url ${url} looking for cover: ${err.message}`));
         }
 
         try { // chapters
@@ -117,7 +117,7 @@ console.log('itemPageEvaluate url:', url);
             data.book.chapters.push(chapter);
           });
         } catch (err) {
-          throw (new Error(`reading url ${url} looking for chapters: ${err.message}`));
+          throw(new Error(`reading url ${url} looking for chapters: ${err.message}`));
         }
 
         try { // metadata
@@ -202,7 +202,7 @@ console.log('itemPageEvaluate url:', url);
             data.book.metadata[meta.key] = meta.value;
           });
         } catch (err) {
-          throw (new Error(`reading url ${url} looking for chapters: ${err.message}`));
+          throw(new Error(`reading url ${url} looking for chapters: ${err.message}`));
         }
 
         return data;

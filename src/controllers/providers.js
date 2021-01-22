@@ -11,7 +11,7 @@ const { phoneNormalize } = require('../utils/providers');
 //const { dbConnect, dbClose } = require('../utils/db');
 const { browserLaunch, browserPageNew, browserPageClose, browserClose } = require('../utils/browser');
 const { mimeImage } = require('../utils/misc');
-const { getPHash } = require('../utils/image');
+const { calculatePHash, comparePHashes } = require('../utils/image');
 //const { register, login } = require('./user');
 const globals = require('../models/Globals');
 const logger = require('../logger');
@@ -82,10 +82,13 @@ exports.scrapeProvidersImages = async (req) => {
     logger.debug(`all providers persons images scraped, found ${sum} images`);
     return sum;
   } catch(err) {
-    throw(`error scraping providers persons images: ${err}`);
+    throw(new Error(`error scraping providers persons images: ${err}`));
   }
 }
 
+/**
+ * Group all items from database, according to some grouping function
+ */
 groupItems = async (req) => {
   const type = "persons";
   const Items = require("../models/Items" + "." + type);
@@ -120,7 +123,63 @@ groupItems = async (req) => {
       return (a.phone === b.phone);
     }
   } catch (err) {
-    throw (`error grouping item: ${err}`);
+    throw (new Error(`error grouping item: ${err}`));
+  }
+}
+
+/**
+ * Decide if two items should belong to the same group (they are "aliases")
+ */
+const sameGroup_2_0 = (a, b) => {
+  return (
+    (a.phone === b.phone)
+    &&
+    (someCommonImages(a, b))
+  );
+
+}
+
+/**
+ * Check if two items share common (considered equal) images
+ */
+const someCommonImages = (a, b) => {
+  for (var i = 0, lenA = a.images.length; i < lenA; i++) {
+    const ai = a.images[i];
+    if (ai.phash) {
+      for (var j = 0, lenB = b.images.length; j < lenB; j++) {
+        const bj = b.images[j];
+        if (bj.phash) {
+          if (comparePHashes(ai.phash, bj.phash)) {
+            // found a common image
+            return true;
+          }
+        }
+      }
+    }
+  }
+  return false;
+}
+
+// TODO: debug only
+exports.debugSomeCommonImages = async (req) => {
+  const type = "persons";
+  const Items = require("../models/Items" + "." + type);
+
+  try {
+    const lastScrapeTimestamp = await globalsGet(`lastScrapeTimestamp`);
+    const itemsAll = await Items.find({ /*'id': '13245'*/ }, { title: 1, images: 1 }); // any item
+    const itemsNew = await Items.find({ /*'id': '13008',*/ createdAt: { $lte: lastScrapeTimestamp } }, { title: 1, images: 1 }); // new items
+    itemsAll.forEach(async (itemAll) => {
+      itemsNew.forEach(async (itemNew) => {
+        if (someCommonImages(itemAll, itemNew)) {
+          logger.info(`item ${itemAll.title} and ${itemNew.title} share some common images`);
+        } else {
+          //logger.debug(`item ${itemAll.title} and ${itemNew.title} DO NOT share some common images`);
+        }
+      });
+    });
+  } catch (err) {
+    throw(new Error(`error debugging some common images item: ${err}`));
   }
 }
 
@@ -144,7 +203,7 @@ scrapeProvider = async (provider, region, user) => {
 
     return items ? (await Promise.all(items)).flat() : []; // we flat-out due to Promise.All
   } catch(err) {
-    throw(`error scraping provider ${provider.info.key}: ${err}`);
+    throw (new Error(`error scraping provider ${provider.info.key}: ${err}`));
   }
 };
 
@@ -242,14 +301,14 @@ scrapeProviderImages = async (provider, region) => {
       for (let j = 0; j < item.images.length; j++) {
         let image = item.images[j];
         if (!image.localPath) { // only download missing images
-logger.debug(`IMAGE: ${JSON.stringify(image)}`);
+logger.debug(`IMAGE:`, image);
 //logger.debug(`--- downloading images of person ${item.provider} ${item.id} - n° ${1+i} / ${items.length} ---`);
           const imageDownloaded = await downloadImage(provider, region, item, image);
           if (imageDownloaded && imageDownloaded.success) {
 logger.debug(`image phash: ${JSON.stringify(image.phash)}`);
             if (!image.phash) {  // calculate image perceptual hash, if not present yet
 logger.debug(`image phash being calculated`);
-              imageDownloaded.phash = await getPHash(imageDownloaded.localPath);
+              imageDownloaded.phash = await calculatePHash(imageDownloaded.localPath);
 //logger.debug(`--- saving image ${j} of ${item.images.length} -------------`);
             }
             await saveItemImage(item, imageDownloaded);
@@ -360,7 +419,7 @@ const itemExists = async(item) => {
     });
     return retval; 
   } catch (err) {
-    throw (`error finding item: ${err}`);
+    throw (new Error(`error finding item: ${err}`));
   }
 }
 
@@ -370,13 +429,13 @@ const saveItem = async(item) => {
     { id: item.id, provider: item.provider/*, region: item.region*/ },
     (err, itemOld) => {
       if (err) {
-        throw (`error finding item to save: ${err}`);
+        throw (new Error(`error finding item to save: ${err}`));
       }
       if (!itemOld) { // a new item
         itemOld = new Items(item);
         itemOld.save((err, itemNew) => {
           if (err) {
-            throw (`error saving new item: ${err}`);
+            throw (new Error(`error saving new item: ${err}`));
           }
           compareItemsHistoryes(null, itemNew, itemNew);
           //logger.debug(`item ${itemNew.title} inserted`);
@@ -386,7 +445,7 @@ const saveItem = async(item) => {
         itemOld.set({...item});
         itemOld.save((err, itemNew) => {
           if (err) {
-            throw (`error updating item: ${err}`);
+            throw (new Error(`error updating item: ${err}`));
           }
           const itemNewLean = JSON.parse(JSON.stringify(itemNew._doc));
           compareItemsHistoryes(itemOldLean, itemNewLean, itemNew);
@@ -522,6 +581,14 @@ const compareItemsHistoryes = (itemOldLean, itemNewLean, itemNew) => {
   }
 }
 
+/**
+ * 
+ * @param {Object} a             first object
+ * @param {Object} b             second object
+ * @param {Array} ignoredProps   props to be ignored while comparing objects
+ * @returns {boolean}            true if the two objects are equivalent
+ *                               (they share all properties values, except for `ignoredProps`)
+ */
 const areEquivalent = (a, b, ignoredProps) => {
   // create arrays of property names
   var aProps = Object.getOwnPropertyNames(a);
@@ -559,7 +626,7 @@ logger.info(`saveItem ${item}`);
     logger.info(`saveItem updateOne nModified: ${retval.nModified}`);
     return retval; 
   } catch (err) {
-    throw (`error saving item: ${err}`);
+    throw (new Error(`error saving item: ${err}`));
   }
 }
 
@@ -581,7 +648,7 @@ const saveItemImage = async(item, imageDownloaded) => {
     );
     return retval; 
   } catch (err) {
-    throw (`error saving item image: ${err}`);
+    throw (new Error(`error saving item image: ${err}`));
   }
 }
 
@@ -599,7 +666,7 @@ logger.debug('userStatus:', userStatus);
     });
 return userStatus;
   } catch(err) {
-    throw(`error updating user status: ${err}`);
+    throw (new Error(`error updating user status: ${err}`));
   }
 }
 
@@ -637,7 +704,7 @@ updateUserProps = async (user, item, props) => { // TODO: DEBUG ME !
     const result = await UserStatuses.findOneAndUpdate(query, update, options).exec(); //, function(error, result) {
     return result;
   } catch(err) {
-    throw(`error updating user props: ${err.message}`);
+    throw (new Error(`error updating user props: ${err.message}`));
   }
 }
 
@@ -648,7 +715,7 @@ scrapeSchedule = async(providers, region, user) => {
       const result = scrapeProviders(providers, region, user);
     });
   } catch(err) {
-    throw(`error scheduling scraping ${err}`);
+    throw (new Error(`error scheduling scraping ${err}`));
   }
 }
 
@@ -656,7 +723,7 @@ scrapeSchedule = async(providers, region, user) => {
 //   try {
 //     console.info('register:', await register(email, password, name, phone, role));
 //   } catch(err) {
-//     throw(`error registering user: ${err}`);
+//     throw(new Error(`error registering user: ${err}`));
 //   }
 // }
 
@@ -664,7 +731,7 @@ scrapeSchedule = async(providers, region, user) => {
 //   try {
 //     console.info('login:', await login(email, password));
 //   } catch(err) {
-//     throw(`error logging user: ${err}`);
+//     throw(new Error(`error logging user: ${err}`));
 //   }
 // }
 
@@ -677,7 +744,7 @@ const _updateUserStatus = async () => {
     const item = {vote: 0.7, note: 'nice'};
     console.info('updateUserStatus:', await updateUserStatus(user));
   } catch(err) {
-    throw(`error updating user status: ${err}`);
+    throw (new Error(`error updating user status: ${err}`));
   }
 }
 
@@ -812,6 +879,10 @@ const getProviderRegions = (provider, regionDescriptor) => {
     })
   }
   return regions;
+}
+
+globalsGet = async (key) => {
+  return (await globals.findOne({ key }).exec()).value;
 }
 
 globalsSet = async(key, value) => {

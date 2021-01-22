@@ -23,7 +23,7 @@ async function listPageEvaluate(region, page) {
     const url = info.regions[region].listUrl;
     const imagesUrl = info.regions[region].imagesUrl;
     if (!url) {
-      throw(`region ${region} for provider ${info.key} has no list url`);
+      throw (new Error(`region ${region} for provider ${info.key} has no list url`));
     }
     logger.info(`listPageEvaluate.provider.${info.key} ${url}`);
     try {
@@ -71,7 +71,7 @@ async function listPageEvaluate(region, page) {
               data.images.push(image);
             }
           } catch (err) {
-            throw (new Error(`reading url ${url} looking for main image: ${err.message}`));
+            throw(new Error(`reading url ${url} looking for main image: ${err.message}`));
           }
 
           try { // title
@@ -104,7 +104,7 @@ const itemPageEvaluate = async (region, page, item) => {
     const itemUrl = item.url;
     const imagesUrl = info.regions[region].imagesUrl;
     if (!baseUrl || !itemUrl) {
-      throw(`url not defined for provider ${info.key} at region region ${region}`);
+      throw (new Error(`url not defined for provider ${info.key} at region region ${region}`));
     }
     const url = baseUrl + itemUrl;
     logger.info(`itemPageEvaluate.provider.${info.key} ${url}`);
@@ -146,7 +146,7 @@ const itemPageEvaluate = async (region, page, item) => {
         //     }
         //   });
         // } catch (err) {
-        //   throw (new Error(`reading url ${url} looking for small images: ${err.message}`));
+        //   throw(new Error(`reading url ${url} looking for small images: ${err.message}`));
         // }
 
         try { // full images
@@ -162,7 +162,7 @@ const itemPageEvaluate = async (region, page, item) => {
             }
           });
         } catch (err) {
-          throw (new Error(`reading url ${url} looking for small images: ${err.message}`));
+          throw(new Error(`reading url ${url} looking for small images: ${err.message}`));
         }
 
 //         try { // address

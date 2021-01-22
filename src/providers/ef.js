@@ -28,7 +28,7 @@ async function listPageEvaluate(region, page) {
     const url = info.regions[region].listUrl;
     const imagesUrl = info.regions[region].imagesUrl;
     if (!url) {
-      throw(`region ${region} for provider ${info.key} has no list url`);
+      throw (new Error(`region ${region} for provider ${info.key} has no list url`));
     }
     logger.info(`listPageEvaluate.provider.${info.key}.${url}`);
     try {
@@ -60,13 +60,13 @@ async function listPageEvaluate(region, page) {
           try { // url
             data.url = item.querySelector("a.showname").getAttribute("href").replace(/^\//, '').replace(/\?.*/, '')
           } catch (err) {
-            throw (new Error(`reading url ${url} looking for url: ${err.message}`));
+            throw(new Error(`reading url ${url} looking for url: ${err.message}`));
           }
 
           try { // id
             data.id = data.url.replace(/accompagnatrici\//, '');
           } catch (err) {
-            throw (new Error(`reading url ${url} looking for id: ${err.message}`));
+            throw(new Error(`reading url ${url} looking for id: ${err.message}`));
           }
 
           if (config.scrape.onlyItemId.length && !config.scrape.onlyItemId.includes(data.id)) {
@@ -79,7 +79,7 @@ async function listPageEvaluate(region, page) {
             data.title = decodeURIComponent(data.title);
             data.title = data.title.toLowerCase().replace(/\b\w/g, l => l.toUpperCase()); // uppercase words
           } catch (err) {
-            throw (new Error(`reading url ${url} looking for title: ${err.message}`));
+            throw(new Error(`reading url ${url} looking for title: ${err.message}`));
           }
 
           try { // main image
@@ -91,7 +91,7 @@ async function listPageEvaluate(region, page) {
               data.images.push(image);
             }
           } catch (err) {
-            throw (new Error(`reading url ${url} looking for main image: ${err.message}`));
+            throw(new Error(`reading url ${url} looking for main image: ${err.message}`));
           }
 
           try { // ad class
@@ -100,32 +100,32 @@ async function listPageEvaluate(region, page) {
               data.adClass = adClassElement.getAttribute('class');
             }
           } catch (err) {
-            throw (new Error(`reading url ${url} looking for class: ${err.message}`));
+            throw(new Error(`reading url ${url} looking for class: ${err.message}`));
           }
 
           try { // price
             data.price = item.querySelector("div.l_price").innerText.replace(/^\s+|\s+$/g, '');
             if (data.price === "-") data.price = null;
           } catch (err) {
-            throw (new Error(`reading url ${url} looking for price: ${err.message}`));
+            throw(new Error(`reading url ${url} looking for price: ${err.message}`));
           }
 
           try { // additionalInfo
             data.additionalInfo = item.querySelector("div.l_slogan_text").innerText.replace(/^\s+|\s+$/g, '');
           } catch (err) {
-            throw (new Error(`reading url ${url} looking for additional info: ${err.message}`));
+            throw(new Error(`reading url ${url} looking for additional info: ${err.message}`));
           }
 
           try { // selfDescription
             data.selfDescription = item.querySelector("div.l_about_text").innerText.replace(/^\s+|\s+$/g, '');
           } catch (err) {
-            throw (new Error(`reading url ${url} looking for self description: ${err.message}`));
+            throw(new Error(`reading url ${url} looking for self description: ${err.message}`));
           }
 
           try { // suspicious flag
             data.suspicious = item.querySelector("span.suspicious") !== null;
           } catch (err) {
-            throw (new Error(`reading url ${url} looking for suspicious flag: ${err.message}`));
+            throw(new Error(`reading url ${url} looking for suspicious flag: ${err.message}`));
           }
 
           list.push(data);
@@ -145,7 +145,7 @@ const itemPageEvaluate = async (region, page, item) => {
     const itemUrl = item.url;
     const imagesUrl = info.regions[region].imagesUrl;
     if (!baseUrl || !itemUrl) {
-      throw(`url not defined for provider ${info.key} at region region ${region}`);
+      throw (new Error(`url not defined for provider ${info.key} at region region ${region}`));
     }
     const url = baseUrl + itemUrl;
     logger.info(`itemPageEvaluate.provider.${info.key}.${url}`);
@@ -170,7 +170,7 @@ const itemPageEvaluate = async (region, page, item) => {
         try { // subtitle
           data.subtitle = document.querySelector("div.head.info").innerText.replace(/^\s+|\s+$/g, '');
         } catch (err) {
-          throw (new Error(`reading url ${url} looking for title: ${err.message}`));
+          throw(new Error(`reading url ${url} looking for title: ${err.message}`));
         }
 
         try { // services
@@ -240,7 +240,7 @@ const itemPageEvaluate = async (region, page, item) => {
             }
           });
         } catch (err) {
-          throw (new Error(`reading url ${url} looking for services: ${err.message}`));
+          throw(new Error(`reading url ${url} looking for services: ${err.message}`));
         }
 
         try { // small images
@@ -255,7 +255,7 @@ const itemPageEvaluate = async (region, page, item) => {
             }
           });
         } catch (err) {
-          throw (new Error(`reading url ${url} looking for small images: ${err.message}`));
+          throw(new Error(`reading url ${url} looking for small images: ${err.message}`));
         }
 
         try { // full images
@@ -270,7 +270,7 @@ const itemPageEvaluate = async (region, page, item) => {
             }
           });
         } catch (err) {
-          throw (new Error(`reading url ${url} looking for full images: ${err.message}`));
+          throw(new Error(`reading url ${url} looking for full images: ${err.message}`));
         }
 
         data.comments = [];
@@ -314,7 +314,7 @@ const itemPageEvaluate = async (region, page, item) => {
         //   }
         //   data.comments = commentsList;
         // } catch (err) {
-        //   throw (new Error(`reading url ${url} looking for comments: ${err.message}`));
+        //   throw(new Error(`reading url ${url} looking for comments: ${err.message}`));
         // }
         //
         // function datetimeSpaced2Date(date, time) {
