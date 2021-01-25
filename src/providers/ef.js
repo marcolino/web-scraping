@@ -52,9 +52,9 @@ async function listPageEvaluate(region, page) {
           const data = {};
           data.provider = info.key;
           data.region = region;
-          data.type = info.type;
+          //data.type = info.type;
           //data.missing = false;
-          data.immutable = info.immutable;
+          //data.immutable = info.immutable;
           data.images = [];
 
           try { // url
@@ -70,7 +70,7 @@ async function listPageEvaluate(region, page) {
           }
 
           if (config.scrape.onlyItemId.length && !config.scrape.onlyItemId.includes(data.id)) {
-            logger.debug('BREAK DUE TO scrape.onlyItemId');
+            console.log('BREAK DUE TO scrape.onlyItemId');
             return;
           }
 
@@ -235,7 +235,7 @@ const itemPageEvaluate = async (region, page, item) => {
                 data.sexualOrientation = rowContent;
                 break;
               default:
-                //logger.debug('default:', rowHeader, ':', rowContent);
+                //console.log('default:', rowHeader, ':', rowContent);
                 break;
             }
           });

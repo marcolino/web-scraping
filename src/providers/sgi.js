@@ -38,15 +38,15 @@ async function listPageEvaluate(region, page) {
       return reject(err.message);
     }
     try {
-      const items = await page.evaluate(async (info, url, imagesUrl, region) => {
+      const items = await page.evaluate(async (config, info, url, imagesUrl, region) => {
         const list = [];
         document.querySelectorAll("div#content_tableTop a, div#content_tableFoto a, div#content_tableOff a").forEach(item => {
           const data = {};
           data.provider = info.key;
           data.region = region;
-          data.type = info.type;
+          //data.type = info.type;
           //data.missing = false;
-          data.immutable = info.immutable;
+          //data.immutable = info.immutable;
           data.images = [];
 
           try { // url
@@ -143,7 +143,7 @@ const itemPageEvaluate = async (region, page, item) => {
         try { // subtitle
           const descriptionElement = document.querySelector("span#content_annuncio");
           if (descriptionElement) {
-            data.description = descriptionElement.innerText.replace(/^\s+|\s+$/g, '');
+            data.selfDescription = descriptionElement.innerText.replace(/^\s+|\s+$/g, '');
           }
         } catch (err) {
           throw(new Error(`reading url ${url} looking for description: ${err.message}`));
@@ -157,7 +157,7 @@ const itemPageEvaluate = async (region, page, item) => {
         // } catch (err) {
         //   throw(new Error(`reading url ${url} looking for imageUrl: ${err.message}`));
         // }
-//logger.info('trying small images for', JSON.stringify(item));
+//console.log('trying small images for', JSON.stringify(item));
         imagesElement = document.querySelector("ul#content_immagini");
 
 //         try { // small images
@@ -165,10 +165,10 @@ const itemPageEvaluate = async (region, page, item) => {
 //             if (imgElement) {
 //               let imageUrl = imgElement.getAttribute("src").replace(/\?.*/, '').replace(/^\//, '');
 //               const image = { url: imageUrl, category: "small" };
-// //logger.info('pushing small image for', JSON.stringify(image));
+// //console.log('pushing small image for', JSON.stringify(image));
 //               data.images.push(image);
 //             }
-// //else logger.info('no small image for', JSON.stringify(item));
+// //else console.log('no small image for', JSON.stringify(item));
 //           });
 //         } catch (err) {
 //           throw(new Error(`reading url ${url} looking for small images: ${err.message}`));
@@ -179,10 +179,10 @@ const itemPageEvaluate = async (region, page, item) => {
             if (imgElement) {
               let imageUrl = imgElement.getAttribute("href").replace(/\?.*/, '').replace(/^\//, '');
               const image = { url: imageUrl, category: "full"};
-//logger.info('pushing small image for', JSON.stringify(image));
+//console.log('pushing small image for', JSON.stringify(image));
               data.images.push(image);
             }
-//else logger.info('no full image for', JSON.stringify(item));
+//else console.log('no full image for', JSON.stringify(item));
           });
         } catch (err) {
           throw(new Error(`reading url ${url} looking for full images: ${err.message}`));

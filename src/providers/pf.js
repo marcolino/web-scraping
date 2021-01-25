@@ -18,8 +18,8 @@ const info = {
   login: {
     loginRequestTag: 'Hai raggiunto il numero massimo di visualizzazioni',
     url: 'https://community.punterforum.com/login/',
-    username: 'Billidechid', // maninthemiddle
-    password: 'Billi123', // supercazzola!123
+    username: 'Billidechid', // john_holmes
+    password: 'Billi123', // supercazzola!666
     usernameSelector: "[name='login']",
     passwordSelector: "[name='password']",
     submitSelector: "[type='submit']",
@@ -52,9 +52,9 @@ async function listPageEvaluate(region, page, nextListPage) {
           const data = {};
           data.provider = info.key;
           data.region = region;
-          data.type = info.type;
+          //data.type = info.type;
           //data.missing = false;
-          data.immutable = info.immutable;
+          //data.immutable = info.immutable;
           data.onHoliday = false;
           data.images = [];
 
@@ -71,7 +71,7 @@ async function listPageEvaluate(region, page, nextListPage) {
           }
 
           if (config.scrape.onlyItemId.length && !config.scrape.onlyItemId.includes(data.id)) {
-            logger.debug('BREAK DUE TO scrape.onlyItemId ' + config.scrape.onlyItemId.length);
+            console.log('BREAK DUE TO scrape.onlyItemId ' + config.scrape.onlyItemId.length);
             return;
           }
 
@@ -103,7 +103,7 @@ async function listPageEvaluate(region, page, nextListPage) {
 
           if (data.title) { // a real element
             list.push(data);
-          } //else logger.warn('NOT pushing data title and phone:', JSON.stringify(data));
+          } //else console.log('NOT pushing data title and phone:', JSON.stringify(data));
         });
 
         // get next page link url

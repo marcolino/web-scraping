@@ -18,9 +18,9 @@ const schemaPersons = new Schema({
     type: String,
     required: true,
   },
-  immutable: {
-    type: Boolean,
-  },
+  // immutable: {
+  //   type: Boolean,
+  // },
   title: {
     type: String,
   },
@@ -78,6 +78,9 @@ const schemaPersons = new Schema({
   shoeSize: {
     type: String,
   },
+  dressSize: {
+    type: String,
+  },
   smoker: {
     type: Boolean,
   },
@@ -132,10 +135,10 @@ const schemaPersons = new Schema({
     type: Boolean,
     default: false,
   },
-  services: {
-    type: Schema.Types.Mixed,
-    default: {},
-  },
+  // services: {
+  //   type: Schema.Types.Mixed,
+  //   default: {},
+  // },
   // images: [
   //   {
   //     data: Buffer,
@@ -217,6 +220,7 @@ schemaPersons.index({ id: 1, provider: 1/*, region: 1*/ }, { unique: true });
 //     'breastSize',
 //     'breastType',
 //     'shoeSize',
+//     'dressSize',
 //     'smoker',
 //     'spokenLanguages',
 //     'sexualOrientation',

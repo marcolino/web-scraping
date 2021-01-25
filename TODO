@@ -8,6 +8,9 @@
   V add etag to item.persons (unuseful, no etag arrives for html pages...)
   - remove region from key, use only for filtering (done, be sure it is not used nowhere anymore)
   V dateCreated, dateUpdated => default names
+  - when grouping, consider phone, images, and adUrlReferences
+  - in compareItemsHistoryes, handle objects
+  - in compareItemsHistoryes, in images array do not consider changes in localPath, pHas, ... but only in url (?)
   - test:
     V login with password unselectable in model
     - what happens if an item has no main image in getItems (should be returned nonetheless)
@@ -16,3 +19,4 @@
     - filterFresh in getItems
     - filterMissing (check on holiday items, missing items, and immutable items) in getItems
     - groupItems() (use js to group after mongo db find())
+    

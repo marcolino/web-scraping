@@ -38,9 +38,9 @@ async function listPageEvaluate(region, page) {
           const data = {};
           data.provider = info.key;
           data.region = region;
-          data.type = info.type;
+          //data.type = info.type;
           //data.missing = false;
-          data.immutable = info.immutable;
+          //data.immutable = info.immutable;
           data.onHoliday = false;
           data.images = [];
           
@@ -58,7 +58,7 @@ async function listPageEvaluate(region, page) {
           }
 
           if (config.scrape.onlyItemId.length && !config.scrape.onlyItemId.includes(data.id)) {
-            logger.debug('BREAK DUE TO scrape.onlyItemId');
+            console.log('BREAK DUE TO scrape.onlyItemId');
             return;
           }
 

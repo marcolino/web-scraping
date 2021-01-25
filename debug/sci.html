@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base href="http://localhost:3001">
+  </head>
+  <body>
+    <h1>Some Common Images</h1>
+    <img id="img1" style="max-width: 200px; max-height: 200px">
+    <img id="img2" style="max-width: 200px; max-height: 200px">
+  </body>
+  <script>
+    var query = {};
+    location.search.substr(1).split("&").forEach(function(item) {query[item.split("=")[0]] = item.split("=")[1]})
+    document.getElementById("img1").src = query.img1;
+    document.getElementById("img2").src = query.img2;
+  </script>
+</html>

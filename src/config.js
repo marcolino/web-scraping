@@ -12,7 +12,7 @@ exports.roles = [ // roles we recognize
 exports.imagesBaseFolder = "./cache/persons/images/";
 exports.scrape = {
   debug: false, // debug puppeteer while scraping providers
-  onlyProvider: ['toe'], // scrape only a subset of providers
+  onlyProvider: [], // scrape only a subset of providers
   onlyItemId: [], // scrape only a subset of items id's
   onlyFirstPage: false, // scrape olny first pages
   onlyFirstItem: false, // scrape olny first items

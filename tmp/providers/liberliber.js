@@ -31,7 +31,7 @@ async function listPageEvaluate(region, page) {
           const data = {};
           data.provider = info.key;
           data.type = info.type;
-          data.immutable = info.immutable;
+          //data.immutable = info.immutable;
 
           data.book = {}
           try { // url book

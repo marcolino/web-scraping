@@ -60,6 +60,7 @@ exports.scrapeProvidersImages = async (req) => {
   try {
     const regionDescriptor = req.body.regionDescriptor || '*';
     const providers = getProvidersByRegion(regionDescriptor);
+    //Object.keys(providers).map((pk, index) => {console.log('filter in:', providers[pk], !(config.scrape.onlyProvider.length && !config.scrape.onlyProvider.includes(providers[index].info.key))); });
     const count = (await Promise.all(
       Object.keys(providers)
       .filter(index => !(config.scrape.onlyProvider.length && !config.scrape.onlyProvider.includes(providers[index].info.key)))
@@ -67,6 +68,7 @@ exports.scrapeProvidersImages = async (req) => {
         const provider = providers[index];
         const regions = getProviderRegions(provider, regionDescriptor);
         let results = 0;
+//console.log('regions:', regions);
         for (let r = 0; r < regions.length; r++) {
           const result = await scrapeProviderImages(provider, regions[r]);
           results += result;
@@ -147,14 +149,16 @@ const sameGroup_2_0 = (a, b) => {
  */
 const someCommonImages = (a, b) => {
   for (var i = 0, lenA = a.images.length; i < lenA; i++) {
+//console.log('.');
     const ai = a.images[i];
     if (ai.phash) {
       for (var j = 0, lenB = b.images.length; j < lenB; j++) {
         const bj = b.images[j];
         if (bj.phash) {
-          if (comparePHashes(ai.phash, bj.phash)) {
+          if (comparePHashes(ai.phash, bj.phash, 0.04)) {
             // found a common image
-            return true;
+            //return true;
+            return [ ai.localPath, bj.localPath ]; // TODO: DEBUG only
           }
         }
       }
@@ -171,16 +175,24 @@ exports.debugSomeCommonImages = async (req) => {
   try {
     const lastScrapeTimestamp = await globalsGet(`lastScrapeTimestamp`);
 console.log('lastScrapeTimestamp:', lastScrapeTimestamp);
-    const itemsAll = await Items.find({ provider: 'toe', /*'id': '13245'*/ }, { title: 1, images: 1 }); // any item
+    const itemsAll = await Items.find({ /*provider: 'toe', /*'id': '13245'*/ }, { provider: 1, id: 1, title: 1, images: 1 }); // any item
 console.log('itemsAll len:', itemsAll.length);
-    const itemsNew = await Items.find({ provider: 'toe', /*'id': '13008',*/ createdAt: { $gte: lastScrapeTimestamp } }, { title: 1, images: 1 }); // new items
+    const itemsNew = await Items.find({ /*provider: 'toe', /*'id': '13008',*/ createdAt: { $gte: lastScrapeTimestamp } }, { provider: 1, id: 1, title: 1, images: 1 }); // new items
 console.log('itemsNew len:', itemsNew.length);
     itemsAll.forEach(async (itemAll) => {
       itemsNew.forEach(async (itemNew) => {
-        if (someCommonImages(itemAll, itemNew)) {
-          logger.info(`item ${itemAll.title} and ${itemNew.title} share some common images`);
-        } else {
-          //logger.debug(`item ${itemAll.title} and ${itemNew.title} DO NOT share some common images`);
+//console.log('itemAll.provider !== itemNew.provider', itemAll.provider, itemNew.provider, itemAll.id, itemNew.id);
+        if (itemAll.provider !== itemNew.provider || itemAll.id !== itemNew.id) { // skip comparing a key with itself
+          //if (someCommonImages(itemAll, itemNew)) {
+          if (commonImages = someCommonImages(itemAll, itemNew)) { // TODO: DEBUG only
+            //const providers = getProvidersByRegion('*');
+            //const providerAll = providers.find(provider => provider.info.key === itemAll.provider);
+            //const providerNew = providers.find(provider => provider.info.key === itemNew.provider);
+            const debugUrl = `http://localhost:${config.defaultServerPort}/debug/sci/?img1=${commonImages[0]}&img2=${commonImages[1]}`; // TODO: DEBUG only
+            logger.info(`item ${itemAll.title} and ${itemNew.title} share some common images: ${debugUrl}`);
+          } else {
+            //logger.debug(`item ${itemAll.title} and ${itemNew.title} DO NOT share some common images`);
+          }
         }
       });
     });
@@ -292,25 +304,29 @@ scrapeProviderImages = async (provider, region) => {
   try {
     const items = await Items.find({
       provider: provider.info.key,
-      region: region
+      region: region,
     });
+//logger.debug('scrapeProviderImages items:', items.length)
     let count = 0;
     for (let i = 0; i < items.length; i++) {
       let item = items[i];
+      if (config.scrape.onlyItemId.length && !config.scrape.onlyItemId.includes(item.id)) {
+        continue;
+      }
       item.provider = provider.info.key;
       item.type = provider.info.type;
       item.region = region;
 
       for (let j = 0; j < item.images.length; j++) {
         let image = item.images[j];
+//logger.debug('scrapeProviderImages item image:', image)
         if (!image.localPath) { // only download missing images
-logger.debug(`IMAGE:`, image);
 //logger.debug(`--- downloading images of person ${item.provider} ${item.id} - n° ${1+i} / ${items.length} ---`);
           const imageDownloaded = await downloadImage(provider, region, item, image);
           if (imageDownloaded && imageDownloaded.success) {
-logger.debug(`image phash: ${JSON.stringify(image.phash)}`);
+//logger.debug(`image phash: ${JSON.stringify(image.phash)}`);
             if (!image.phash) {  // calculate image perceptual hash, if not present yet
-logger.debug(`image phash being calculated`);
+//logger.debug(`image phash being calculated`);
               imageDownloaded.phash = await calculatePHash(imageDownloaded.localPath);
 //logger.debug(`--- saving image ${j} of ${item.images.length} -------------`);
             }
@@ -384,7 +400,7 @@ downloadImage = async (provider, region, item, image) => {
     const buffer = await response.buffer();
     try { // check if image exists already
       fs.accessSync(outputFileName, fs.constants.R_OK); 
-      logger.debug(`image ${imageUrl} file exists already: ignoring`);
+      //logger.debug(`image ${imageUrl} file exists already: ignoring`);
     } catch (err) {
       if (err.code !== 'ENOENT') { // some error accessing file
         console.warn(`file ${outputFileName} has some problem accessing: ${err.code}`);
@@ -392,9 +408,9 @@ downloadImage = async (provider, region, item, image) => {
       } else { // image does not exist, save it to filesystem
         try {
           fs.writeFileSync(outputFileName, buffer);
-          logger.debug(`image ${imageUrl} file downloaded`);
+          logger.debug(`downloaded image ${imageUrl} file saved`);
         } catch (err) {
-          console.warn(`cannot save image file ${outputFileName}: ${err}`);
+          console.warn(`cannot save downloaded image file ${outputFileName}: ${err}`);
           return retval;
         }
       }
@@ -444,7 +460,8 @@ const saveItem = async(item) => {
         });
       } else { // an existing item
         const itemOldLean = JSON.parse(JSON.stringify(itemOld));
-        itemOld.set({...item});
+        const itemMerged = itemsMerge(itemOldLean, item);
+        itemOld.set({...itemMerged});
         itemOld.save((err, itemNew) => {
           if (err) {
             throw (new Error(`error updating item: ${err}`));
@@ -457,6 +474,166 @@ const saveItem = async(item) => {
     }
   );
 }
+
+const itemsMerge = (o, n) => {
+  const merged = {};
+  for (const prop in n) {
+    //const value = n[prop];
+    switch (prop) {
+      case 'id':
+      case 'provider':
+      case 'region':
+      case 'group':
+      case 'changedAt':
+        merged[prop] = n[prop]; // always return new prop
+        break;
+      case 'title':
+      case 'subtitle':
+      case 'url':
+      case 'address':
+      case 'phone':
+      case 'contactInstructions':
+      case 'ethnicity':
+      case 'nationality':
+      case 'age':
+      case 'eyesColor':
+      case 'hairColor':
+      case 'pubicHair':
+      case 'tatoo':
+      case 'piercings':
+      case 'height':
+      case 'weight':
+      case 'breastSize':
+      case 'breastType':
+      case 'shoeSize':
+      case 'dressSize':
+      case 'smoker':
+      case 'sexualOrientation':
+      case 'selfDescription':
+      case 'adClass':
+      case 'price':
+      case 'additionalInfo':
+      case 'onHoliday':
+      case 'suspicious':
+      case 'spokenLanguages': // array of strings
+      case 'adUrlReferences': // array of strings
+        merged[prop] = typeof n[prop] !== 'undefined' ? n[prop] : o[prop]; // return new prop if present, otherwise keep old prop
+        break;
+      case 'images': // array of objects
+        merged[prop] = arraysMerge(o[prop], n[prop], [ 'url' ], true); // merge old and new arrays, excluding objects with a common set of props
+        break;
+      case 'comments': // array of objects (author, authorCommentsCount, text, date, vote)
+        merged[prop] = arraysMerge(o[prop], n[prop], [ 'author', 'text', 'date' ], false); // merge old and new arrays, excluding objects with a common set of props
+        break;
+      default:
+        logger.warn('itemsMerge unforeseen prop', prop, n[prop], typeof n[prop]);
+    }
+  }
+  return merged;
+}
+
+/**
+ * Merge two arrays of objects, excluding objects with a common set of props, ad adding n' active boolean prop (set to true in new array) if requested
+ * @param {array} o 
+ * @param {array} n 
+ * @param {array} commonPropsSet 
+ * @param {boolean} setActive 
+ */
+const arraysMerge = (o, n, commonPropsSet, setActive) => {
+  if (setActive) {
+    for (var i = 0; i < o.length; i++) { // set active flag to false for old array
+      o[i].active = false;
+    }
+    for (var i = 0; i < n.length; i++) { // set active flag to false for old array
+      n[i].active = true;
+    }  
+  }
+  const keysOldSets = [];
+  const keysNewSets = [];
+  for (var i = 0; i < commonPropsSet.length; i++) { // build an array of sets for all commonPropsSet
+    keysOldSets[i] = new Set(o.map(d => d[commonPropsSet[i]])); // build a set of univoke keys in old array
+  }
+  for (var i = 0; i < commonPropsSet.length; i++) { // build an array of sets for all commonPropsSet
+    keysNewSets[i] = new Set(n.map(d => d[commonPropsSet[i]])); // build a set of univoke keys in new array
+  }
+  const merged = [...(n), ...(o).filter(m => { // merge new and old document for this prop, filtering it out if *all* commonPropsSet are the same
+    for (var i = 0; i < commonPropsSet.length; i++) { // loop through all commonPropsSet, to skip array elements with all key props equal
+      if (!(keysOldSets[i].has(m[commonPropsSet[i]]) && keysNewSets[i].has(m[commonPropsSet[i]]))) {
+        return true; // this common prop is not in this to-be-mered object (merge it)
+      }
+    }
+    return false; // all common props are in this to-be-mered object (skip it)
+  })];
+  return merged;
+}
+
+// debugItemsMerge = () => {
+//   const oI = {
+//     images: [
+//       {
+//         url: 'abc',
+//         etag: 123,
+//       }, {
+//         url: 'def',
+//         etag: 456,
+//       }, {
+//         url: 'ghi',
+//         etag: 789,
+//       }
+//     ],
+//   };
+//   const nI = {
+//     images: [
+//       {
+//         url: 'abc',
+//         etag: 1234,
+//       }, {
+//         url: 'def',
+//         etag: 4567,
+//       }
+//     ]
+//   };
+//   const mergedI = itemsMerge(oI, nI);
+//   console.log('merged images:', mergedI);
+
+//   const oC = {
+//     comments: [
+//       {
+//         author: 'alice',
+//         date: '2021-01-01',
+//         text: 'bello',
+//       }, {
+//         author: 'bob',
+//         date: '2021-01-02',
+//         text: 'brutto',
+//       }, {
+//         author: 'charlie',
+//         date: '2021-01-03',
+//         text: 'così così',
+//       }
+//     ],
+//   };
+//   const nC = {
+//     comments: [
+//       {
+//         author: 'alice',
+//         date: '2021-01-01',
+//         text: 'bello',
+//       }, {
+//         author: 'bob',
+//         date: '2021-01-02',
+//         text: 'brutto',
+//       }, {
+//         author: 'charlie',
+//         date: '2021-01-03',
+//         text: 'così così',
+//       }
+//     ],
+//   };
+//   const mergedC = itemsMerge(oC, nC);
+//   console.log('merged comments:', mergedC);
+// }
+// debugItemsMerge();
 
 const compareItemsHistoryes = (itemOldLean, itemNewLean, itemNew) => {
   const key = `${itemNewLean.provider} ${itemNewLean.id}`;
@@ -485,6 +662,8 @@ const compareItemsHistoryes = (itemOldLean, itemNewLean, itemNew) => {
             break;
           case 'string':
           case 'number':
+          case 'object': // we assume one level only objects (shallow compare)
+            //if (!itemOldLean[prop] || !itemNewLean[prop]) {
             if (itemOldLean[prop] !== itemNewLean[prop]) {
               // require('colors');
               // const diff = require('diff');
@@ -501,31 +680,30 @@ const compareItemsHistoryes = (itemOldLean, itemNewLean, itemNew) => {
               // logger.info(`${key} changed ${prop}: ${difference}`);
 
               logger.info(`${key} changed ${prop}: ${itemOldLean[prop]} => ${itemNewLean[prop]}`);
-
               changed = true;
             }
             break;
           case 'array': // we assume one level only arrays (shallow compare)
-  //if(prop !== 'comments') break;
-  //console.log('PROP:', prop);
+//if(prop !== 'images') break;
+//  console.log('PROP:', prop);
             const o = itemOldLean[prop];
             const n = itemNewLean[prop];
 
             // check for removed elements in array
             const removed = [];
-  //console.log('COMMENTS old length:', o.length);
             for (var oi = 0; oi < o.length; oi++) {
               const oObj = o[oi];
               let found = false;
               for (var ni = 0; ni < n.length; ni++) {
                 const nObj = n[ni];
-  //console.log('COMPARING:', nObj, oObj);
-                if (areEquivalent(nObj, oObj, ['_id'])) {
+                if (areEquivalent(nObj, oObj, ['_id', 'authorCommentsCount', 'date', 'etag', /*'type'*/, 'phash', 'localPath'])) {
                   found = true;
                   break;
                 }
+//else logger.warn('nObj', nObj);
               }
               if (!found) { // this old item was not found or was different in new items
+//logger.warn('oObj not found!!!!', oObj); return;
                 removed.push(oObj);
               }
             }
@@ -543,7 +721,8 @@ const compareItemsHistoryes = (itemOldLean, itemNewLean, itemNew) => {
               for (var oi = 0; oi < o.length; oi++) {
                 const oObj = o[oi];
   //console.log('COMPARING:', oObj, mObj);
-                if (areEquivalent(oObj, nObj, ['_id'])) {
+                //if (areEquivalent(oObj, nObj, ['_id'])) {
+                if (areEquivalent(nObj, oObj, ['_id', 'authorCommentsCount', 'date', 'etag', /*'type'*/, 'phash', 'localPath'])) {
                   found = true;
                   break;
                 }
@@ -558,17 +737,6 @@ const compareItemsHistoryes = (itemOldLean, itemNewLean, itemNew) => {
             }
 
             break;
-          case 'object': // we assume one level only objects (shallow compare)
-            // if (prop == 'comments') {
-            //   logger.warn(`itemOldLean[${prop}]: ` + JSON.stringify(itemOldLean[prop]));
-            //   logger.warn(`itemNewLean[${prop}]: ` + JSON.stringify(itemNewLean[prop]));
-            // }          
-            break;
-            // if (!itemOldLean[prop] || !itemNewLean[prop] || itemOldLean[prop].length != itemNewLean[prop].length) {
-            //   changed = true;
-            //   logger.debug(`${key} ${itemNewLean.title} changed prop ${prop} length`)
-            // }
-            // break;
           default:
             logger.warn(`${prop}: type ${type} diff is not yet implemented`);
             break;
@@ -592,9 +760,12 @@ const compareItemsHistoryes = (itemOldLean, itemNewLean, itemNew) => {
  *                               (they share all properties values, except for `ignoredProps`)
  */
 const areEquivalent = (a, b, ignoredProps) => {
-  // create arrays of property names
-  var aProps = Object.getOwnPropertyNames(a);
-  var bProps = Object.getOwnPropertyNames(b);
+  // create arrays of property names, ignoring props to be ignored
+  var aProps = Object.getOwnPropertyNames(a).filter(p => !ignoredProps.includes(p));
+  var bProps = Object.getOwnPropertyNames(b).filter(p => !ignoredProps.includes(p));
+
+  //console.log('aProps:', aProps);
+  //console.log('bProps:', bProps);
 
   // if number of properties is different, objects are not equivalent
   if (aProps.length != bProps.length) {
@@ -605,7 +776,7 @@ const areEquivalent = (a, b, ignoredProps) => {
     var propName = aProps[i];
 
     // if values of same property are not equal, objects are not equivalent
-    if (!ignoredProps.includes(propName) && (a[propName] !== b[propName])) {
+    if (a[propName] !== b[propName]) {
       return false;
     }
   }

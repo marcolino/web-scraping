@@ -1,5 +1,6 @@
 // create an express app
 const express = require('express')
+const path = require('path');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const helmet = require('helmet');
@@ -13,6 +14,7 @@ const { addRequestId } = require('./auth');
 const usersRoutes = require('./routes/users');
 const itemsRoutes = require('./routes/items');
 const providersRoutes = require('./routes/providers');
+const debugRoutes = require('./routes/debug'); // TODO: DEBUG only'
 const logger = require('./logger');
 const config = require('./config');
 
@@ -35,6 +37,8 @@ app.use(`/users`, usersRoutes);
 app.use(`/items`, itemsRoutes);
 app.use(`/providers`, providersRoutes);
 app.use(`/doc`, swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+app.use(`/debug`, debugRoutes);
+app.use('/cache', express.static(path.join(__dirname, '../cache'))); // TODO: DEBUG only
 
 // default root route
 app.get(`/`, (req, res) => {
