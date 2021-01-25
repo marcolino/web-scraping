@@ -147,20 +147,14 @@ const sameGroup_2_0 = (a, b) => {
 /**
  * Check if two items share common (considered equal) images
  */
-exports.someCommonImages = (a, b) => {
-  //console.log('b:', b.provider, b.id, b.title); return false;
+exports.someCommonImages = (a, b, threshold = 0.20) => {
   for (var i = 0, lenA = a.images.length; i < lenA; i++) {
     const ai = a.images[i];
     if (ai.phash) {
-      //console.log('phash a ok for', a.provider, a.id, a.title, `(${i})`);
       for (var j = 0, lenB = b.images.length; j < lenB; j++) {
         const bj = b.images[j];
-        //console.log('phash b for', b.provider, b.id, b.title, b.phash, `(${j})`);
         if (bj.phash) {
-          //console.log('phash b ok for', b.provider, b.id, b.title, `(${j})`);
-          //console.log('comparing', a.provider, a.id, a.title, `(${i})`);
-          //console.log('     with', b.provider, b.id, b.title, `(${j})`);
-          if (comparePHashes(ai.phash, bj.phash, 0.99 /*0.1094*/)) {
+          if (comparePHashes(ai.phash, bj.phash, threshold /*0.1094*/)) {
             // found a common image
             //return true;
             return [ ai.localPath, bj.localPath ]; // TODO: DEBUG only
@@ -546,7 +540,7 @@ const compareItemsHistoryes = (itemOldLean, itemNewLean, itemNew) => {
   } else {
     // a changed item
     Object.keys(itemOldLean).map(prop => {
-      if (!['__v', '_id', 'provider', 'region', 'id', 'createdAt', 'updatedAt'].includes(prop)) {
+      if (!['__v', '_id', 'provider', 'id', 'region', 'createdAt', 'updatedAt'].includes(prop)) {
         //logger.debug(`--- ${prop} ---`);
         const type = Array.isArray(itemOldLean[prop]) ? 'array' : typeof itemOldLean[prop];
   //logger.debug(`typeof itemOldLean[${prop}]: ${type}`);
@@ -630,7 +624,7 @@ const compareItemsHistoryes = (itemOldLean, itemNewLean, itemNew) => {
               }
             }
             if (added.length) {
-              logger.info(`${key} added ${added.length} ${prop}: ${JSON.stringify(added)}`);
+              logger.info(`${key} added ${added.length} ${prop}` /*: ${added}`*/);
               changed = true;
             }
 

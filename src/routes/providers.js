@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+//const sum = require('hash-sum');
 const { public, private } = require('../auth');
 const { scrapeProviders, scrapeProvidersImages, groupProvidersItems, someCommonImages, itemsMerge } = require('../controllers/providers');
 const logger = require('../logger');
@@ -31,25 +32,22 @@ router.post('/group', private, async (req, res, next) => {
 
 
 // system only routes (debug and housekeeping)
-router.post('/debugSomeCommonImages', private, async (req, res, next) => {
+router.post('/verifyConsistency', private, async (req, res, next) => {
   const type = "persons";
   const Items = require("../models/Items" + "." + type);
-  const glob = require('glob');
-  const path = require('path');
+  const glob = require("glob");
+  const path = require("path");
 
   try {
-    let filterA = req.body.filterA ? req.body.filterA : {};
-    let filterB = req.body.filterB ? req.body.filterB : {};
+    let filter = req.body.filter ? req.body.filter : {};
+    const project = {};
 
-    if (filterA === 'new') filterA = { createdAt: { $gte: await globalsGet(`lastScrapeTimestamp`) } };
-    if (filterB === 'new') filterB = { createdAt: { $gte: await globalsGet(`lastScrapeTimestamp`) } };
-    logger.debug('filter A:', filterA);
-    logger.debug('filter B:', filterB);
-    const itemsA = await Items.find(filterA, { provider: 1, id: 1, region: 1, title: 1, url: 1, images: 1 });
-    logger.debug('items A length:', itemsA.length);
-    const itemsB = await Items.find(filterB, { provider: 1, id: 1, region: 1, title: 1, url: 1, images: 1 });
-    logger.debug('items B length:', itemsB.length);
+    logger.debug('filter:', filter);
+    logger.debug('project:', project);
+    const items = await Items.find(filter, project);
+    logger.debug('items length:', items.length);
 
+    // read providers data
     const providers = {};
     glob.sync('src/providers/*.js').forEach(file => {
       p = require(path.resolve(file));
@@ -58,11 +56,75 @@ router.post('/debugSomeCommonImages', private, async (req, res, next) => {
       }
     });
 
+    // loop through all items
+    let result = false;
+    items.forEach(async (item) => {
+      //logger.info(`verifyConsistency for item`, item.provider, item.id);
+      if (!item.id) {
+        logger.warn(`no id for item with _id`, item._id);
+      }
+      if (!item.provider) {
+        logger.warn(`no provider for item with _id`, item._id);
+      }
+      result = true;
+    });
+
+    res.status(200).json({ message: "Finished verifying consistency", result });
+  } catch (err) {
+    res.status(500).json({ message: "Error verifying consistency", err });
+  }
+});
+
+router.post('/debugSomeCommonImages', private, async (req, res, next) => {
+  const type = "persons";
+  const Items = require("../models/Items" + "." + type);
+  const glob = require("glob");
+  const path = require("path");
+
+  try {
+    let filterA = req.body.filterA ? req.body.filterA : {};
+    let filterB = req.body.filterB ? req.body.filterB : {};
+    const threshold = typeof req.body.threshold !== 'undefined' ? req.body.threshold : 0.20;
+    const project = { provider: 1, id: 1, region: 1, title: 1, url: 1, images: 1 };
+
+    if (filterA === 'new') filterA = { createdAt: { $gte: await globalsGet(`lastScrapeTimestamp`) } };
+    if (filterB === 'new') filterB = { createdAt: { $gte: await globalsGet(`lastScrapeTimestamp`) } };
+
+//filterA = { "title": { $regex: /[A-Z].*/ } };
+//filterB = { "title": { $regex: /[A-Z].*/ } };
+
+    logger.debug('filter A:', filterA);
+    logger.debug('filter B:', filterB);
+    logger.debug('threshold:', threshold);
+    logger.debug('project:', project);
+    const itemsA = await Items.find(filterA, project);
+    const itemsB = await Items.find(filterB, project);
+    logger.debug('items A length:', itemsA.length);
+    logger.debug('items B length:', itemsB.length);
+
+    // read providers data
+    const providers = {};
+    glob.sync('src/providers/*.js').forEach(file => {
+      p = require(path.resolve(file));
+      if (p.info) {
+        providers[p.info.key] = p.info;
+      }
+    });
+
+    // compare all items in A to all items in B
     const debugUrls = [];
+
     itemsA.forEach(async (itemA) => {
+      const hashA = ((typeof itemA.id !== 'undefined' ? itemA.id : '') + (typeof itemA.id !== 'undefined' ? itemA.provider : '')).hashCode();
       itemsB.forEach(async (itemB) => {
-        if (itemA.provider !== itemB.provider || itemA.id !== itemB.id) { // skip comparing a key with itself
-          if (commonImages = someCommonImages(itemA, itemB)) {
+        const hashB = ((typeof itemB.id !== 'undefined' ? itemB.id : '') + (typeof itemB.id !== 'undefined' ? itemB.provider : '')).hashCode();
+
+        if (hashA >= hashB) { // avoid repeating a comparison of the same objects
+          return;
+        }
+
+        //if (itemA.provider !== itemB.provider || itemA.id !== itemB.id) { // do not compare a key with itself
+          if (commonImages = someCommonImages(itemA, itemB, threshold)) {
             //console.log('itemAll:', itemAll);
             //console.log('itemAll.provider:', itemAll.provider);
             //console.log('itemAll.region:', itemAll.region);
@@ -70,18 +132,19 @@ router.post('/debugSomeCommonImages', private, async (req, res, next) => {
             const url2 = encodeURIComponent(providers[itemB.provider].regions[itemB.region].imagesUrl + itemB.url);
             const debugUrl = `http://localhost:${config.defaultServerPort}/debug/sci/?img1=${commonImages[0]}&img2=${commonImages[1]}&url1=${url1}&url2=${url2}`;
             debugUrls.push(debugUrl);
-            logger.debug(`
-item ${itemA.provider} ${itemA.id} ${itemA.title}
- and ${itemB.provider} ${itemB.id} ${itemB.title}
-share some common images; see at ${debugUrl}
-            `);
+//             logger.debug(`
+// item ${itemA.provider} ${itemA.id} ${itemA.title}
+//  and ${itemB.provider} ${itemB.id} ${itemB.title}
+// share some common images; see at ${debugUrl}
+//             `);
           } else {
             //logger.debug(`item ${itemAll.title} and ${itemNew.title} DO NOT share some common images`);
           }
-        }
+        //}
       });
     });
-    res.status(200).json({ message: "Finished debugging someCommonImages", debugUrls });
+
+    res.status(200).json({ message: "Finished debugging someCommonImages", count: debugUrls.length, debugUrls });
   } catch (err) {
     res.status(500).json({ message: "Error debugging someCommonImages", err });
   }
@@ -152,6 +215,18 @@ router.post('/debugItemsMerge', private, async (req, res, next) => {
 // }
   const mergedItems = itemsMerge(oldItem, newItem);
   res.status(200).json({ message: "Merged images:", data: mergedItems });
+});
+
+Object.defineProperty(String.prototype, 'hashCode', {
+  value: function () {
+    var hash = 0, i, chr;
+    for (i = 0; i < this.length; i++) {
+      chr = this.charCodeAt(i);
+      hash = ((hash << 5) - hash) + chr;
+      hash |= 0; // convert to 32bit integer
+    }
+    return hash;
+  }
 });
 
 module.exports = router;
