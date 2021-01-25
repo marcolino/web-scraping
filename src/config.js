@@ -14,8 +14,10 @@ exports.scrape = {
   debug: false, // debug puppeteer while scraping providers
   onlyProvider: [], // scrape only a subset of providers
   onlyItemId: [], // scrape only a subset of items id's
-  onlyFirstPage: false, // scrape olny first pages
-  onlyFirstItem: false, // scrape olny first items
+  onlyFirstPages: 0, // scrape olny the first n pages
+  onlyFirsItems: 0, // scrape only the first n items
+  //onlyFirstPage: false, // scrape olny first pages
+  //onlyFirstItem: false, // scrape olny first items
 }
 
 if (process.env.DB === "cloud") { // TODO: put MONGO_URI in environment, in production

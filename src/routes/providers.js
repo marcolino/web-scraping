@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
-//const sum = require('hash-sum');
+const fs = require('fs');
+const glob = require("glob");
+const path = require("path");
 const { public, private } = require('../auth');
 const { scrapeProviders, scrapeProvidersImages, groupProvidersItems, someCommonImages, itemsMerge } = require('../controllers/providers');
 const logger = require('../logger');
@@ -35,8 +37,6 @@ router.post('/group', private, async (req, res, next) => {
 router.post('/verifyConsistency', private, async (req, res, next) => {
   const type = "persons";
   const Items = require("../models/Items" + "." + type);
-  const glob = require("glob");
-  const path = require("path");
 
   try {
     let filter = req.body.filter ? req.body.filter : {};
@@ -47,14 +47,14 @@ router.post('/verifyConsistency', private, async (req, res, next) => {
     const items = await Items.find(filter, project);
     logger.debug('items length:', items.length);
 
-    // read providers data
-    const providers = {};
-    glob.sync('src/providers/*.js').forEach(file => {
-      p = require(path.resolve(file));
-      if (p.info) {
-        providers[p.info.key] = p.info;
-      }
-    });
+    // // read providers data
+    // const providers = {};
+    // glob.sync('src/providers/*.js').forEach(file => {
+    //   p = require(path.resolve(file));
+    //   if (p.info) {
+    //     providers[p.info.key] = p.info;
+    //   }
+    // });
 
     // loop through all items
     let result = false;
@@ -75,11 +75,63 @@ router.post('/verifyConsistency', private, async (req, res, next) => {
   }
 });
 
+router.post('/verifyImagesCache', private, async (req, res, next) => {
+  const type = "persons";
+  const Items = require("../models/Items" + "." + type);
+
+  try {
+    let filter = req.body.filter ? req.body.filter : {};
+    const project = {};
+
+    logger.debug('filter:', filter);
+    logger.debug('project:', project);
+    const items = await Items.find(filter, project);
+    logger.debug('items length:', items.length);
+
+    try {
+      // get images paths in db
+      const images = new Set();
+      items.forEach(async (item) => {
+        item.images.forEach(async (image) => {
+          //console.log(` db ${image.localPath}`);
+          if (image.localPath) {
+            images.add(`${image.localPath}`);
+          }
+        });
+      });
+
+      // read images files on fs
+      const files = new Set();
+      fs.readdirSync(config.imagesBaseFolder).forEach(dir => {
+        //console.log(`dir: ${dir}`);
+        fs.readdirSync(`${config.imagesBaseFolder}${dir}`).forEach(file => {
+          files.add(`${config.imagesBaseFolder}${dir}/${file}`);
+          //console.log(` fs ${config.imagesBaseFolder}${dir}/${file}`);
+        });
+      });
+
+      let orphanedImages = new Set(
+        [...images].filter(i => !files.has(i))
+      );
+      console.log(`db images have no files in fs ${orphanedImages.size}`);
+
+      let orphanedFiles = new Set(
+        [...files].filter(f => !images.has(f))
+      );
+      console.log(`fs files have no images in db ${orphanedFiles.size}`);
+    } catch (err) {
+      res.status(500).json({ message: "Error verifying orphaning", err });
+    }
+
+    res.status(200).json({ message: "Finished verifying consistency"   });
+  } catch (err) {
+    res.status(500).json({ message: "Error verifying consistency", err });
+  }
+});
+
 router.post('/debugSomeCommonImages', private, async (req, res, next) => {
   const type = "persons";
   const Items = require("../models/Items" + "." + type);
-  const glob = require("glob");
-  const path = require("path");
 
   try {
     let filterA = req.body.filterA ? req.body.filterA : {};
@@ -187,6 +239,7 @@ router.post('/debugItemsMerge', private, async (req, res, next) => {
   {
     images: [
       {
+
         url: 'abc',
         etag: 1234,
       }, {

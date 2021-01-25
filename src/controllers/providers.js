@@ -193,6 +193,7 @@ scrapeProvider = async (provider, region, user) => {
 const scrapeProviderMultiListAndItems = async (provider, region, page) => {
   let nextListPage = null;
   let itemsMultiPage = [];
+  let pages = 0;
   do {
     const list = await scrapeList(provider, region, page, nextListPage);
     nextListPage = list && list.length ? list[list.length-1].nextListPage : null;
@@ -202,8 +203,9 @@ const scrapeProviderMultiListAndItems = async (provider, region, page) => {
       nextListPage = null; // break loop
     }
     itemsMultiPage = itemsMultiPage.concat(items);
-    if (config.scrape.onlyFirstPage) {
-      logger.debug('BREAK DUE TO scrape.onlyFirstPage');
+    pages++;
+    if (pages >= config.scrape.onlyFirstPages) {
+      logger.debug(`BREAK DUE TO scrape.onlyFirstPages: ${pages} >= ${config.scrape.onlyFirstPages}`);
       break;
     }
   } while (nextListPage);
@@ -253,8 +255,8 @@ const scrapeItems = async (provider, region, page, list) => {
             console.warn(`null item from page`);
           }
         }
-        if (config.scrape.onlyFirstItem) {
-          logger.debug('BREAK DUE TO scrape.onlyFirstItem');
+        if (itemsFull.length >= config.scrape.onlyFirstItems) {
+          logger.debug(`BREAK DUE TO scrape.onlyFirstItems ${itemsFull.length} >= ${config.scrape.onlyFirstItems}`);
           break;
         }
       }
@@ -487,8 +489,8 @@ const itemsMerge = (o, n) => {
       case 'images': // array of objects
         o[prop] = o[prop].map(p => { p.active = false; return p; }); // set active to false on all items of old prop array
         n[prop] = n[prop].map(p => { p.active = true; return p; }); // set active to true on all items of old prop array
-console.log('o[prop]:', o[prop]);
-console.log('n[prop]:', n[prop]);
+// console.log('o[prop]:', o[prop]);
+// console.log('n[prop]:', n[prop]);
         merged[prop] = arraysMerge(o[prop], n[prop], [ 'url' ]); // merge old and new arrays, excluding objects with a common set of props
         break;
       case 'comments': // array of objects (author, authorCommentsCount, text, date, vote)
