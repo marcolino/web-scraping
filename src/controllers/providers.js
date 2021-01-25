@@ -139,7 +139,7 @@ const sameGroup_2_0 = (a, b) => {
   return (
     (a.phone === b.phone)
     &&
-    (someCommonImages(a, b))
+    (exports.someCommonImages(a, b))
   );
 
 }
@@ -147,15 +147,20 @@ const sameGroup_2_0 = (a, b) => {
 /**
  * Check if two items share common (considered equal) images
  */
-const someCommonImages = (a, b) => {
+exports.someCommonImages = (a, b) => {
+  //console.log('b:', b.provider, b.id, b.title); return false;
   for (var i = 0, lenA = a.images.length; i < lenA; i++) {
-//console.log('.');
     const ai = a.images[i];
     if (ai.phash) {
+      //console.log('phash a ok for', a.provider, a.id, a.title, `(${i})`);
       for (var j = 0, lenB = b.images.length; j < lenB; j++) {
         const bj = b.images[j];
+        //console.log('phash b for', b.provider, b.id, b.title, b.phash, `(${j})`);
         if (bj.phash) {
-          if (comparePHashes(ai.phash, bj.phash, 0.04)) {
+          //console.log('phash b ok for', b.provider, b.id, b.title, `(${j})`);
+          //console.log('comparing', a.provider, a.id, a.title, `(${i})`);
+          //console.log('     with', b.provider, b.id, b.title, `(${j})`);
+          if (comparePHashes(ai.phash, bj.phash, 0.99 /*0.1094*/)) {
             // found a common image
             //return true;
             return [ ai.localPath, bj.localPath ]; // TODO: DEBUG only
@@ -165,40 +170,6 @@ const someCommonImages = (a, b) => {
     }
   }
   return false;
-}
-
-// TODO: debug only
-exports.debugSomeCommonImages = async (req) => {
-  const type = "persons";
-  const Items = require("../models/Items" + "." + type);
-
-  try {
-    const lastScrapeTimestamp = await globalsGet(`lastScrapeTimestamp`);
-console.log('lastScrapeTimestamp:', lastScrapeTimestamp);
-    const itemsAll = await Items.find({ /*provider: 'toe', /*'id': '13245'*/ }, { provider: 1, id: 1, title: 1, images: 1 }); // any item
-console.log('itemsAll len:', itemsAll.length);
-    const itemsNew = await Items.find({ /*provider: 'toe', /*'id': '13008',*/ createdAt: { $gte: lastScrapeTimestamp } }, { provider: 1, id: 1, title: 1, images: 1 }); // new items
-console.log('itemsNew len:', itemsNew.length);
-    itemsAll.forEach(async (itemAll) => {
-      itemsNew.forEach(async (itemNew) => {
-//console.log('itemAll.provider !== itemNew.provider', itemAll.provider, itemNew.provider, itemAll.id, itemNew.id);
-        if (itemAll.provider !== itemNew.provider || itemAll.id !== itemNew.id) { // skip comparing a key with itself
-          //if (someCommonImages(itemAll, itemNew)) {
-          if (commonImages = someCommonImages(itemAll, itemNew)) { // TODO: DEBUG only
-            //const providers = getProvidersByRegion('*');
-            //const providerAll = providers.find(provider => provider.info.key === itemAll.provider);
-            //const providerNew = providers.find(provider => provider.info.key === itemNew.provider);
-            const debugUrl = `http://localhost:${config.defaultServerPort}/debug/sci/?img1=${commonImages[0]}&img2=${commonImages[1]}`; // TODO: DEBUG only
-            logger.info(`item ${itemAll.title} and ${itemNew.title} share some common images: ${debugUrl}`);
-          } else {
-            //logger.debug(`item ${itemAll.title} and ${itemNew.title} DO NOT share some common images`);
-          }
-        }
-      });
-    });
-  } catch (err) {
-    throw(new Error(`error debugging some common images item: ${err}`));
-  }
 }
 
 scrapeProvider = async (provider, region, user) => {
@@ -520,10 +491,14 @@ const itemsMerge = (o, n) => {
         merged[prop] = typeof n[prop] !== 'undefined' ? n[prop] : o[prop]; // return new prop if present, otherwise keep old prop
         break;
       case 'images': // array of objects
-        merged[prop] = arraysMerge(o[prop], n[prop], [ 'url' ], true); // merge old and new arrays, excluding objects with a common set of props
+        o[prop] = o[prop].map(p => { p.active = false; return p; }); // set active to false on all items of old prop array
+        n[prop] = n[prop].map(p => { p.active = true; return p; }); // set active to true on all items of old prop array
+console.log('o[prop]:', o[prop]);
+console.log('n[prop]:', n[prop]);
+        merged[prop] = arraysMerge(o[prop], n[prop], [ 'url' ]); // merge old and new arrays, excluding objects with a common set of props
         break;
       case 'comments': // array of objects (author, authorCommentsCount, text, date, vote)
-        merged[prop] = arraysMerge(o[prop], n[prop], [ 'author', 'text', 'date' ], false); // merge old and new arrays, excluding objects with a common set of props
+        merged[prop] = arraysMerge(o[prop], n[prop], ['author', 'text', 'date']); // merge old and new arrays, excluding objects with a common set of props
         break;
       default:
         logger.warn('itemsMerge unforeseen prop', prop, n[prop], typeof n[prop]);
@@ -534,20 +509,11 @@ const itemsMerge = (o, n) => {
 
 /**
  * Merge two arrays of objects, excluding objects with a common set of props, ad adding n' active boolean prop (set to true in new array) if requested
- * @param {array} o 
- * @param {array} n 
- * @param {array} commonPropsSet 
- * @param {boolean} setActive 
+ * @param {array} o
+ * @param {array} n
+ * @param {array} commonPropsSet
  */
-const arraysMerge = (o, n, commonPropsSet, setActive) => {
-  if (setActive) {
-    for (var i = 0; i < o.length; i++) { // set active flag to false for old array
-      o[i].active = false;
-    }
-    for (var i = 0; i < n.length; i++) { // set active flag to false for old array
-      n[i].active = true;
-    }  
-  }
+const arraysMerge = (o, n, commonPropsSet) => {
   const keysOldSets = [];
   const keysNewSets = [];
   for (var i = 0; i < commonPropsSet.length; i++) { // build an array of sets for all commonPropsSet
@@ -559,81 +525,13 @@ const arraysMerge = (o, n, commonPropsSet, setActive) => {
   const merged = [...(n), ...(o).filter(m => { // merge new and old document for this prop, filtering it out if *all* commonPropsSet are the same
     for (var i = 0; i < commonPropsSet.length; i++) { // loop through all commonPropsSet, to skip array elements with all key props equal
       if (!(keysOldSets[i].has(m[commonPropsSet[i]]) && keysNewSets[i].has(m[commonPropsSet[i]]))) {
-        return true; // this common prop is not in this to-be-mered object (merge it)
+        return true; // this common prop is not in this to-be-merged object (merge it)
       }
     }
-    return false; // all common props are in this to-be-mered object (skip it)
+    return false; // all common props are in this to-be-merged object (skip it)
   })];
   return merged;
 }
-
-// debugItemsMerge = () => {
-//   const oI = {
-//     images: [
-//       {
-//         url: 'abc',
-//         etag: 123,
-//       }, {
-//         url: 'def',
-//         etag: 456,
-//       }, {
-//         url: 'ghi',
-//         etag: 789,
-//       }
-//     ],
-//   };
-//   const nI = {
-//     images: [
-//       {
-//         url: 'abc',
-//         etag: 1234,
-//       }, {
-//         url: 'def',
-//         etag: 4567,
-//       }
-//     ]
-//   };
-//   const mergedI = itemsMerge(oI, nI);
-//   console.log('merged images:', mergedI);
-
-//   const oC = {
-//     comments: [
-//       {
-//         author: 'alice',
-//         date: '2021-01-01',
-//         text: 'bello',
-//       }, {
-//         author: 'bob',
-//         date: '2021-01-02',
-//         text: 'brutto',
-//       }, {
-//         author: 'charlie',
-//         date: '2021-01-03',
-//         text: 'così così',
-//       }
-//     ],
-//   };
-//   const nC = {
-//     comments: [
-//       {
-//         author: 'alice',
-//         date: '2021-01-01',
-//         text: 'bello',
-//       }, {
-//         author: 'bob',
-//         date: '2021-01-02',
-//         text: 'brutto',
-//       }, {
-//         author: 'charlie',
-//         date: '2021-01-03',
-//         text: 'così così',
-//       }
-//     ],
-//   };
-//   const mergedC = itemsMerge(oC, nC);
-//   console.log('merged comments:', mergedC);
-// }
-// debugItemsMerge();
 
 const compareItemsHistoryes = (itemOldLean, itemNewLean, itemNew) => {
   const key = `${itemNewLean.provider} ${itemNewLean.id}`;

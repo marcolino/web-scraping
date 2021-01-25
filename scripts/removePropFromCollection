@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# Rename a local database
+# Remove prop from collection
 
 prop="${1:-missing}"
 db="${2-web-scraping}"

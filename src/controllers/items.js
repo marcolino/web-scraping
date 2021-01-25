@@ -67,9 +67,12 @@ async function getItems(req, res, next) {
     if (flags && flags.onlyCommentsCount) {
       itemsList = itemsList.map(item => {
         item.commentsCount = item.comments ? item.comments.length : 0;
-        //item.votesAverage = 0.5;
-        item.commentsVoteAverage = item.comments.filter(c => {console.log(c.vote); return typeof c.vote !== 'undefined'}).reduce((total, next) => {console.log('next.vote, total:', next.vote, total); return total + next.vote}, 0); // / item.comments.length;
-        //delete item.comments;
+        //item.commentsVoteAverage = item.comments.filter(c => { console.log(c.vote); return typeof c.vote !== 'undefined' }).reduce((total, next) => { console.log('next.vote, total:', next.vote, total); return total + next.vote }, 0); // / item.comments.length;
+        // start from -1
+        item.commentsVoteAverage = item.comments.filter(c => typeof c.vote !== 'undefined').reduce((total, next) => total + next.vote, -1);
+        // if -1 is the result, no botes found, so return undefined; otherwise, add 1 to the result
+        item.commentsVoteAverage = item.commentsVoteAverage === -1 ? undefined : item.commentsVoteAverage + 1;
+        delete item.comments;
         return item;
       });
     }
