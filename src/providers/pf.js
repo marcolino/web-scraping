@@ -18,8 +18,8 @@ const info = {
   login: {
     loginRequestTag: 'Hai raggiunto il numero massimo di visualizzazioni',
     url: 'https://community.punterforum.com/login/',
-    username: 'Billidechid', // john_holmes
-    password: 'Billi123', // supercazzola!666
+    username: 'Billidechid', // john_holmes giovanni_olmo esterrefatto
+    password: 'Billi123', // supercazzola!666 supercazzola!666
     usernameSelector: "[name='login']",
     passwordSelector: "[name='password']",
     submitSelector: "[type='submit']",

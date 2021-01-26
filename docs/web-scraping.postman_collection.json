@@ -126,18 +126,6 @@
 					"path": [
 						"users",
 						"signin"
-					],
-					"query": [
-						{
-							"key": "userId",
-							"value": "5f2c2f8a1d8bdb3498b8aca1",
-							"disabled": true
-						},
-						{
-							"key": "userId",
-							"value": "123",
-							"disabled": true
-						}
 					]
 				}
 			},
@@ -259,14 +247,14 @@
 			"response": []
 		},
 		{
-			"name": "/providers/scrape",
+			"name": "/providers/verifyDuplicateImagesForPerson",
 			"request": {
 				"auth": {
 					"type": "bearer",
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwMDZkODQ3ZmQ2YzVlMWU2ZTQwYTE3NCIsInJvbGUiOiJzeXN0ZW0iLCJpYXQiOjE2MTExMzgyMDJ9.NmXr6ayzzZozOS9yxbGjhs5kg0-zepuWz09KBh41Iuc",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwMDZkODQ3ZmQ2YzVlMWU2ZTQwYTE3NCIsInJvbGUiOiJzeXN0ZW0iLCJpYXQiOjE2MTE2NDg3NjJ9.i1lfe34lggjjnVsETVokHZvs9iha0Tjr3s3rGP2cJnM",
 							"type": "string"
 						}
 					]
@@ -275,7 +263,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"filterA\": {},\n    \"filterB\": {},\n    \"threshold\": 0.1\n}",
+					"raw": "{\n   \"filter\": {\n       \"provider\": \"toe\"\n   },\n   \"threshold\": 0.05\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -283,7 +271,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:3001/providers/debugSomeCommonImages",
+					"raw": "http://localhost:3001/providers/verifyDuplicateImagesForPerson",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -291,7 +279,7 @@
 					"port": "3001",
 					"path": [
 						"providers",
-						"debugSomeCommonImages"
+						"verifyDuplicateImagesForPerson"
 					]
 				}
 			},
@@ -359,6 +347,35 @@
 			"response": []
 		},
 		{
+			"name": "/providers/verifyOrpanedImages",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwMDZkODQ3ZmQ2YzVlMWU2ZTQwYTE3NCIsInJvbGUiOiJzeXN0ZW0iLCJpYXQiOjE2MTE2NDg3NjJ9.i1lfe34lggjjnVsETVokHZvs9iha0Tjr3s3rGP2cJnM",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "localhost:3001/providers/verifyOrpanedImages",
+					"host": [
+						"localhost"
+					],
+					"port": "3001",
+					"path": [
+						"providers",
+						"verifyOrpanedImages"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "/providers/debugSomeCommonImages",
 			"request": {
 				"auth": {
@@ -366,13 +383,22 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVmZjFhMzAzODcyMTRhNGRkNWM2MzEwMSIsInJvbGUiOiJzeXN0ZW0iLCJpYXQiOjE2MTA0ODA5Mjl9.MdX5zpPJeUNTJ5qC8aP7bg348s3jaFsC_5XNxmOlerI",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwMDZkODQ3ZmQ2YzVlMWU2ZTQwYTE3NCIsInJvbGUiOiJzeXN0ZW0iLCJpYXQiOjE2MTE2NDg3NjJ9.i1lfe34lggjjnVsETVokHZvs9iha0Tjr3s3rGP2cJnM",
 							"type": "string"
 						}
 					]
 				},
 				"method": "POST",
 				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"threshold\": 0.04\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
 				"url": {
 					"raw": "localhost:3001/providers/debugSomeCommonImages",
 					"host": [
@@ -382,6 +408,74 @@
 					"path": [
 						"providers",
 						"debugSomeCommonImages"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/providers/debugItemsMerge",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwMDZkODQ3ZmQ2YzVlMWU2ZTQwYTE3NCIsInJvbGUiOiJzeXN0ZW0iLCJpYXQiOjE2MTE2NDg3NjJ9.i1lfe34lggjjnVsETVokHZvs9iha0Tjr3s3rGP2cJnM",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "localhost:3001/providers/debugItemsMerge",
+					"host": [
+						"localhost"
+					],
+					"port": "3001",
+					"path": [
+						"providers",
+						"debugItemsMerge"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/providers/scrape",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwMDZkODQ3ZmQ2YzVlMWU2ZTQwYTE3NCIsInJvbGUiOiJzeXN0ZW0iLCJpYXQiOjE2MTE2NDg3NjJ9.i1lfe34lggjjnVsETVokHZvs9iha0Tjr3s3rGP2cJnM",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"regionDescriptior\": \"italy.torino\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3001/providers/scrape",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3001",
+					"path": [
+						"providers",
+						"scrape"
 					]
 				}
 			},
