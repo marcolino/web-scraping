@@ -427,7 +427,10 @@ const saveItem = async(item) => {
         });
       } else { // an existing item
         const itemOldLean = JSON.parse(JSON.stringify(itemOld));
-        const itemMerged = itemsMerge(itemOldLean, item);
+        const itemMerged = exports.itemsMerge(itemOldLean, item);
+        if (!itemMerged) {
+          return;
+        }
         itemOld.set({...itemMerged});
         itemOld.save((err, itemNew) => {
           if (err) {
@@ -442,16 +445,30 @@ const saveItem = async(item) => {
   );
 }
 
-const itemsMerge = (o, n) => {
+exports.itemsMerge = (o, n) => {
+  const type = "persons";
+  const Items = require("../models/Items" + "." + type);
+  //logger.debug('itemsMerge - Items schema.paths:', Object.keys(Items.schema.paths));
   const merged = {};
-  for (const prop in n) {
-    //const value = n[prop];
+  const props = Object.keys(Items.schema.paths);
+  props.map(prop => {
+    //console.log('*', prop);
     switch (prop) {
+      case '_id':
+      case '__v':
+        break; // ignore special props
+      //case 'createdAt':
+      //case 'changedAt':
+      //case 'updatedAt':
       case 'id':
       case 'provider':
       case 'region':
-      case 'group':
-      case 'changedAt':
+      //case 'group':
+        // mandatory props
+        if (typeof n[prop] === 'undefined') {
+          logger.warn(`itemsMerge - new document does not contain a defined ${prop} prop, ignoring it`);
+          return null;
+        }
         merged[prop] = n[prop]; // always return new prop
         break;
       case 'title':
@@ -486,25 +503,23 @@ const itemsMerge = (o, n) => {
       case 'adUrlReferences': // array of strings
         merged[prop] = typeof n[prop] !== 'undefined' ? n[prop] : o[prop]; // return new prop if present, otherwise keep old prop
         break;
-      case 'images': // array of objects
+      case 'images': // array of objects (url, category, date, etag, phash, localPath)
         o[prop] = o[prop].map(p => { p.active = false; return p; }); // set active to false on all items of old prop array
         n[prop] = n[prop].map(p => { p.active = true; return p; }); // set active to true on all items of old prop array
-// console.log('o[prop]:', o[prop]);
-// console.log('n[prop]:', n[prop]);
         merged[prop] = arraysMerge(o[prop], n[prop], [ 'url' ]); // merge old and new arrays, excluding objects with a common set of props
         break;
       case 'comments': // array of objects (author, authorCommentsCount, text, date, vote)
-        merged[prop] = arraysMerge(o[prop], n[prop], ['author', 'text', 'date']); // merge old and new arrays, excluding objects with a common set of props
+        merged[prop] = arraysMerge(o[prop], n[prop], [ 'author', 'text', 'date' ]); // merge old and new arrays, excluding objects with a common set of props
         break;
       default:
         logger.warn('itemsMerge unforeseen prop', prop, n[prop], typeof n[prop]);
     }
-  }
+  });
   return merged;
 }
 
 /**
- * Merge two arrays of objects, excluding objects with a common set of props, ad adding n' active boolean prop (set to true in new array) if requested
+ * Merge two arrays of objects, excluding objects with a common set of props
  * @param {array} o
  * @param {array} n
  * @param {array} commonPropsSet
@@ -518,13 +533,13 @@ const arraysMerge = (o, n, commonPropsSet) => {
   for (var i = 0; i < commonPropsSet.length; i++) { // build an array of sets for all commonPropsSet
     keysNewSets[i] = new Set(n.map(d => d[commonPropsSet[i]])); // build a set of univoke keys in new array
   }
-  const merged = [...(n), ...(o).filter(m => { // merge new and old document for this prop, filtering it out if *all* commonPropsSet are the same
+  const merged = [...(n), ...(o).filter(m => { // merge new and old document for this prop, filtering it out if *all* commonPropsSet are equal
     for (var i = 0; i < commonPropsSet.length; i++) { // loop through all commonPropsSet, to skip array elements with all key props equal
       if (!(keysOldSets[i].has(m[commonPropsSet[i]]) && keysNewSets[i].has(m[commonPropsSet[i]]))) {
-        return true; // this common prop is not in this to-be-merged object (merge it)
+        return true; // this common prop is not in this to-be-merged object: merge it
       }
     }
-    return false; // all common props are in this to-be-merged object (skip it)
+    return false; // all common props are in this to-be-merged object: skip it
   })];
   return merged;
 }
@@ -602,7 +617,7 @@ const compareItemsHistoryes = (itemOldLean, itemNewLean, itemNew) => {
               }
             }
             if (removed.length) {
-              logger.info(`${key} removed ${removed.length} ${prop}: ${JSON.stringify(removed)}`);
+              logger.info(`${key} removed ${removed.length} ${prop}`/*: ${JSON.stringify(removed)}*/);
               changed = true;
             }
 
@@ -626,7 +641,7 @@ const compareItemsHistoryes = (itemOldLean, itemNewLean, itemNew) => {
               }
             }
             if (added.length) {
-              logger.info(`${key} added ${added.length} ${prop}` /*: ${added}`*/);
+              logger.info(`${key} added ${added.length} ${prop}`/*: ${added}`*/);
               changed = true;
             }
 
@@ -651,15 +666,12 @@ const compareItemsHistoryes = (itemOldLean, itemNewLean, itemNew) => {
  * @param {Object} b             second object
  * @param {Array} ignoredProps   props to be ignored while comparing objects
  * @returns {boolean}            true if the two objects are equivalent
- *                               (they share all properties values, except for `ignoredProps`)
+ *                               (they share all properties values, except for the `ignoredProps`)
  */
 const areEquivalent = (a, b, ignoredProps) => {
   // create arrays of property names, ignoring props to be ignored
-  var aProps = Object.getOwnPropertyNames(a).filter(p => !ignoredProps.includes(p));
-  var bProps = Object.getOwnPropertyNames(b).filter(p => !ignoredProps.includes(p));
-
-  //console.log('aProps:', aProps);
-  //console.log('bProps:', bProps);
+  const aProps = Object.getOwnPropertyNames(a).filter(p => !ignoredProps.includes(p));
+  const bProps = Object.getOwnPropertyNames(b).filter(p => !ignoredProps.includes(p));
 
   // if number of properties is different, objects are not equivalent
   if (aProps.length != bProps.length) {
@@ -667,10 +679,8 @@ const areEquivalent = (a, b, ignoredProps) => {
   }
 
   for (var i = 0; i < aProps.length; i++) {
-    var propName = aProps[i];
-
-    // if values of same property are not equal, objects are not equivalent
-    if (a[propName] !== b[propName]) {
+    const propName = aProps[i];
+    if (a[propName] !== b[propName]) { // if values of same property are not equal, objects are not equivalent
       return false;
     }
   }

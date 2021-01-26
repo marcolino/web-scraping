@@ -57,16 +57,17 @@ router.post('/verifyConsistency', private, async (req, res, next) => {
     // });
 
     // loop through all items
-    let result = false;
+    let result = true;
     items.forEach(async (item) => {
       //logger.info(`verifyConsistency for item`, item.provider, item.id);
       if (!item.id) {
         logger.warn(`no id for item with _id`, item._id);
+        result = false;
       }
       if (!item.provider) {
         logger.warn(`no provider for item with _id`, item._id);
+        result = false;
       }
-      result = true;
     });
 
     res.status(200).json({ message: "Finished verifying consistency", result });
@@ -75,9 +76,11 @@ router.post('/verifyConsistency', private, async (req, res, next) => {
   }
 });
 
-router.post('/verifyImagesCache', private, async (req, res, next) => {
+router.post('/verifyOrpanedImages', private, async (req, res, next) => {
   const type = "persons";
   const Items = require("../models/Items" + "." + type);
+
+  const result = {};
 
   try {
     let filter = req.body.filter ? req.body.filter : {};
@@ -88,44 +91,62 @@ router.post('/verifyImagesCache', private, async (req, res, next) => {
     const items = await Items.find(filter, project);
     logger.debug('items length:', items.length);
 
-    try {
-      // get images paths in db
-      const images = new Set();
-      items.forEach(async (item) => {
-        item.images.forEach(async (image) => {
+    // get images paths in db
+    const images = new Set();
+    items.forEach(async (item) => {
+      item.images.forEach(async (image) => {
+        if (image.localPath) {
+          images.add(`${image.localPath}`);
           //console.log(` db ${image.localPath}`);
-          if (image.localPath) {
-            images.add(`${image.localPath}`);
-          }
-        });
+        }
       });
+    });
+    logger.debug('images on db count:', images.size)
 
-      // read images files on fs
-      const files = new Set();
-      fs.readdirSync(config.imagesBaseFolder).forEach(dir => {
-        //console.log(`dir: ${dir}`);
-        fs.readdirSync(`${config.imagesBaseFolder}${dir}`).forEach(file => {
-          files.add(`${config.imagesBaseFolder}${dir}/${file}`);
-          //console.log(` fs ${config.imagesBaseFolder}${dir}/${file}`);
-        });
+    // read images files on fs
+    const files = new Set();
+    fs.readdirSync(config.imagesBaseFolder).forEach(dir => {
+      //console.log(`dir: ${dir}`);
+      fs.readdirSync(`${config.imagesBaseFolder}${dir}`).forEach(file => {
+        files.add(`${config.imagesBaseFolder}${dir}/${file}`);
+        //console.log(` fs ${config.imagesBaseFolder}${dir}/${file}`);
       });
+    });
+    logger.debug('image files on fs count:', files.size)
 
-      let orphanedImages = new Set(
-        [...images].filter(i => !files.has(i))
-      );
-      console.log(`db images have no files in fs ${orphanedImages.size}`);
-
-      let orphanedFiles = new Set(
-        [...files].filter(f => !images.has(f))
-      );
-      console.log(`fs files have no images in db ${orphanedFiles.size}`);
-    } catch (err) {
-      res.status(500).json({ message: "Error verifying orphaning", err });
+    result.count = {
+      equal: (images.size === files.size),
+      images: images.size,
+      files: files.size,
+    };
+    if (images.size !== files.size) {
+      logger.warn(`images on db (${images.size}) differ by image files on fs (${$files.size})`);
     }
 
-    res.status(200).json({ message: "Finished verifying consistency"   });
+    result.orphaned = {};
+
+    let orphanedImages = new Set(
+      [...images].filter(i => !files.has(i))
+    );
+    result.orphaned.images = orphanedImages;
+    result.orphaned.imagesSize = orphanedImages.size;
+    if (orphanedImages.size > 0) {
+      logger.warn(`db images that have no files in fs: ${orphanedImages.size}`);
+    }
+
+    let orphanedFiles = new Set(
+      [...files].filter(f => !images.has(f))
+    );
+    result.orphaned.files = orphanedFiles;
+    result.orphaned.filesSize = orphanedFiles.size;
+    if (orphanedFiles.size > 0) {
+      logger.warn(`fs files that have no images in db: ${orphanedFiles.size}`);
+    }
+
+    res.status(200).json({ message: "Finished verifying consistency", result });
   } catch (err) {
-    res.status(500).json({ message: "Error verifying consistency", err });
+    logger.error(err.toString());
+    res.status(500).json({ message: "Error verifying consistency", err: err.toString() });
   }
 });
 
@@ -142,8 +163,8 @@ router.post('/debugSomeCommonImages', private, async (req, res, next) => {
     if (filterA === 'new') filterA = { createdAt: { $gte: await globalsGet(`lastScrapeTimestamp`) } };
     if (filterB === 'new') filterB = { createdAt: { $gte: await globalsGet(`lastScrapeTimestamp`) } };
 
-//filterA = { "title": { $regex: /[A-Z].*/ } };
-//filterB = { "title": { $regex: /[A-Z].*/ } };
+    //filterA = { "title": { $regex: /[A-Z].*/ } };
+    //filterB = { "title": { $regex: /[A-Z].*/ } };
 
     logger.debug('filter A:', filterA);
     logger.debug('filter B:', filterB);
@@ -175,24 +196,14 @@ router.post('/debugSomeCommonImages', private, async (req, res, next) => {
           return;
         }
 
-        //if (itemA.provider !== itemB.provider || itemA.id !== itemB.id) { // do not compare a key with itself
-          if (commonImages = someCommonImages(itemA, itemB, threshold)) {
-            //console.log('itemAll:', itemAll);
-            //console.log('itemAll.provider:', itemAll.provider);
-            //console.log('itemAll.region:', itemAll.region);
-            const url1 = encodeURIComponent(providers[itemA.provider].regions[itemA.region].imagesUrl + itemA.url);
-            const url2 = encodeURIComponent(providers[itemB.provider].regions[itemB.region].imagesUrl + itemB.url);
-            const debugUrl = `http://localhost:${config.defaultServerPort}/debug/sci/?img1=${commonImages[0]}&img2=${commonImages[1]}&url1=${url1}&url2=${url2}`;
-            debugUrls.push(debugUrl);
-//             logger.debug(`
-// item ${itemA.provider} ${itemA.id} ${itemA.title}
-//  and ${itemB.provider} ${itemB.id} ${itemB.title}
-// share some common images; see at ${debugUrl}
-//             `);
-          } else {
-            //logger.debug(`item ${itemAll.title} and ${itemNew.title} DO NOT share some common images`);
-          }
-        //}
+        if (commonImages = someCommonImages(itemA, itemB, threshold)) {
+          const url1 = encodeURIComponent(providers[itemA.provider].regions[itemA.region].imagesUrl + itemA.url);
+          const url2 = encodeURIComponent(providers[itemB.provider].regions[itemB.region].imagesUrl + itemB.url);
+          const debugUrl = `http://localhost:${config.defaultServerPort}/debug/sci/?img1=${commonImages[0]}&img2=${commonImages[1]}&url1=${url1}&url2=${url2}`;
+          debugUrls.push(debugUrl);
+        } else {
+          //logger.debug(`item ${itemAll.title} and ${itemNew.title} DO NOT share some common images`);
+        }
       });
     });
 
@@ -205,6 +216,8 @@ router.post('/debugSomeCommonImages', private, async (req, res, next) => {
 router.post('/debugItemsMerge', private, async (req, res, next) => {
   const oldItem = req.body.oldItem ? req.body.oldItem :
   {
+    xyz: 3,
+    title: 'old title',
     images: [
       {
         url: 'abc',
@@ -217,26 +230,33 @@ router.post('/debugItemsMerge', private, async (req, res, next) => {
         etag: 789,
       }
     ],
+    comments: [
+      {
+        author: 'alice',
+        date: '2021-01-01',
+        text: 'bello',
+      }, {
+        author: 'bob',
+        date: '2021-01-02',
+        text: 'brutto',
+      }, {
+        author: 'charlie',
+        date: '2021-01-03',
+        text: 'così così',
+      }
+    ],
   };
-//   {
-//     comments: [
-//       {
-//         author: 'alice',
-//         date: '2021-01-01',
-//         text: 'bello',
-//       }, {
-//         author: 'bob',
-//         date: '2021-01-02',
-//         text: 'brutto',
-//       }, {
-//         author: 'charlie',
-//         date: '2021-01-03',
-//         text: 'così così',
-//       }
-//     ],
-//   };
   const newItem = req.body.newItem ? req.body.newItem :
   {
+    id: 1,
+    __v: 0,
+    createdAt: 'now',
+    changedAt: 'now',
+    updatedAt: 'now',
+    id: 123,
+    provider: 'toe',
+    region: ' italy.torino',
+    group: '',
     images: [
       {
 
@@ -246,28 +266,25 @@ router.post('/debugItemsMerge', private, async (req, res, next) => {
         url: 'def',
         etag: 4567,
       }
-    ]
+    ],
+    comments: [
+      {
+        author: 'alice',
+        date: '2021-01-01',
+        text: 'bello',
+      }, {
+        author: 'bob',
+        date: '2021-01-02',
+        text: 'brutto',
+      }, {
+        author: 'charlie',
+        date: '2021-01-03',
+        text: 'così così',
+      }
+    ],
   };
-//   {
-//     comments: [
-//       {
-//         author: 'alice',
-//         date: '2021-01-01',
-//         text: 'bello',
-//       }, {
-//         author: 'bob',
-//         date: '2021-01-02',
-//         text: 'brutto',
-//       }, {
-//         author: 'charlie',
-//         date: '2021-01-03',
-//         text: 'così così',
-//       }
-//     ],
-//   };
-// }
   const mergedItems = itemsMerge(oldItem, newItem);
-  res.status(200).json({ message: "Merged images:", data: mergedItems });
+  res.status(200).json({ message: "Merged items:", data: mergedItems });
 });
 
 Object.defineProperty(String.prototype, 'hashCode', {

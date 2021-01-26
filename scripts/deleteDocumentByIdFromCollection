@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+#
+# Delete one document by _id from collection
+
+id="${1}"
+db="${2-web-scraping}"
+
+echo 'db.items.persons.deleteOne({"_id": ObjectId("'$id'")})' | \
+mongo "$db" --quiet | \
+grep -v '^bye$'
