@@ -20,6 +20,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
+const { Console } = require("winston/lib/winston/transports");
+
 // https://code.google.com/p/ironchef-team21/source/browse/ironchef_team21/src/ImagePHash.java
 
 /*
@@ -40,7 +42,8 @@ ImagePHash.prototype.smallerSize = 8;
 ImagePHash.prototype.distance = function(s1, s2) {
   let counter = 0;
 
-  for (let k = 0; k < s1.length; k++) {
+  const len = Math.min(s1 ? s1.length : 0, s2 ? s2.length : 0);
+  for (let k = 0; k < len; k++) {
     if (s1[k] !== s2[k]) {
       counter++;
     }

@@ -11,7 +11,11 @@ exports.roles = [ // roles we recognize
 ];
 exports.imagesBaseFolder = "./cache/persons/images/";
 exports.scrape = {
-  debug: true, // debug puppeteer while scraping providers
+  debug: {
+    puppeteer: false, // debug puppeteer while scraping providers
+    duplicateItemsPersonsCollection: true, // duplicate db collection 'items.persons' before starting
+    duplicateImagesCache: true, // duplicate images cache before starting
+  },
   onlyProvider: ['pf'], // scrape only a subset of providers
   onlyItemId: [], // scrape only a subset of items id's
   onlyFirstPages: 0, // scrape olny the first n pages (0 means all pages)

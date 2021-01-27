@@ -11,6 +11,7 @@
   - when grouping, consider phone, images, and adUrlReferences
   - in compareItemsHistoryes, handle objects
   - in compareItemsHistoryes, in images array do not consider changes in localPath, pHas, ... but only in url (?)
+  - finish debug/grid, to view a grid of images from some debug endpoin, if needed...
   - test:
     V login with password unselectable in model
     - what happens if an item has no main image in getItems (should be returned nonetheless)

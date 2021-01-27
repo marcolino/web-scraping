@@ -58,6 +58,25 @@ const scrapeProviders = async(req) => {
 
 const scrapeProvidersImages = async (req) => {
   try {
+
+    if (config.scrape.debug.duplicateImagesCache) { // duplicate images cahce before starting
+      const fse = require('fs-extra');
+      const srcDir = `${config.imagesBaseFolder}`;
+      const dstDir = `${config.imagesBaseFolder.replace(/\/$/, '')}.pre`;
+      try {
+        fs.rmdirSync(dstDir, { recursive: true });
+        logger.debug(`cleared images cache duplicate successfully`);
+      } catch(err) {
+        logger.error(`error clearing images cache duplicate: ${err.message}`);
+      }
+      try {
+        fse.copySync(srcDir, dstDir);
+        logger.debug(`copyed images cache duplicate successfully`);
+      } catch (err) {
+        logger.error(`error duplicating images cache: ${err.message}`);
+      }
+    }
+
     const regionDescriptor = req.body.regionDescriptor || '*';
     const providers = getProvidersByRegion(regionDescriptor);
     //Object.keys(providers).map((pk, index) => {console.log('filter in:', providers[pk], !(config.scrape.onlyProvider.length && !config.scrape.onlyProvider.includes(providers[index].info.key))); });
@@ -183,7 +202,7 @@ scrapeProvider = async (provider, region, user) => {
     const browser = await browserLaunch();
     const page = await browserPageNew(browser);
 
-    if (config.scrape.debug) page.on('console', msg => {
+    if (config.scrape.debug.puppeteer) page.on('console', msg => {
       logger.debug(msg.text())
     }); // do use logger.debug() inside page.evaluate
 
@@ -309,10 +328,14 @@ scrapeProviderImages = async (provider, region) => {
             // compare downloaded image phash with other images phashes to detect duplicates
             let foundSimilarImage = false;
             for (let k = 0; k < item.images.length; k++) {
-              if (comparePHashes(imageDownloaded.phash, item.images[k].phash, 0.02)) {
-                foundSimilarImage = true;
-                logger.debug(`two similar images for person ${item.provider} ${item.id} ${item.url}`);
-                break;
+              if (item.images[k].phash) { // check images being compared has a phash already
+                if (comparePHashes(imageDownloaded.phash, item.images[k].phash, 0.02)) {
+                  foundSimilarImage = true;
+                  logger.debug(`two similar images for person ${item.provider} ${item.id} ${item.url}`);
+                  break;
+                }
+              } else {
+                logger.warn(`Item ${item.provider} ${item.id} ${item.title} image n. ${k} category ${item.images[k].category} has no phash, should not happen...`);
               }
             }
             if (foundSimilarImage) {
@@ -323,7 +346,7 @@ scrapeProviderImages = async (provider, region) => {
             count++;
           }
         }
-//else logger.debug(`--- NOT downloading image ${j} of ${item.images.length} ---`);
+//else logger.debug(`--- NOT downloading image ${j} of ${item.images.length}, it was already present ---`);
       }
     }
     return count; 
