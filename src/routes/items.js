@@ -4,7 +4,7 @@ const { public, private } = require('../auth');
 const { getItems, getMainImages, createItem, deleteItem, updateItem, test } = require('../controllers/items');
 
 // endpoint to get items
-router.get('/', public, async (...args) => getItems(...args));
+router.post('/', public, async (...args) => getItems(...args));
 
 // endpoint to get items
 router.get('/mainImages', public, async (...args) => getMainImages(...args));

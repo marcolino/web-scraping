@@ -1,4 +1,7 @@
-exports.clone = (obj) => {
+/**
+ * clones an object (deep)
+ */
+ exports.clone = (obj) => {
   return JSON.parse(JSON.stringify(obj));
 }
 
@@ -6,6 +9,9 @@ exports.clone = (obj) => {
 //   return await new Promise(resolve => setTimeout(resolve, t));
 // }
 
+/**
+ * detects te mime type of an image
+ */
 exports.mimeImage = (mime) => {
   mimeImages = [
     'image/bmp',
@@ -33,3 +39,15 @@ exports.mimeImage = (mime) => {
   ];
   return mimeImages.includes(mime);
 }
+
+/**
+ * dump an error according to environment
+ */
+exports.dumperr = (error) => {
+  if (process.env.NODE_ENV === "production") {
+    return error.message; // hide stack in production
+  } else {
+    return error.message + "\n" + error.stack;
+  }
+}
+

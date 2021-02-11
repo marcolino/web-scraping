@@ -14,7 +14,7 @@ const { addRequestId } = require('./auth');
 const usersRoutes = require('./routes/users');
 const itemsRoutes = require('./routes/items');
 const providersRoutes = require('./routes/providers');
-const debugRoutes = require('./routes/debug'); // TODO: DEBUG only'
+const debugRoutes = require('./routes/debug');
 const logger = require('./logger');
 const config = require('./config');
 
@@ -38,7 +38,11 @@ app.use(`/items`, itemsRoutes);
 app.use(`/providers`, providersRoutes);
 app.use(`/doc`, swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use(`/debug`, debugRoutes);
-app.use('/cache', express.static(path.join(__dirname, '../cache'))); // TODO: DEBUG only
+if (process.env.NODE_ENV === 'development') { // development only routes
+  app.use('/cache', express.static(path.join(__dirname, '../cache')));
+  app.use('/assets/fonts', express.static(path.join(__dirname, '../debug/assets/fonts')));
+  app.use('/assets', express.static(path.join(__dirname, '../debug/assets')));
+}
 
 // default root route
 app.get(`/`, (req, res) => {

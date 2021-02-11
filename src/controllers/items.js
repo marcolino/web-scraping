@@ -2,7 +2,7 @@ const { getCountryCallingCode } = require('libphonenumber-js');
 const { ObjectID } = require('mongodb');
 const logger = require('../logger');
 const globals = require('../models/Globals');
-const items = require('../models/Items.' + 'persons'); // TODO: make persons a variable...
+const items = require('../models/Items');
 
 async function getItems(req, res, next) {
   try {
@@ -20,6 +20,8 @@ async function getItems(req, res, next) {
     const filterOnlyNew = flags && flags.onlyNew ? { createdAt: { $gte: lastScrapeTimestamp.value } } : {}; // select only new items, if requested
     const filterOnlyNewAndChanged = flags && flags.onlyNewAndChanged ? { $or: [ { createdAt: { $gte: lastScrapeTimestamp.value } }, { changedAt: { $gte: lastScrapeTimestamp.value } } ] } : {}; // select only new items, if requested
     const filterMissingToo = flags && flags.missingToo ? {} : { onHoliday: { $ne: true }, $or: [ { updatedAt: { $gte: lastScrapeTimestamp.value } }, { immutable: true } ] }; // select missing items, too, if requested
+
+console.log(filter, filterOnlyNew, filterOnlyNewAndChanged, filterMissingToo);
 
     let itemsList = await items.
       find(
@@ -51,7 +53,7 @@ async function getItems(req, res, next) {
         images: 1,
         comments: 1,
       })
-      .sort({dateInserted: 'ascending', dateChanged: 'ascending', dateUpdated: 'ascending'})
+      .sort({insertedAt: 'descending', changedAt: 'descending', updatedAt: 'descending'})
       .lean()
     ;
 
@@ -69,7 +71,7 @@ async function getItems(req, res, next) {
         item.commentsCount = item.comments ? item.comments.length : 0;
         //item.commentsVoteAverage = item.comments.filter(c => { console.log(c.vote); return typeof c.vote !== 'undefined' }).reduce((total, next) => { console.log('next.vote, total:', next.vote, total); return total + next.vote }, 0); // / item.comments.length;
         // start from -1
-        item.commentsVoteAverage = item.comments.filter(c => typeof c.vote !== 'undefined').reduce((total, next) => total + next.vote, -1);
+        item.commentsVoteAverage = item.comments.filter(c => typeof c.vote !== 'undefined').reduce((total, next) => parseInt(total) + parseInt(next.vote), -1);
         // if -1 is the result, no botes found, so return undefined; otherwise, add 1 to the result
         item.commentsVoteAverage = item.commentsVoteAverage === -1 ? undefined : item.commentsVoteAverage + 1;
         delete item.comments;
@@ -191,7 +193,7 @@ async function updateItemById(id) {
 async function test(req, res, next) {
   try {
     const item = req.body.item;
-    const Items = require("../models/Items" + "." + 'persons');
+    const Items = require("../models/Items");
     const persons = await Items.find({
       provider: item.provider,
       //id: '396863',

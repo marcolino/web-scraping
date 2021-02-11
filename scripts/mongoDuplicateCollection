@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+#
+# Duplicate a collection
+
+DB=${1:-web-scraping}
+COLLECTION_OLD=${2}
+COLLECTION_NEW=${3}
+
+if [ -z "$DB" ]; then
+  echo "Please specify db name as first parameter"; exit -1
+fi
+if [ -z "$COLLECTION_OLD" ]; then
+  echo "Please specify old collection name as second parameter"; exit -1
+fi
+if [ -z "$COLLECTION_NEW" ]; then
+  echo "Please specify new collection name as third parameter"; exit -1
+fi
+
+# drop new collection
+echo 'db.'$COLLECTION_NEW'.drop()' | \
+mongo "$DB" --quiet | \
+grep -v '^bye$' >/dev/null
+
+# export old collection to the new one
+( mongoexport -d "$DB" -c "$COLLECTION_OLD" | mongoimport -d "$DB" -c "$COLLECTION_NEW" ) 2>/dev/null
+
+result=$?
+if [ $result -ne 0 ]; then
+  echo "Error duplicationg collection: $result"; exit -1
+fi

@@ -18,8 +18,8 @@ const info = {
   login: {
     loginRequestTag: 'Hai raggiunto il numero massimo di visualizzazioni',
     url: 'https://community.punterforum.com/login/',
-    username: 'Billidechid', // john_holmes giovanni_olmo esterrefatto
-    password: 'Billi123', // supercazzola!666 supercazzola!666
+    username: 'freeclimber2', // john_holmes giovanni_olmo esterrefatto IlPompiere ilburattinaio
+    password: 'Elsa1926', // supercazzola!666 supercazzola!666 esti.catsi!666
     usernameSelector: "[name='login']",
     passwordSelector: "[name='password']",
     submitSelector: "[type='submit']",
@@ -71,7 +71,7 @@ async function listPageEvaluate(region, page, nextListPage) {
           }
 
           if (config.scrape.onlyItemId.length && !config.scrape.onlyItemId.includes(data.id)) {
-            console.log('BREAK DUE TO scrape.onlyItemId ' + config.scrape.onlyItemId.length);
+            //console.log('BREAK DUE TO scrape.onlyItemId ' + config.scrape.onlyItemId.length);
             return;
           }
 
@@ -91,10 +91,12 @@ async function listPageEvaluate(region, page, nextListPage) {
             const imgElement = item.querySelector("div.structItem-iconContainer > a > img");
             if (imgElement) {
               const hostRegexp = new RegExp('^' + imagesUrl);
-              let imageUrl = imgElement.getAttribute("src").replace(/^\//, '').replace(hostRegexp, '');
-              const image = { url: imageUrl, category: 'main' };
-              if (imageUrl !== "images/placeholder.jpg") { // skip placeholders
-                data.images.push(image);
+              let imageUrl = imgElement.getAttribute("src").replace(/^\//, '').replace(/\?.*/, '').replace(hostRegexp, '');
+              if (!imageUrl.match(/^proxy\.php\?image=/)) { // skip local icons
+                const image = { url: imageUrl, category: 'main' };
+                if (imageUrl !== "images/placeholder.jpg") { // skip placeholders
+                  data.images.push(image);
+                }
               }
             }
           } catch (err) {
@@ -129,7 +131,7 @@ const itemPageEvaluate = async (region, page, item) => {
       throw(new Error(`url not defined for provider ${info.key} at region region ${region}`));
     }
     const url = baseUrl + itemUrl;
-    logger.info(`itemPageEvaluate.provider.${info.key} ${url}`);
+    //logger.info(`itemPageEvaluate.provider.${info.key} ${url}`);
     try {
       const response = await page.goto(url);
     } catch (err) {
@@ -151,11 +153,11 @@ const itemPageEvaluate = async (region, page, item) => {
           document.querySelectorAll(/*"a.js-lbImage, */"div.bbImageWrapper.js-lbImage").forEach((imgElement) => {
             if (imgElement) {
               const hostRegexp = new RegExp('^' + imagesUrl);
-              let imageUrl = imgElement.querySelector("img").getAttribute("src").replace(/^\//, '').replace(hostRegexp, '');
+              let imageUrl = imgElement.querySelector("img").getAttribute("src").replace(/^\//, '').replace(/\?.*/, '').replace(hostRegexp, '');
               const image = { url: imageUrl, category: null };
-              if (!imageUrl.match(/^proxy.php\?image=/)) { // skip local icons
+              if (!imageUrl.match(/^proxy\.php\?image=/)) { // skip local icons
                 if (!data.images.some(img => img.url === imageUrl)) { // skip duplicates
-                  image.category = 'small';
+                  image.category = 'full';
                   data.images.push(image);
                 }
               }

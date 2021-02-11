@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const logger = require("../logger");
 const config = require("../config");
 
-exports.dbConnect = async () => {
+dbConnect = async () => {
   try {
     await mongoose
       .connect(config.MONGO_URI, { // TODO: use process.env.MONGO_URI in production
@@ -20,10 +20,15 @@ exports.dbConnect = async () => {
   }
 }
 
-exports.dbClose = async() => {
+dbClose = async() => {
   try {
     await mongoose.connection.close();
   } catch (err) {
     logger.error(`error disconnecting from database: ${err}`);
   }
 }
+
+module.exports = {
+  dbConnect,
+  dbClose,
+};

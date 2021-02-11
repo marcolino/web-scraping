@@ -16,7 +16,7 @@ const info = {
 };
 
 const config = require('../config');
-const logger = require('../logger');
+//const logger = require('../logger');
 
 async function listPageEvaluate(region, page) {
   return new Promise(async (resolve, reject) => {
@@ -25,7 +25,6 @@ async function listPageEvaluate(region, page) {
     if (!url) {
       throw (new Error(`region ${region} for provider ${info.key} has no list url`));
     }
-    logger.info(`listPageEvaluate.provider.${info.key} ${url}`);
     try {
       await page.goto(url);
     } catch (err) {
@@ -58,7 +57,7 @@ async function listPageEvaluate(region, page) {
           }
 
           if (config.scrape.onlyItemId.length && !config.scrape.onlyItemId.includes(data.id)) {
-            console.log('BREAK DUE TO scrape.onlyItemId');
+            //console.log('BREAK DUE TO scrape.onlyItemId');
             return;
           }
 
@@ -66,7 +65,7 @@ async function listPageEvaluate(region, page) {
             const imgElement = item.querySelector("img");
             if (imgElement) {
               const hostRegexp = new RegExp('^' + imagesUrl);
-              let imageUrl = imgElement.getAttribute("src").replace(/^\//, '').replace(hostRegexp, '');
+              let imageUrl = imgElement.getAttribute("src").replace(/^\//, '').replace(/\?.*/, '').replace(hostRegexp, '');
               const image = { url: imageUrl, category: 'main' };
               data.images.push(image);
             }
@@ -107,7 +106,7 @@ const itemPageEvaluate = async (region, page, item) => {
       throw (new Error(`url not defined for provider ${info.key} at region region ${region}`));
     }
     const url = baseUrl + itemUrl;
-    logger.info(`itemPageEvaluate.provider.${info.key} ${url}`);
+
     try {
       const response = await page.goto(url);
     } catch (err) {
@@ -130,12 +129,12 @@ const itemPageEvaluate = async (region, page, item) => {
         }
 
         try { // selfDescription
-          data.selfDescription = document.querySelector("div.annuncio-box > p").innerText.replace(/^\s+|\s+$/g, '');
+          data.selfDescription = document.querySelector("div.annuncio-box > p").innerText.replace(/^\s+|\s+$/g, '').replace(/\n+/g, '\n');
         } catch (err) {
           throw(new Error(`reading url ${url} looking for description: ${err.message}`));
         }
 
-        // this provider ouse onecopy of the images for both small and full versions
+        // this provider use the same copy of the images for both small and full versions
         // try { // small images
         //   document.querySelectorAll("div.gallery > div > a > img").forEach(imgElement => {
         //     if (imgElement) {
@@ -153,11 +152,8 @@ const itemPageEvaluate = async (region, page, item) => {
           document.querySelectorAll("div.gallery.row.no-gutters.d-none > div > a").forEach(imgElement => {
             if (imgElement) {
               //const hostRegexp = new RegExp('^' + imagesUrl);
-              let imageUrl = imgElement.getAttribute("href"); //.replace(/^\//, '').replace(hostRegexp, '');
+              let imageUrl = imgElement.getAttribute("href").replace(/\?.*/, ''); //.replace(/^\//, '').replace(hostRegexp, '');
               const image = { url: imageUrl, category: 'full' };
-
-              // TODO: check if image is really new... :-(
-
               data.images.push(image);
             }
           });
@@ -214,7 +210,7 @@ const itemPageEvaluate = async (region, page, item) => {
             let c = {};
             c.author = commentElement.querySelector("div.text > h6").innerText.replace(/^@/, '');
             c.date = datetimeSlashed2Date(commentElement.querySelector("p.date").innerText);
-            c.text = commentElement.querySelector("p:not([class='date'])").innerText;
+            c.text = commentElement.querySelector("p:not([class='date'])").innerText.replace(/^\s+|\s+$/g, '').replace(/\n+/g, '\n');
             commentsList.push(c);
           });
           data.comments = commentsList;

@@ -1,8 +1,9 @@
-require("dotenv").config();
-const config = require("../config");
 const mongoose = require("mongoose");
-
+const config = require("../config");
+//require("dotenv").config();
 const Schema = mongoose.Schema;
+
+const model = "Role";
 
 const schema = new Schema([
   {
@@ -15,4 +16,4 @@ const schema = new Schema([
   }
 ]);
 
-module.exports = mongoose.model("Roles", schema);
+module.exports = mongoose.model(model, schema);

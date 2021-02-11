@@ -1,17 +1,18 @@
 const cron = require('node-cron');
-const fetch = require('node-fetch');
+//const fetch = require('node-fetch');
+const got = require('got');
 const fs = require('fs');
 const mime = require('mime-types');
 const crypto = require('crypto');
 const uuid = require('uuid');
-const Items = require('../models/Items.' + 'persons'); // TODO: make persons a variable...
-const UserStatuses = require("../models/UserStatuses");
-const Globals = require("../models/Globals");
-const { phoneNormalize } = require('../utils/providers');
+const Items = require('../models/Items');
+const UserStatuses = require('../models/UserStatuses');
+const Globals = require('../models/Globals');
 //const { dbConnect, dbClose } = require('../utils/db');
+const { phoneNormalize } = require('../utils/providers');
 const { browserLaunch, browserPageNew, browserPageClose, browserClose } = require('../utils/browser');
-const { mimeImage } = require('../utils/misc');
-const { calculatePHash, comparePHashes } = require('../utils/image');
+const { mimeImage, dumperr } = require('../utils/misc');
+const { calculatePerceptualHash, comparePerceptualHashes, perceptuallyEqual } = require('../utils/image');
 //const { register, login } = require('./user');
 const globals = require('../models/Globals');
 const logger = require('../logger');
@@ -20,9 +21,20 @@ const config = require('../config');
 const scrapeProviders = async(req) => {
   logger.info(`providers.scrapeProviders.starting.${req.requestId}`);
   try {
-    const lastScrapeTimestamp = new Date().toISOString();
+    if (config.scrape.debug.duplicateItemsPersonsCollection) { // duplicate items persons collection before starting
+      var exec = require('child_process').exec;
+      const o = 'items';
+      const n = 'items.pre';
+      exec(`scripts/mongoDuplicateCollection web-scraping ${o} ${n}`, function callback(error, stdout, stderr) {
+        if (stderr) {
+          logger.error(`Error duplicating collection: ${stderr}`);
+        }
+      });
+    }
+
+    const lastScrapeTimestamp = new Date();
     globalsSet(`lastScrapeStatus`, `started`);
-    globalsSet(`lastScrapeTimestampStart`, lastScrapeTimestamp);
+    globalsSet(`lastScrapeTimestampStart`, lastScrapeTimestamp.toISOString());
     const regionDescriptor = req.body.regionDescriptor || '*';
 //logger.debug('regionDescriptor:', regionDescriptor);
     const providers = getProvidersByRegion(regionDescriptor);
@@ -30,15 +42,20 @@ const scrapeProviders = async(req) => {
     const data = (await Promise.all(
       Object.keys(providers)
       .filter(index => providers[index].info.type === config.type)
-      .filter(index => !(config.scrape.onlyProvider.length && !config.scrape.onlyProvider.includes(providers[index].info.key)))
+      .filter(index => !(config.scrape.onlyProviders.length && !config.scrape.onlyProviders.includes(providers[index].info.key)))
       .map(async index => {
         const provider = providers[index];
         const regions = getProviderRegions(provider, regionDescriptor);
 //logger.debug('regions:', regions);
         let results = [];
         for (let r = 0; r < regions.length; r++) { // loop on all regions
-//logger.debug('region:', r);
-          const result = await scrapeProvider(provider, regions[r])
+          const region = regions[r];
+//logger.debug('scrapeProviders - region:', region);
+          if (config.scrape.onlyRegions.length && !config.scrape.onlyRegions.includes(region)) {
+            //logger.debug(`${provider.info.key} provider scrape break due to scrape.onlyRegions: ${region} not in ${config.scrape.onlyRegions}`);
+            continue;
+          }
+          const result = await scrapeProvider(provider, region);
           results = results.concat(result);
         }
         return results;
@@ -46,60 +63,66 @@ const scrapeProviders = async(req) => {
     )).flat(); // we flat-out due to Promise.All
     // save last scrape timestamp in globals
     globalsSet(`lastScrapeTimestamp`, lastScrapeTimestamp);
-    //logger.debug(`Request ${req.requestId} successful: ${data.length} providers scraped`); // TODO
-    logger.info(`providers.scrapeProviders.finishing.${req.requestId}.success: ${data.length}`);
+    const lastScrapeTimestampEnd = new Date();
+    const duration = (lastScrapeTimestampEnd - lastScrapeTimestamp).toHHMMSS();
+    logger.info(`providers.scrapeProviders.finishing.${req.requestId}.success ${data.length} items scraped in ${duration}`);
   } catch (err) {
-    //logger.debug(`Request ${req.requestId} unsuccessful: ${err}`); // TODO
-    logger.error(`providers.scrapeProviders.finishing.${req.requestId}.error: ${err}`);
+    logger.error(`providers.scrapeProviders.finishing.${req.requestId}.error ${dumperr(err)}`);
   } finally {
     globalsSet(`lastScrapeStatus`, `finished`);
   }
 }
 
 const scrapeProvidersImages = async (req) => {
+  logger.info(`providers.scrapeProvidersImages.starting.${req.requestId}`);
   try {
-
     if (config.scrape.debug.duplicateImagesCache) { // duplicate images cahce before starting
       const fse = require('fs-extra');
       const srcDir = `${config.imagesBaseFolder}`;
       const dstDir = `${config.imagesBaseFolder.replace(/\/$/, '')}.pre`;
       try {
         fs.rmdirSync(dstDir, { recursive: true });
-        logger.debug(`cleared images cache duplicate successfully`);
+        //logger.debug(`cleared images cache duplicate successfully`);
       } catch(err) {
-        logger.error(`error clearing images cache duplicate: ${err.message}`);
+        logger.warn(`error clearing images cache duplicate: ${dumperr(err)}`);
       }
       try {
         fse.copySync(srcDir, dstDir);
-        logger.debug(`copyed images cache duplicate successfully`);
+        //logger.debug(`copyed images cache duplicate successfully`);
       } catch (err) {
-        logger.error(`error duplicating images cache: ${err.message}`);
+        logger.warn(`error duplicating images cache: ${err.message}`);
       }
     }
 
+    const lastImagesScrapeTimestamp = new Date();
     const regionDescriptor = req.body.regionDescriptor || '*';
     const providers = getProvidersByRegion(regionDescriptor);
-    //Object.keys(providers).map((pk, index) => {console.log('filter in:', providers[pk], !(config.scrape.onlyProvider.length && !config.scrape.onlyProvider.includes(providers[index].info.key))); });
     const count = (await Promise.all(
       Object.keys(providers)
-      .filter(index => !(config.scrape.onlyProvider.length && !config.scrape.onlyProvider.includes(providers[index].info.key)))
+      .filter(index => !(config.scrape.onlyProviders.length && !config.scrape.onlyProviders.includes(providers[index].info.key)))
       .map(async index => {
         const provider = providers[index];
         const regions = getProviderRegions(provider, regionDescriptor);
         let results = 0;
-//console.log('regions:', regions);
         for (let r = 0; r < regions.length; r++) {
-          const result = await scrapeProviderImages(provider, regions[r]);
+          const region = regions[r];
+          if (config.scrape.onlyRegions.length && !config.scrape.onlyRegions.includes(region)) {
+            //logger.debug(`${provider.info.key} provider images scrape break due to scrape.onlyRegions: ${region} not in ${config.scrape.onlyRegions}`);
+            continue;
+          }
+          const result = await scrapeProviderImages(provider, region);
           results += result;
         }
         return results;
       })
     )).flat(); // we flat-out due to Promise.All
-    const sum = count.reduce((a, b) => a + b, 0);
-    logger.debug(`all providers persons images scraped, found ${sum} images`);
+    const sum = count.reduce((a, b) => parseInt(a) + parseInt(b), 0);
+    const lastImagesScrapeTimestampEnd = new Date();
+    const duration = (lastImagesScrapeTimestampEnd - lastImagesScrapeTimestamp).toHHMMSS()
+    logger.info(`providers.scrapeProvidersImages.finishing.${req.requestId}.success: ${sum ? sum : 0} images scraped in ${duration}`);
     return sum;
   } catch(err) {
-    throw(new Error(`error scraping providers persons images: ${err}`));
+    logger.error(`providers.scrapeProvidersImages.finishing.${req.requestId}.error: ${dumperr(err)}`);
   }
 }
 
@@ -167,9 +190,9 @@ const sameGroup_2_0 = (a, b) => {
 }
 
 /**
- * Check if two items share common (considered equal) images
+ * Check if two items share common (considered similar) images
  */
-const someCommonImages = (a, b, threshold = 0.10) => {
+const someCommonImages = (a, b, threshold = 0.10 /*0.1094*/) => {
   for (var i = 0, lenA = a.images.length; i < lenA; i++) {
     const ai = a.images[i];
     if (ai.phash) {
@@ -179,7 +202,7 @@ const someCommonImages = (a, b, threshold = 0.10) => {
         if (ai.url !== bj.url) { // the images are not from the same url, otherwise do not even compare them
           if (ai.category === bj.category) { // compare only images of the same category
             if (bj.phash) {
-              if (comparePHashes(ai.phash, bj.phash, threshold /*0.1094*/)) {
+              if (comparePerceptualHashes(ai.phash, bj.phash, threshold)) {
                 // found a common image
                 //return true;
                 return [ ai.localPath, bj.localPath ]; // TODO: DEBUG only
@@ -194,17 +217,13 @@ const someCommonImages = (a, b, threshold = 0.10) => {
 }
 
 scrapeProvider = async (provider, region, user) => {
-  if (config.scrape.onlyProvider.length && !config.scrape.onlyProvider.includes(provider.info.key)) {
-    logger.debug('BREAK DUE TO scrape.onlyProvider');
-    return;
-  }
   try {
     const browser = await browserLaunch();
     const page = await browserPageNew(browser);
 
     if (config.scrape.debug.puppeteer) page.on('console', msg => {
-      logger.debug(msg.text())
-    }); // do use logger.debug() inside page.evaluate
+      logger.debug(`provider ${provider.info.key} scrape message: ${msg.text()}, script row: ${msg._stackTraceLocations[0].lineNumber}, col: ${msg._stackTraceLocations[0].columnNumber}`);
+    }); // do use console.log() inside page.evaluate
 
     const items = await scrapeProviderMultiListAndItems(provider, region, page)
 
@@ -213,7 +232,7 @@ scrapeProvider = async (provider, region, user) => {
 
     return items ? (await Promise.all(items)).flat() : []; // we flat-out due to Promise.All
   } catch(err) {
-    throw (new Error(`error scraping provider ${provider.info.key}: ${err}`));
+    throw (new Error(`error scraping provider ${provider.info.key}: ${dumperr(err)}`));
   }
 };
 
@@ -224,6 +243,7 @@ const scrapeProviderMultiListAndItems = async (provider, region, page) => {
   do {
     const list = await scrapeList(provider, region, page, nextListPage);
     nextListPage = list && list.length ? list[list.length-1].nextListPage : null;
+
     let items = await scrapeItems(provider, region, page, list);
     if (items && items.length && items[items.length-1].itemFoundBreakMultiPage) { // one item was found existing in immutable provider: break multi page loop
       items.pop();
@@ -232,16 +252,24 @@ const scrapeProviderMultiListAndItems = async (provider, region, page) => {
     itemsMultiPage = itemsMultiPage.concat(items);
     pages++;
     if (config.scrape.onlyFirstPages > 0 && pages >= config.scrape.onlyFirstPages) {
-      logger.debug(`BREAK DUE TO scrape.onlyFirstPages: ${pages} >= ${config.scrape.onlyFirstPages}`);
-      break;
+      //logger.debug(`${provider.info.key} provider scrape multi list and items break due to scrape.onlyFirstPages: ${pages} >= ${config.scrape.onlyFirstPages}`);
+      nextListPage = null; // break loop
     }
-  } while (nextListPage);
+    if (config.scrape.onlyFirstItems > 0 && itemsMultiPage.length >= config.scrape.onlyFirstItems) {
+      //logger.debug(`${provider.info.key} break due to scrape.onlyFirstItems ${itemsFull.length} >= ${config.scrape.onlyFirstItems}`);
+      nextListPage = null; // break loop
+    }
+} while (nextListPage);
   return itemsMultiPage;
 }
 
 const scrapeList = async(provider, region, page, nextListPage) => {
   try {
-    return await provider.listPageEvaluate(region, page, nextListPage);
+    logger.info(`providers.scrapeList.listPageEvaluate ${provider.info.key}`);
+    const list = await provider.listPageEvaluate(region, page, nextListPage);
+    // show provider's list warnings, if any
+    for (let warning in list.warnings) logger.warn(`provider ${provider.info.key} list scraping warning: ${warning}`);
+    return list;
   } catch (err) {
     console.warn(`error scraping list for provider ${provider.info.key}: ${err}`);
   }
@@ -251,17 +279,21 @@ const scrapeItems = async (provider, region, page, list) => {
   try {
     const itemsFull = [];
     if (list) {
-      for (var i = 0; i < list.length; i++) {
+      const len = list.length;
+      for (var i = 0; i < len; i++) {
         const item = list[i];
         if (item.id) { // this is not a dummy item for multi-page handling
-          if (provider.info.immutable) { // this provider pages are immutable: avoid reparsing already present items
-            const exists = await itemExists(item); // check if already present, to avoid reparsing already present items...
-            if (exists) { // item found existing in immutable provider list: break and signal multi-page handle to break
+          if (provider.info.immutable && !config.scrape.alsoImmutables) { // this provider pages are immutable: avoid reparsing already present items
+            if (await itemExists(item)) { // item found existing in immutable provider list: break and signal multi-page handle to break
               itemsFull.push({itemFoundBreakMultiPage: true});
               break;
             }
           }
+          logger.info(`providers.scrapeItems.itemPageEvaluate ${provider.info.key}\t${item.id}\t[${1+i}/${len}]`);
           const itemFull = await provider.itemPageEvaluate(region, page, item);
+          // show provider's item warnings, if any
+          for (let warning in itemFull.warnings) logger.warn(`provider ${provider.info.key} item scraping warning: ${warning}`);
+
           if (itemFull) {
             if (itemFull.loginRequested) { // try to login
               const login = provider.info.login;
@@ -275,7 +307,7 @@ const scrapeItems = async (provider, region, page, list) => {
               i = i - 1; // reprocess previous item page, which failed requesting login
             } else {
               itemFull.phone = phoneNormalize(itemFull.phone).number; // can't do it in provider.itemPageEvaluate() because can't pass functions into puppeteer evaluation...
-              saveItem(itemFull);
+              await saveItem(itemFull); // TODO: we could run saveItem asynchronously...
               itemsFull.push(itemFull);
             }
           } else {
@@ -283,7 +315,7 @@ const scrapeItems = async (provider, region, page, list) => {
           }
         }
         if (config.scrape.onlyFirstItems > 0 && itemsFull.length >= config.scrape.onlyFirstItems) {
-          logger.debug(`BREAK DUE TO scrape.onlyFirstItems ${itemsFull.length} >= ${config.scrape.onlyFirstItems}`);
+          //logger.debug(`${provider.info.key} provider items scrape break due to scrape.onlyFirstItems ${itemsFull.length} >= ${config.scrape.onlyFirstItems}`);
           break;
         }
       }
@@ -296,14 +328,22 @@ const scrapeItems = async (provider, region, page, list) => {
 
 scrapeProviderImages = async (provider, region) => {
   try {
-    const items = await Items.find({
+    const items = await Items.find({ // TODO: filter only new images, with no localPath ... (NO, FIND ALL ITEMS)
       provider: provider.info.key,
       region: region,
+      //images: { $elemMatch: { localPath: null } }
     });
-//logger.debug('scrapeProviderImages items:', items.length)
+//logger.debug('scrapeProviderImages items with some image without localPath:', items.length);
     let count = 0;
     for (let i = 0; i < items.length; i++) {
+//logger.debug('*** scrapeProviderImages item:', items[i].id)
+      if (config.scrape.onlyFirstItems > 0 && i > config.scrape.onlyFirstItems) {
+        //logger.debug(`${provider.info.key} provider images scrape break due to scrape.onlyFirstItems ${i} > ${config.scrape.onlyFirstItems}`);
+        break;
+      }
+
       let item = items[i];
+//logger.debug('scrapeProviderImages item images:', item.images);
       if (config.scrape.onlyItemId.length && !config.scrape.onlyItemId.includes(item.id)) {
         continue;
       }
@@ -312,39 +352,73 @@ scrapeProviderImages = async (provider, region) => {
       item.region = region;
 
       for (let j = 0; j < item.images.length; j++) {
+//logger.error('j', item.images.length);
         let image = item.images[j];
 //logger.debug('scrapeProviderImages item image:', image)
-        if (!image.localPath) { // only download missing images
-//logger.debug(`--- downloading images of person ${item.provider} ${item.id} - n° ${1+i} / ${items.length} ---`);
-          const imageDownloaded = await downloadImage(provider, region, item, image);
-          if (imageDownloaded && imageDownloaded.success) {
-//logger.debug(`image phash: ${JSON.stringify(image.phash)}`);
-            if (!image.phash) {  // calculate image perceptual hash, if not present yet
-//logger.debug(`image phash being calculated`);
-              imageDownloaded.phash = await calculatePHash(imageDownloaded.localPath);
-//logger.debug(`--- saving image ${j} of ${item.images.length} -------------`);
-            }
+          image.cached = fs.existsSync(image.localPath); // check if file is already cached on fs
+          if (!image.localPath || !image.cached) { // only download images with no localPath, or missing file image
+//logger.debug(`--- downloading image of person ${item.provider} ${item.id} - n° ${1+j} / ${item.images.length} image: ${image} ---`);
 
-            // compare downloaded image phash with other images phashes to detect duplicates
-            let foundSimilarImage = false;
-            for (let k = 0; k < item.images.length; k++) {
-              if (item.images[k].phash) { // check images being compared has a phash already
-                if (comparePHashes(imageDownloaded.phash, item.images[k].phash, 0.02)) {
-                  foundSimilarImage = true;
-                  logger.debug(`two similar images for person ${item.provider} ${item.id} ${item.url}`);
-                  break;
-                }
-              } else {
-                logger.warn(`Item ${item.provider} ${item.id} ${item.title} image n. ${k} category ${item.images[k].category} has no phash, should not happen...`);
+          logger.info(`scrapeProvidersImages.provider.${provider.info.key}\t${item.id}\t[item ${1+i}/${items.length}] [image ${1+j}/${item.images.length}]`);
+          const response = await downloadImage(provider, region, item, image);
+          if (!response || !response.success) {
+            continue;
+          }
+          // if (!response.changed) {
+          //   logger.warn(`no change downloading image ${image.url}, ignoring it...`);
+          //   continue;
+          // }
+          const imageDownloaded = response.image;
+            //logger.debug(`image phash: ${JSON.stringify(image.phash)}`);
+
+          // calculate image perceptual hash
+          imageDownloaded.phash = await calculatePerceptualHash(imageDownloaded.localPath);
+          
+//logger.warn(` +++ image before dow:`, image);
+
+          // copy downloaded image props to items image
+          delete imageDownloaded.success;
+          for (var prop in imageDownloaded) image[prop] = imageDownloaded[prop];
+
+//logger.warn(` +++ image downloaded:`, imageDownloaded);
+//logger.debug(`image phash being calculated: ${imageDownloaded.phash}`);
+
+//logger.debug(`--- saving image ${j} of ${item.images.length} -------------`);
+//logger.debug(`--- saving image ${j} of ${item.images.length} -------------`);
+
+          // compare downloaded image phash with other images phashes (of the same item) to detect duplicates
+          let foundSimilarImage = -1;
+          let image2 = null;
+          for (let k = 0; k < item.images.length; k++) {
+            image2 = item.images[k];
+            if (k == j) continue; // do not compare the an image to itself
+//logger.error('k', item.images.length);
+            if (image2.duplicate) continue; // do not compare an image which is for sure a duplicate
+            if (image2.phash) { // check images being compared has a phash already
+//logger.debug(`comparing phashes: ${imageDownloaded.phash}, ${item.images[k].phash}`);
+              if (perceptuallyEqual(image/*Downloaded*/.phash, image2.phash)) {
+                foundSimilarImage = k;
+                break;                 
+              } else { // this is the standard case, two images do not match
+                //logger.warn(`Item ${item.provider} ${item.id} ${item.title} image n. ${k} category ${item.images[k].category} image is different by image n. ${j}`);
+              }
+            } else { // image of new item has no phash, yet
+              if (image2.localPath) { // no phsh should not happen on images already downloaded...
+                logger.warn(`item ${item.provider} ${item.id} ${item.title} image n. ${k} category ${image2.category} has no phash, should not happen...`);
               }
             }
-            if (foundSimilarImage) {
-              continue;
-            }
-
-            await saveItemImage(item, imageDownloaded);
-            count++;
           }
+          if (foundSimilarImage >= 0) {
+            if (!image2.duplicate) {
+              logger.debug(`two perceptually equal images for person ${item.provider} ${item.id} ${item.url}, images ${j} and ${foundSimilarImage}, marking it as duplicate`);
+              //await deleteItemImage(item, image); // TODO: we could delete asynchrounously, without await, in production...
+              image.duplicate = true;
+            }
+          }
+
+          // save item image
+          await saveItemImage(item, image/*Downloaded*/); // TODO: we could save asynchrounously, without await, in production...
+          count++;
         }
 //else logger.debug(`--- NOT downloading image ${j} of ${item.images.length}, it was already present ---`);
       }
@@ -364,12 +438,15 @@ const showCommonImages = (providers, items, commonImages) => {
   const url2 = encodeURIComponent(providers[items[1].provider].regions[items[1].region].imagesUrl + items[1].url);
   const url = `http://localhost:${config.defaultServerPort}/debug/sci/?img1=${commonImages[0]}&img2=${commonImages[1]}&url1=${url1}&url2=${url2}`;
   return url;
+
 }
 
 /**
  * Returns an array with all providers information
  */
 const getProviders = () => {
+  const glob = require('glob');
+  const path = require('path');
   const providers = [];
   glob.sync('src/providers/*.js').forEach(file => {
     p = require(path.resolve(file));
@@ -383,33 +460,40 @@ const getProviders = () => {
 const downloadImage = async (provider, region, item, image) => {
   imageUrl = provider.info.regions[region].imagesUrl + image.url;
   try {
-    const retval = {success: false};
-    const response = await fetch(imageUrl, {
-      headers: {
-        'If-Modified-Since': image.date ? image.date.toUTCString() : null,
+    const retval = {success: false, changed: true, already: false};
+    //const response = await fetch(imageUrl, {
+    const response = await got(imageUrl, {
+      headers: image.cached ? // add cache headers if image is already cached
+      {
+        'If-Modified-Since': image.date ? image.date.toUTCString() : undefined,
         'If-None-Match': image.etag,
-      },
+      } : {},
     });
-    const status = response.status;
-    if (status === 404) {
-      logger.warn(`image ${imageUrl} not found: ignoring`);
-      return retval;
+    switch (response.statusCode) {
+      case 404:
+        logger.warn(`image ${imageUrl} not found: ignoring`);
+        return retval;
+      case 304:
+        logger.debug(`image ${imageUrl} did not change`);
+        //retval.success = true;
+        retval.changed = false;
+        //return retval;
+        break;
+      case 200:
+        break;
+      default:
+        logger.warn(`image ${imageUrl} download status was ${statusCode}: ignoring`);
+        return retval;
     }
-    if (status === 304) {
-      logger.warn(`image ${imageUrl} did not change: ignoring`);
-      return retval;
-    }
-    if (status !== 200) {
-      logger.warn(`image ${imageUrl} download status was ${status}: ignoring`);
-      return retval;
-    }
-    const mimeType = response.headers.get('content-type').replace(/;.*/, '');
-    const date = response.headers.get('last-Modified');
-    const etag = response.headers.get('etag');
+
+    const mimeType = response.headers['content-type'];
+    const date = response.headers['last-modified'];
+    const etag = response.headers['etag'];
 
     if (etag === image.etag) {
-      logger.debug(`etag not changed for ${imageUrl}: ignoring`);
-      return retval;
+      logger.debug(`etag not changed for ${imageUrl}`);
+      retval.changed = false;
+      //return retval;
     }
     if (!mimeType) {
       logger.warn(`image ${imageUrl} content type was not defined: ignoring`);
@@ -426,20 +510,21 @@ const downloadImage = async (provider, region, item, image) => {
     const title = item.title.toLowerCase().replace(/[^a-z]/g, '');
     const md5 = crypto.createHash('md5').update(imageUrl).digest('hex');
     const outputFileName = `${config.imagesBaseFolder}${provider.info.key}/${id}_${title}_${category}_${md5}.${extension}`;
-//logger.debug('downloadImage - outputFileName:', outputFileName);
+    //logger.debug('downloadImage - outputFileName:', outputFileName);
     fs.mkdirSync(`${config.imagesBaseFolder}${provider.info.key}`, { recursive: true }); // be sure folder exists
-    const buffer = await response.buffer();
+    const buffer = await response.rawBody;
     try { // check if image exists already
       fs.accessSync(outputFileName, fs.constants.R_OK); 
-      //logger.debug(`image ${imageUrl} file exists already: ignoring`);
+      logger.info(`downloaded image ${imageUrl} file skipped because already present`);
+      retval.already = true;
     } catch (err) {
       if (err.code !== 'ENOENT') { // some error accessing file
         logger.warn(`file ${outputFileName} has some problem accessing: ${err.code}`);
-        // fall down
+        return retval;
       } else { // image does not exist, save it to filesystem
         try {
           fs.writeFileSync(outputFileName, buffer);
-          logger.debug(`downloaded image ${imageUrl} file saved`);
+          logger.info(`downloaded image ${imageUrl} file saved`);
         } catch (err) {
           logger.warn(`cannot save downloaded image file ${outputFileName}: ${err}`);
           return retval;
@@ -447,25 +532,23 @@ const downloadImage = async (provider, region, item, image) => {
       }
     }
     retval.success = true;
-    retval.url = image.url;
-    retval.category = image.category;
-    retval.date = date;
-    retval.etag = etag;
-    retval.localPath = outputFileName;
-// logger.debug('downloadImage - returning:', retval);
+    retval.image = {};
+    retval.image.url = image.url;
+    retval.image.category = image.category;
+    retval.image.date = date;
+    retval.image.etag = etag;
+    retval.image.localPath = outputFileName;
     return retval;
   } catch (err) {
-    logger.warn(`error downloading image at ${imageUrl}: ${err}`);
+    logger.warn(`error downloading image at ${imageUrl}: ${dumperr(err)}`);
   }
 }
 
 const itemExists = async(item) => {
   try {
-    //const Items = require("../models/Items" + "." + item.type);
     const retval = await Items.exists({
       id: item.id,
       provider: item.provider,
-      //region: item.region
     });
     return retval; 
   } catch (err) {
@@ -486,7 +569,7 @@ const saveItem = async(item) => {
           if (err) {
             throw (new Error(`error saving new item: ${err}`));
           }
-          compareItemsHistoryes(null, itemNew, itemNew);
+          compareItemsHistoryes(null, itemNew, itemNew); // we run compareItemsHistoryes asynchronously, it will debug log out of sync...
           //logger.debug(`item ${itemNew.title} inserted`);
         });
       } else { // an existing item
@@ -501,7 +584,7 @@ const saveItem = async(item) => {
             throw (new Error(`error updating item: ${err}`));
           }
           const itemNewLean = JSON.parse(JSON.stringify(itemNew._doc));
-          compareItemsHistoryes(itemOldLean, itemNewLean, itemNew);
+          compareItemsHistoryes(itemOldLean, itemNewLean, itemNew); // we run compareItemsHistoryes asynchronously, it will debug log out of sync...
           //logger.debug(`item ${itemNew.title} updated`);
         });
       }
@@ -510,8 +593,7 @@ const saveItem = async(item) => {
 }
 
 const itemsMerge = (o, n) => {
-  const type = "persons";
-  const Items = require("../models/Items" + "." + type);
+  const Items = require("../models/Items");
   //logger.debug('itemsMerge - Items schema.paths:', Object.keys(Items.schema.paths));
   const merged = {};
   const props = Object.keys(Items.schema.paths);
@@ -571,9 +653,16 @@ const itemsMerge = (o, n) => {
       case 'images': // array of objects (url, category, date, etag, phash, localPath)
         o[prop] = o[prop].map(p => { p.active = false; return p; }); // set active to false on all items of old prop array
         n[prop] = n[prop].map(p => { p.active = true; return p; }); // set active to true on all items of old prop array
+//console.log('before images arrays merge - o[prop]:', o[prop]);
+//console.log('before images arrays merge - n[prop]:', n[prop]);
         merged[prop] = arraysMerge(o[prop], n[prop], [ 'url' ]); // merge old and new arrays, excluding objects with a common set of props
+//console.log('after  images arrays merge - merged[prop]:', merged[prop]);
         break;
       case 'comments': // array of objects (author, authorCommentsCount, text, date, vote)
+//console.log('before comments arrays merge - o[prop]:', o[prop]);
+//console.log('before comments arrays merge - n[prop]:', n[prop]);
+        o[prop] = o[prop].map(p => { p.active = false; return p; }); // set active to false on all items of old prop array
+        n[prop] = n[prop].map(p => { p.active = true; return p; }); // set active to true on all items of old prop array
         merged[prop] = arraysMerge(o[prop], n[prop], [ 'author', 'text', 'date' ]); // merge old and new arrays, excluding objects with a common set of props
         break;
       default:
@@ -587,29 +676,37 @@ const itemsMerge = (o, n) => {
  * Merge two arrays of objects, excluding objects with a common set of props
  * @param {array} o
  * @param {array} n
- * @param {array} commonPropsSet
+ * @param {array} keyPropsSet
  */
-const arraysMerge = (o, n, commonPropsSet) => {
-  const keysOldSets = [];
-  const keysNewSets = [];
-  for (var i = 0; i < commonPropsSet.length; i++) { // build an array of sets for all commonPropsSet
-    keysOldSets[i] = new Set(o.map(d => d[commonPropsSet[i]])); // build a set of univoke keys in old array
-  }
-  for (var i = 0; i < commonPropsSet.length; i++) { // build an array of sets for all commonPropsSet
-    keysNewSets[i] = new Set(n.map(d => d[commonPropsSet[i]])); // build a set of univoke keys in new array
-  }
-  const merged = [...(n), ...(o).filter(m => { // merge new and old document for this prop, filtering it out if *all* commonPropsSet are equal
-    for (var i = 0; i < commonPropsSet.length; i++) { // loop through all commonPropsSet, to skip array elements with all key props equal
-      if (!(keysOldSets[i].has(m[commonPropsSet[i]]) && keysNewSets[i].has(m[commonPropsSet[i]]))) {
-        return true; // this common prop is not in this to-be-merged object: merge it
+const arraysMerge = (o, n, keyPropsSet) => {
+  const all = [...o, ...n]; // merge the two arrays
+  
+  // look for duplicate entries, and merge them
+  const merged = [];
+  all.forEach(a => { // scan trough items all
+    // look for duplicates of this all element into merged array
+    const index = merged.findIndex(m => {
+      let dup = true;
+      for (let i = 0; i < keyPropsSet.length; i++) {
+        const keyProp = keyPropsSet[i];     
+        if (m[keyProp] !== a[keyProp]) {
+          dup = false;
+          break;
+        }
       }
+      return dup;
+    });
+    if (index >= 0) { // a duplicate found in merged array: merge this all element with the duplicate
+      merged[index] = {...(merged[index]), ...(a)}
+    } else { // no duplicate found in merged array: push this all element
+      merged.push(a);
     }
-    return false; // all common props are in this to-be-merged object: skip it
-  })];
+  });
   return merged;
 }
 
-const compareItemsHistoryes = (itemOldLean, itemNewLean, itemNew) => {
+
+const compareItemsHistoryes = async (itemOldLean, itemNewLean, itemNew) => {
   const key = `${itemNewLean.provider} ${itemNewLean.id}`;
   if (!itemOldLean && !itemNewLean) { // safety check, should not happen
     logger.warn(`${key} neither new nor old item is set!`);
@@ -641,17 +738,17 @@ const compareItemsHistoryes = (itemOldLean, itemNewLean, itemNew) => {
             if (itemOldLean[prop] !== itemNewLean[prop]) {
               require('colors');
               const diff = require('diff');
-              const differences = diff.diffChars(itemOldLean[prop], itemNewLean[prop]);
+              const differences = diff.diffWords(itemOldLean[prop], itemNewLean[prop]);
               let difference = '';
               differences.forEach((part) => {
-                // green for additions, red for deletionn, grey for common parts
-                const color = part.added ? 'bgGreen' :
-                  part.removed ? 'bgRed' :
-                  'grey'
+                // green for additions, red for deletion, grey for common parts
+                const color = part.added ? 'blue' :
+                  part.removed ? 'red' :
+                  'green'
                 ;
                 difference += part.value[color];
               });
-              logger.info(`${key} changed ${prop}: ${difference}`);
+              logger.info(`${key} changed ${prop}:\n${difference}`);
 
               //logger.info(`${key} changed ${prop}: ${itemOldLean[prop]} => ${itemNewLean[prop]}`);
 
@@ -660,7 +757,6 @@ const compareItemsHistoryes = (itemOldLean, itemNewLean, itemNew) => {
             break;
           case 'array': // we assume one level only arrays (shallow compare)
 //if(prop !== 'images') break;
-//  console.log('PROP:', prop);
             const o = itemOldLean[prop];
             const n = itemNewLean[prop];
 
@@ -671,16 +767,17 @@ const compareItemsHistoryes = (itemOldLean, itemNewLean, itemNew) => {
               let found = false;
               for (var ni = 0; ni < n.length; ni++) {
                 const nObj = n[ni];
-                if (areEquivalent(nObj, oObj, ['_id', 'authorCommentsCount', 'date', 'etag', /*'type'*/, 'phash', 'localPath'])) {
+                if (areEquivalent(nObj, oObj, ['_id', 'authorCommentsCount', 'date', 'etag', /*'type'*/, 'phash', 'localPath', 'active', 'duplicate'])) {
                   found = true;
                   break;
                 }
-//else logger.warn('nObj', nObj);
+//else logger.warn('nObj is not equivalent:', nObj, oObj);
               }
               if (!found) { // this old item was not found or was different in new items
-//logger.warn('oObj not found!!!!', oObj); return;
+//logger.warn('oObj not found:', oObj);
                 removed.push(oObj);
               }
+//break;
             }
             if (removed.length) {
               logger.info(`${key} removed ${removed.length} ${prop}`/*: ${JSON.stringify(removed)}*/);
@@ -695,9 +792,9 @@ const compareItemsHistoryes = (itemOldLean, itemNewLean, itemNew) => {
               let found = false;
               for (var oi = 0; oi < o.length; oi++) {
                 const oObj = o[oi];
-  //console.log('COMPARING:', oObj, mObj);
+//console.log('COMPARING:', oObj, nObj);
                 //if (areEquivalent(oObj, nObj, ['_id'])) {
-                if (areEquivalent(nObj, oObj, ['_id', 'authorCommentsCount', 'date', 'etag', /*'type'*/, 'phash', 'localPath'])) {
+                if (areEquivalent(nObj, oObj, ['_id', 'authorCommentsCount', 'date', 'etag', /*'type'*/, 'phash', 'localPath', 'active', 'duplicate'])) {
                   found = true;
                   break;
                 }
@@ -713,16 +810,16 @@ const compareItemsHistoryes = (itemOldLean, itemNewLean, itemNew) => {
 
             break;
           default:
-            logger.warn(`${prop}: type ${type} diff is not yet implemented`);
+            logger.warn(`${prop}: type ${type} compare is not yet implemented`);
             break;
         }
       }
     });
   }
   if (added || changed) { // save changetAt now timestamp
-    itemNew.update({ changedAt: new Date() });
+    itemNew.update({ changedAt: new Date() }); // TODO: return changedAt date, do not update here
   } else {
-    logger.info(`${key} unchanged`)
+    //logger.debug(`${key} unchanged`);
   }
 }
 
@@ -756,26 +853,41 @@ const areEquivalent = (a, b, ignoredProps) => {
 }
 
 const saveItemImage = async(item, imageDownloaded) => {
-  delete imageDownloaded.success;
-  //logger.debug('saveItemImage - imageDownloaded:', imageDownloaded);
   try {
-    //const Items = require("../models/Items" + "." + item.type);
-    const retval = await Items.updateOne(
-      { id: item.id, provider: item.provider, "images": { "$elemMatch": { "url": imageDownloaded.url } }  },
-      { $set: { "images.$": imageDownloaded } },
-      function(err, result) {
-        if (err) {
-          console.warn('error updating item image:', imageDownloaded, err);
-        } else {
-          //logger.debug(`image ${imageDownloaded.url} updated ${result.ok === 1 ? 'successfully' : 'with some problem'}`, result);
-        }
-      }
-    );
-    return retval; 
+    const image = item._doc.images.find(image => image.url === imageDownloaded.url);
+    if (typeof image !== 'undefined') {
+      //logger.debug(`updating image ${image.url}`);
+      const retval = await Items.updateOne(
+        { id: item.id, provider: item.provider, 'images.url': imageDownloaded.url},
+        { '$set': { 'images.$': imageDownloaded } }
+      );
+      return retval;
+    } else {
+      throw (`image downloaded url ${imageDownloaded.url} was not found in item`);
+    }
   } catch (err) {
-    throw (new Error(`error saving item image: ${err}`));
+    throw (`error saving item image: ${err}`);
   }
+
 }
+  
+// const deleteItemImage = async(item, image) => {
+//   try {
+//     await Items.updateOne(
+//       { id: item.id, provider: item.provider },
+//       { $pull: { images: { url: image.url } } },
+//     );
+//   } catch (err) {
+//     throw (`error deleting item image: ${err}`);
+//   }
+//   try {
+//     if (fs.existsSync(image.localPath)) { // remove also image file
+//       fs.unlinkSync(image.localPath);
+//     }
+//   } catch (err) {
+//     throw (`error deleting item image: ${err}`);
+//   }
+// }
 
 updateUserStatus = async (user) => { // TODO: DEBUG ME !
   try {
@@ -790,7 +902,7 @@ logger.debug('userStatus:', userStatus);
     });
 return userStatus;
   } catch(err) {
-    throw (new Error(`error updating user status: ${err}`));
+    throw (new Error(`error updating user status: ${dumperr(err)}`));
   }
 }
 
@@ -825,18 +937,24 @@ updateUserProps = async (user, item, props) => { // TODO: DEBUG ME !
     const result = await UserStatuses.findOneAndUpdate(query, update, options).exec(); //, function(error, result) {
     return result;
   } catch(err) {
-    throw (new Error(`error updating user props: ${err.message}`));
+    throw (new Error(`error updating user props: ${dumperr(err)}`));
   }
 }
 
-scrapeSchedule = async(providers, region, user) => {
+const scrapeSchedule = async(req) => {
+  logger.info(`providers.scrapeSchedule.enable.${req.requestId}`);
   try {
-    cron.schedule(config.schedule, () => {
-      logger.debug('running on', new Date().toUTCString());
-      const result = scrapeProviders(providers, region, user);
+    const schedule = req.body.schedule ? req.body.schedule : config.schedule;
+    cron.schedule(schedule, async() => {
+      // TODO: check no scrape is running already...
+      logger.debug(`scheduling scrape now (${new Date().toUTCString()}) - schedule is ${schedule}`);
+      await scrapeProviders(req);
+      await scrapeProvidersImages(req);
     });
-  } catch(err) {
-    throw (new Error(`error scheduling scraping ${err}`));
+    logger.info(`providers.scrapeSchedule.enable.${req.requestId}.success`);
+  } catch (err) {
+    logger.error(`providers.scrapeSchedule.enable.${req.requestId}.error ${dumperr(err)}`);
+    throw (new Error(`error scheduling scraping ${dumperr(err)}`));
   }
 }
 
@@ -844,7 +962,7 @@ scrapeSchedule = async(providers, region, user) => {
 //   try {
 //     console.info('register:', await register(email, password, name, phone, role));
 //   } catch(err) {
-//     throw(new Error(`error registering user: ${err}`));
+//     throw(new Error(`error registering user: ${dumperr(err)}`));
 //   }
 // }
 
@@ -852,7 +970,7 @@ scrapeSchedule = async(providers, region, user) => {
 //   try {
 //     console.info('login:', await login(email, password));
 //   } catch(err) {
-//     throw(new Error(`error logging user: ${err}`));
+//     throw(new Error(`error logging user: ${dumperr(err)}`));
 //   }
 // }
 
@@ -865,7 +983,7 @@ const _updateUserStatus = async () => {
     const item = {vote: 0.7, note: 'nice'};
     console.info('updateUserStatus:', await updateUserStatus(user));
   } catch(err) {
-    throw (new Error(`error updating user status: ${err}`));
+    throw (new Error(`error updating user status: ${dumperr(err)}`));
   }
 }
 
@@ -1010,7 +1128,27 @@ globalsSet = async(key, value) => {
   await globals.updateOne({ key }, { value }, { upsert: true }).exec();
 }
 
+String.prototype.toHHMMSS = function() {
+  var sec_num = parseInt(this, 10) / 1000;
+  var hours = Math.floor(sec_num / 3600);
+  var minutes = Math.floor((sec_num - (hours * 3600)) / 60);
+  var seconds = sec_num - (hours * 3600) - (minutes * 60);
+  if (hours < 10) { hours = "0" + hours; }
+  if (minutes < 10) { minutes = "0" + minutes; }
+  if (seconds < 10) { seconds = "0" + seconds; }
+  return hours + ':' + minutes + ':' + seconds;
+};
 
+Number.prototype.toHHMMSS = function() {
+  var sec_num = parseInt(this / 1000, 10);
+  var hours = Math.floor(sec_num / 3600);
+  var minutes = Math.floor((sec_num - (hours * 3600)) / 60);
+  var seconds = sec_num - (hours * 3600) - (minutes * 60);
+  if (hours < 10) { hours = "0" + hours; }
+  if (minutes < 10) { minutes = "0" + minutes; }
+  if (seconds < 10) { seconds = "0" + seconds; }
+  return hours + ':' + minutes + ':' + seconds;
+};
 
 module.exports = {
   scrapeProviders,
@@ -1020,4 +1158,5 @@ module.exports = {
   itemsMerge,
   getProviders,
   showCommonImages,
+  scrapeSchedule,
 };

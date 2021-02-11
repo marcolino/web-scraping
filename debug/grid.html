@@ -5,57 +5,154 @@
   <base href="http://localhost:3001">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!--<link rel="stylesheet" href="assets/fonts/Roboto.css">-->
   <style>
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
+      font-family: "Roboto", "sans-serif";
+      font-style: normal;
     }
-    main {
+    #main {
       display: grid;
-      grid-gap: 2rem;
+      grid-gap: 1.5rem;
       grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      grid-auto-rows: minmax(150px, 1fr);
+      grid-auto-rows: minmax(320px, 1fr);
       grid-auto-flow: dense;
-      padding: 2rem;
+      padding: 1rem;
     }
     .card {
-      background-color: #770f0f;
-      border: 3px solid white;
-      border-radius: .66rem;
-      /* center number in cards */
+      position: relative;
+      /*background-color: #770f0f;*/
+      background-color: black;
+      border: 1px solid black;
+      border-radius: 0.66rem;
+      /* center image in cards */
       display: flex;
       align-items: center;
       justify-content: center;
       color: white;
     }
+    .overlay {
+      float: bottom;
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      height: 50px;
+      z-index: 1000;
+      background-color: rgba(0, 0, 0, 0.5);
+      /* border: 1px solid black; */
+      border-radius: 0.66rem;
+      padding: 5px;
+      color: rgba(255, 255, 255, 0.8);
+      font-weight: bold;
+      font-size: 1.4em;
+      text-align: center;
+      font-family: "NO Roboto", "sans-serif";
+      font-style: normal;
+    }
   </style>
+  <script>
+    const size = 300;
+
+    function load() {
+      fetch('/items', {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(
+          {
+            // "filter": {
+            //   "provider": "toe"
+            // },
+            "flags": {
+              "onlyMainImages": true,
+              "onlyCommentsCount": true,
+              "missingToo": false,
+            }
+          }
+        )
+      })
+      .then(response => response.json())
+      .then(result => {
+        console.log('result:', result);
+        const main = document.getElementById('main');
+        for (let i = 0; i < result.data.length; i++) {
+          const card = document.createElement('div');
+          card.className = 'card';
+          const link = document.createElement('a');
+          const img = document.createElement('img');
+          const provider = result.data[i].provider;
+          let baseurl = '';
+          //console.log(provider);
+          switch (provider) {
+            case 'sgi':
+              baseurl = 'https://sexyguidaitalia.com/';
+              baseurlimg = 'https://sexyguidaitalia.com/';
+              break;
+            case 'toe':
+              baseurl = 'https://www.torinoerotica.com/';
+              baseurlimg = 'https://www.torinoerotica.com/';
+              break;
+            case 'pf':
+              baseurl = 'https://community.punterforum.com/';
+              baseurlimg = 'https://community.punterforum.com/';
+              break;
+            case 'ef':
+              baseurl = 'https://escortforumit.xxx/';
+              baseurlimg = 'https://pic.escortforumit.xxx/escortforumit.xxx/';
+              break;
+            default: throw new Error(`Unforeseen provider ${provider}`);
+          }
+          if (result.data[i].images[0]) {
+            link.href = baseurl + result.data[i].url;
+            link.target = baseurl + result.data[i].url;
+            img.src = baseurlimg + (result.data[i].images[0] ? result.data[i].images[0].url : '');
+            img.style.maxWidth = `${size}px`;
+            img.style.maxHeight = `${size}px`;
+            if (result.data[i].missing) {
+              img.style.opacity = 0.3;
+            }
+          } else console.warn('no first image item:', result.data[i]);
+
+          const overlay = document.createElement('div');
+          overlay.className = 'overlay';
+          overlay.innerHTML = `${result.data[i].title} <img class="logo-provider" src="assets/images/logos/${provider}.png" style="width:24px; vertical-align: bottom; padding-bottom: 2px;">`;
+
+          link.appendChild(img);
+          card.appendChild(link);
+          card.appendChild(overlay);
+          main.appendChild(card);
+        }
+      });
+    }
+    window.onload = load;
+  </script>
 </head>
 
 <body>
-  <h1>Images Grid</h1>
-  <main>
-    <div class="card">1</div>
-    <div class="card">2</div>
-    <div class="card">3</div>
-    <div class="card">4</div>
-    <div class="card">5</div>
-    <div class="card">6</div>
-    <div class="card">7</div>
-    <div class="card">8</div>
-    <div class="card">9</div>
-    <div class="card">10</div>
-    <div class="card">11</div>
-  </main>
+  <h1 style="text-align:center">Images Grid</h1>
+  <div id="main">
+    <div id="card-1" class="card">
+      <a href="https://google.com">
+        <img id="img-1" src="https://cdn.artphotolimited.com/images/5791da9f23dcc50044c86953/700x700/dans-tes-yeux-3.jpg" style="max-width: 300px">
+      </a>
+      <div class="overlay">
+        Prova 1
+      </div>
+    </div>
+    <div id="card-2" class="card">
+      <a href="https://twitter.com">
+        <img id="img-2" src="https://www.lookslikefilm.com/wp-content/uploads/2019/02/Alexis-Fernandez.jpg" style="max-width: 300px">
+      </a>
+      <div class="overlay">
+        Prova 2
+      </div>
+    </div>
+</main>
 </body>
 </html>
-<script>
-  // var query = {};
-  // location.search.substr(1).split("&").forEach(function (item) { query[item.split("=")[0]] = item.split("=")[1] })
-  // document.getElementById("img1").src = query.img1;
-  // document.getElementById("img2").src = query.img2;
-  // document.getElementById("url1").href = decodeURIComponent(query.url1);
-  // document.getElementById("url2").href = decodeURIComponent(query.url2);
-</script>
-
 </html>

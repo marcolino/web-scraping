@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+#
+# Delete one item by index in array of a document by _id from collection
+
+db=${1:-web-scraping}
+collection=${2:-items}
+id=${3}
+propArray=${4}
+index=${5}
+
+if [ -z "$db" ]; then
+  echo "Please specify db name as first parameter"; exit -1
+fi
+if [ -z "$collection" ]; then
+  echo "Please specify collection name as second parameter"; exit -1
+fi
+if [ -z "$id" ]; then
+  echo "Please specify an id as third parameter"; exit -1
+fi
+
+echo 'db.'$collection'.updateOne({"_id": ObjectId("'$id'")}, { $unset: { "'${propArray}.${index}'": null } } )' | \
+mongo "$db" --quiet | \
+grep -v '^bye$'
+
+echo 'db.'$collection'.updateOne({"_id": ObjectId("'$id'")}, { $pull: { '${propArray}': null } } )' | \
+mongo "$db" --quiet | \
+grep -v '^bye$'

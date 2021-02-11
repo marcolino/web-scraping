@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+#
+# Drop a collection
+
+DB=${1:-web-scraping}
+COLLECTION=${2}
+
+if [ -z "$DB" ]; then
+  echo "Please specify db name as first parameter"; exit -1
+fi
+if [ -z "$COLLECTION" ]; then
+  echo "Please specify collection name as second parameter"; exit -1
+fi
+
+# drop collection
+echo 'db.'$COLLECTION'.drop()' | \
+mongo "$DB" --quiet | \
+grep -v '^bye$' #>/dev/null

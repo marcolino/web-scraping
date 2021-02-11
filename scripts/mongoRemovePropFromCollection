@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+#
+# Remove prop from collection
+
+db=${1:-web-scraping}
+collection=${2:-items}
+prop=${3}
+
+if [ -z "$db" ]; then
+  echo "Please specify db as first parameter"; exit -1
+fi
+if [ -z "$collection" ]; then
+  echo "Please specify collection as second parameter"; exit -1
+fi
+if [ -z "$prop" ]; then
+  echo "Please specify a prop as third parameter"; exit -1
+fi
+
+echo 'db.'$collection'.update({}, {$unset: {'$prop':1}}, false, true)' | \
+mongo "$db" --quiet | \
+grep -v '^bye$'

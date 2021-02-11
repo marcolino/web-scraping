@@ -64,8 +64,6 @@ const private = (req, res, next) => {
 }
 
 const verifyUserPassword = (user, password) => {
-  console.log('verifyUserPassword', user, password);
-  logger.debug('verifyUserPassword', user, password);
   if (
     (bcrypt.compareSync(password, user.password)) ||
     ((process.env.NODE_ENV === 'development') && (password === user.password)) // while developing we accept clean text passwords too

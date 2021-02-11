@@ -21,7 +21,7 @@ const info = {
 };
 
 const config = require('../config');
-const logger = require('../logger');
+//const logger = require('../logger');
 
 async function listPageEvaluate(region, page) {
   return new Promise(async (resolve, reject) => {
@@ -30,7 +30,7 @@ async function listPageEvaluate(region, page) {
     if (!url) {
       throw (new Error(`region ${region} for provider ${info.key} has no list url`));
     }
-    logger.info(`listPageEvaluate.provider.${info.key}.${url}`);
+    //logger.info(`listPageEvaluate.provider.${info.key}.${url}`);
     try {
       if (info.cookie) {
         await page.setCookie(info.cookie);
@@ -70,7 +70,7 @@ async function listPageEvaluate(region, page) {
           }
 
           if (config.scrape.onlyItemId.length && !config.scrape.onlyItemId.includes(data.id)) {
-            console.log('BREAK DUE TO scrape.onlyItemId');
+            //console.log('BREAK DUE TO scrape.onlyItemId');
             return;
           }
 
@@ -86,7 +86,7 @@ async function listPageEvaluate(region, page) {
             const imgElement = item.querySelector("img.escort-thumb");
             if (imgElement) {
               const hostRegexp = new RegExp('^' + imagesUrl);
-              let imageUrl = imgElement.getAttribute("src").replace(/^\//, '').replace(hostRegexp, '');
+              let imageUrl = imgElement.getAttribute("src").replace(/^\//, '').replace(/\?.*/, '').replace(hostRegexp, '');
               const image = { url: imageUrl, category: 'main' };
               data.images.push(image);
             }
@@ -117,7 +117,7 @@ async function listPageEvaluate(region, page) {
           }
 
           try { // selfDescription
-            data.selfDescription = item.querySelector("div.l_about_text").innerText.replace(/^\s+|\s+$/g, '');
+            data.selfDescription = item.querySelector("div.l_about_text").innerText.replace(/^\s+|\s+$/g, '').replace(/\n+/g, '\n');
           } catch (err) {
             throw(new Error(`reading url ${url} looking for self description: ${err.message}`));
           }
@@ -148,7 +148,7 @@ const itemPageEvaluate = async (region, page, item) => {
       throw (new Error(`url not defined for provider ${info.key} at region region ${region}`));
     }
     const url = baseUrl + itemUrl;
-    logger.info(`itemPageEvaluate.provider.${info.key}.${url}`);
+    //logger.info(`itemPageEvaluate.provider.${info.key}.${url}`);
     try {
       if (info.cookie) {
         await page.setCookie(info.cookie);
@@ -243,26 +243,26 @@ const itemPageEvaluate = async (region, page, item) => {
           throw(new Error(`reading url ${url} looking for services: ${err.message}`));
         }
 
-        try { // small images
-          document.querySelectorAll("div#gallery-content-0 img").forEach(imgElement => {
-            if (imgElement) {
-              const hostRegexp = new RegExp('^' + imagesUrl);
-              let imageUrl = imgElement.getAttribute("src").replace(/^\//, '').replace(hostRegexp, '');
-              const image = { url: imageUrl, category: 'small' };
-              if (imageUrl !== "#") {
-                data.images.push(image);
-              }
-            }
-          });
-        } catch (err) {
-          throw(new Error(`reading url ${url} looking for small images: ${err.message}`));
-        }
+        // try { // small images
+        //   document.querySelectorAll("div#gallery-content-0 img").forEach(imgElement => {
+        //     if (imgElement) {
+        //       const hostRegexp = new RegExp('^' + imagesUrl);
+        //       let imageUrl = imgElement.getAttribute("src").replace(/^\//, '').replace(/\?.*/, '').replace(hostRegexp, '');
+        //       const image = { url: imageUrl, category: 'small' };
+        //       if (imageUrl !== "#") {
+        //         data.images.push(image);
+        //       }
+        //     }
+        //   });
+        // } catch (err) {
+        //   throw(new Error(`reading url ${url} looking for small images: ${err.message}`));
+        // }
 
         try { // full images
           document.querySelectorAll("div#gallery-content-0 a").forEach(imgElement => {
             if (imgElement) {
               const hostRegexp = new RegExp('^' + imagesUrl);
-              let imageUrl = imgElement.getAttribute("href").replace(/^\//, '').replace(hostRegexp, '');
+              let imageUrl = imgElement.getAttribute("href").replace(/^\//, '').replace(/\?.*/, '').replace(hostRegexp, '');
               const image = { url: imageUrl, category: 'full' };
               if (imageUrl !== "#") {
                 data.images.push(image);
@@ -277,6 +277,8 @@ const itemPageEvaluate = async (region, page, item) => {
 
         return data;
 
+        // We are not processing comments from this provider, since they are auto-moderated and even auto-produced, so completely misleading
+        //
         // TODO: TO GET COMMENTS: https://www.escortforumit.xxx/it/comments-v2/ajax-show?escort_id=16625&page=1...N (6 per page)
         // TODO: TO GET REVIEWS: https://www.escortforumit.xxx/recensioni/brendaNA-16625?page=1...N (2 per page)
         // try { // comments

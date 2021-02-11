@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+#
+# Update prop in all documents in collection
+
+db=${1:-web-scraping}
+collection=${2:-items}
+filter=${3:-{}}
+propName=${3}
+propValue=${4}
+
+if [ -z "$db" ]; then
+  echo "Please specify db as first parameter"; exit -1
+fi
+if [ -z "$collection" ]; then
+  echo "Please specify collection as second parameter"; exit -1
+fi
+if [ -z "$filter" ]; then
+  echo "Please specify a filter as third parameter"; exit -1
+fi
+if [ -z "$propName" ]; then
+  echo "Please specify a prop name as fourth parameter"; exit -1
+fi
+if [ -z "$propValue" ]; then
+  echo "Please specify a prop value as fifth parameter"; exit -1
+fi
+
+echo 'db.'${collection}'.updateMany('${filter}', {$set: {'$propName':'$propValue'}})' | \
+mongo "$db" --quiet | \
+grep -v '^bye$'

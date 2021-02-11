@@ -12,6 +12,10 @@
   - in compareItemsHistoryes, handle objects
   - in compareItemsHistoryes, in images array do not consider changes in localPath, pHas, ... but only in url (?)
   - finish debug/grid, to view a grid of images from some debug endpoin, if needed...
+  - wrtite to globals date and time and result of each scrape
+  - decide if using throw(new Error(...)) or logger.error(...) on scraping errors (throw while inside inner functions, log while in top level functions)
+  - add fake image in db without image on disk to debuf scrapeProvidersImages... (https://scontent-cdt1-1.xx.fbcdn.net/v/t1.0-1/43599420_1139655082879487_2594198514942607360_n.jpg)
+  - mark duplicate images as duplicates, do not delete them
   - test:
     V login with password unselectable in model
     - what happens if an item has no main image in getItems (should be returned nonetheless)
