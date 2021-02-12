@@ -40,7 +40,6 @@ app.use(`/doc`, swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use(`/debug`, debugRoutes);
 if (process.env.NODE_ENV === 'development') { // development only routes
   app.use('/cache', express.static(path.join(__dirname, '../cache')));
-  app.use('/assets/fonts', express.static(path.join(__dirname, '../debug/assets/fonts')));
   app.use('/assets', express.static(path.join(__dirname, '../debug/assets')));
 }
 
@@ -72,6 +71,6 @@ app.all('*', addRequestId);
   // start the server
   const port = process.env.PORT || config.defaultServerPort;
   app.listen(port, async () => {
-    logger.info(`listening on port ${port}`);
+    logger.info(`listening on port ${port} on all interfaces`);
   });
 });

@@ -11,7 +11,7 @@
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: "Roboto", "sans-serif";
+      font-family: /*"Roboto",*/ "sans-serif";
       font-style: normal;
     }
     #main {
@@ -39,18 +39,33 @@
       position: absolute;
       bottom: 0;
       width: 100%;
-      height: 50px;
+      height: 75px;
       z-index: 1000;
       background-color: rgba(0, 0, 0, 0.5);
       /* border: 1px solid black; */
       border-radius: 0.66rem;
       padding: 5px;
       color: rgba(255, 255, 255, 0.8);
+      text-align: center;
+    }
+    .overlay1 {
       font-weight: bold;
       font-size: 1.4em;
-      text-align: center;
-      font-family: "NO Roboto", "sans-serif";
       font-style: normal;
+    }
+    .overlay2 {
+      font-weight: normal;
+      font-size: 0.9em;
+      font-style: normal;
+    }
+    .logo-provider {
+      width: 24px;
+      vertical-align: bottom;
+      padding-bottom: 2px;
+    }
+    .icon-phone {
+      width: 20px;
+      vertical-align: bottom;
     }
   </style>
   <script>
@@ -65,13 +80,13 @@
         },
         body: JSON.stringify(
           {
-            // "filter": {
-            //   "provider": "toe"
-            // },
+            "filter": {
+              "provider": "sgi"
+            },
             "flags": {
               "onlyMainImages": true,
               "onlyCommentsCount": true,
-              "missingToo": false,
+              "missingToo": true,
             }
           }
         )
@@ -107,29 +122,98 @@
               break;
             default: throw new Error(`Unforeseen provider ${provider}`);
           }
+          link.href = baseurl + result.data[i].url;
+          link.target = baseurl + result.data[i].url;
           if (result.data[i].images[0]) {
-            link.href = baseurl + result.data[i].url;
-            link.target = baseurl + result.data[i].url;
             img.src = baseurlimg + (result.data[i].images[0] ? result.data[i].images[0].url : '');
-            img.style.maxWidth = `${size}px`;
-            img.style.maxHeight = `${size}px`;
-            if (result.data[i].missing) {
-              img.style.opacity = 0.3;
-            }
-          } else console.warn('no first image item:', result.data[i]);
+          } else {
+            console.warn('no first image item:', result.data[i]);
+            img.src = `https://via.placeholder.com/200x300/FF0000/FFF?text=no image`;
+          }
+          img.style.maxWidth = `${size}px`;
+          img.style.maxHeight = `${size}px`;
+          if (result.data[i].missing) {
+            img.style.opacity = 0.3;
+          }
 
           const overlay = document.createElement('div');
           overlay.className = 'overlay';
-          overlay.innerHTML = `${result.data[i].title} <img class="logo-provider" src="assets/images/logos/${provider}.png" style="width:24px; vertical-align: bottom; padding-bottom: 2px;">`;
 
+          const overlay1 = document.createElement('div');
+          overlay1.className = 'overlay1';
+          overlay1.innerHTML = ``;
+          overlay1.innerHTML += `<img class="logo-provider" src="assets/images/logos/${provider}.png">`;
+          overlay1.innerHTML += `&emsp;`;
+          overlay1.innerHTML += `${result.data[i].title}`;
+
+          const overlay2 = document.createElement('div');
+          overlay2.className = 'overlay2';
+          overlay2.innerHTML = ``;
+          const arrived = fuzzyTimeDistanceFromNow(new Date(result.data[i].createdAt));
+          overlay2.innerHTML += `📅 ${arrived}`;
+          if (result.data[i].commentsCount > 0) {
+            overlay2.innerHTML += `&emsp;`;
+            overlay2.innerHTML += `💬 ${result.data[i].commentsCount}`;
+          }
+          if (result.data[i].phone) {
+            overlay2.innerHTML += `&emsp;`;
+            overlay2.innerHTML += `<a href="tel:${result.data[i].phone}"><img class="icon-phone" src="assets/images/icons/phone.png"></a>`;
+          }
+
+          overlay.appendChild(overlay1);
+          overlay.appendChild(overlay2);
           link.appendChild(img);
           card.appendChild(link);
           card.appendChild(overlay);
           main.appendChild(card);
         }
+      })
+      .catch(err => {
+        alert(JSON.stringify(err.message));
       });
     }
     window.onload = load;
+
+    /**
+     * Provides a natural language (fuzzy) representation of a time distance from now
+     * Currently this works for dates in the past only.
+     * Currently it is localized for Italian only.
+     */
+    const fuzzyTimeDistanceFromNow = (date) => {
+      const delta = Math.round((+new Date - date) / 1000);
+      const
+        minute = 60,
+        hour = minute * 60,
+        day = hour * 24,
+        week = day * 7,
+        month = day * 30,
+        year = day * 365
+      ;
+
+      if (delta < 30) {
+        return `proprio adesso`;
+      } else if (delta < minute) {
+        return `${delta} secondi fa`;
+      } else if (delta < 2 * minute) {
+        return `un minuto fa`;
+      } else if (delta < hour) {
+        return `${Math.floor(delta / minute)} minuti fa`
+      } else if (Math.floor(delta / hour) == 1) {
+        return `un'ora fa`;
+      } else if (delta < day) {
+        return `${Math.floor(delta / hour)} ore fa`;
+      } else if (delta < day * 2) {
+        return `ieri`;
+      } else if (delta < month) {
+        return `${Math.floor(delta / day)} giorni fa`;
+      } else if (delta < year) {
+        return `${Math.floor(delta / month)} mesi fa`;
+      } else { // more than a year
+        const years = Math.floor(delta / year);
+        const months = Math.floor((delta - years) / month);
+        return `${years} anni e ${months} mesi fa`;
+      }
+    }
   </script>
 </head>
 
@@ -138,21 +222,20 @@
   <div id="main">
     <div id="card-1" class="card">
       <a href="https://google.com">
-        <img id="img-1" src="https://cdn.artphotolimited.com/images/5791da9f23dcc50044c86953/700x700/dans-tes-yeux-3.jpg" style="max-width: 300px">
+        <img id="img-1" src="https://via.placeholder.com/300/0000FF/DDD?text=Prova 1" style="max-width: 300px">
       </a>
-      <div class="overlay">
+      <div class="overlay overlay1">
         Prova 1
       </div>
     </div>
     <div id="card-2" class="card">
       <a href="https://twitter.com">
-        <img id="img-2" src="https://www.lookslikefilm.com/wp-content/uploads/2019/02/Alexis-Fernandez.jpg" style="max-width: 300px">
+        <img id="img-2" src="https://via.placeholder.com/300/00FF00/222?text=Prova 2" style="max-width: 300px">
       </a>
-      <div class="overlay">
+      <div class="overlay overlay1">
         Prova 2
       </div>
     </div>
-</main>
+  </div>
 </body>
-</html>
 </html>

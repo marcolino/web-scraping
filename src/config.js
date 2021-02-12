@@ -16,7 +16,7 @@ exports.scrape = {
     duplicateItemsPersonsCollection: true, // duplicate db collection 'items.persons' before starting
     duplicateImagesCache: true, // duplicate images cache before starting
   },
-  onlyProviders: ["toe", "ef", "sgi"], // scrape only a subset of providers
+  onlyProviders: ["ef"], // scrape only a subset of providers
   onlyRegions: ["italy.torino"], // scrape only a subset of regions
   onlyItemId: [], // scrape only a subset of items id's
   onlyFirstPages: 0, // scrape olny the first n pages (0 means all pages)

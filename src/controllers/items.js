@@ -1,6 +1,7 @@
-const { getCountryCallingCode } = require('libphonenumber-js');
+//const { getCountryCallingCode } = require('libphonenumber-js');
 const { ObjectID } = require('mongodb');
 const logger = require('../logger');
+const { getProviders } = require('../utils/misc');
 const globals = require('../models/Globals');
 const items = require('../models/Items');
 
@@ -14,14 +15,10 @@ async function getItems(req, res, next) {
     // call();
     // hrend = process.hrtime(hrstart); logger.info(`call() execution time (hr): ${hrend[1] / 1000000} ms`);
 
-    const lastScrapeTimestamp = await globals.findOne({ key: 'lastScrapeTimestamp' }).exec();
-    //logger.info('lastScrapeTimestamp value:', lastScrapeTimestamp.value);
-
     const filterOnlyNew = flags && flags.onlyNew ? { createdAt: { $gte: lastScrapeTimestamp.value } } : {}; // select only new items, if requested
     const filterOnlyNewAndChanged = flags && flags.onlyNewAndChanged ? { $or: [ { createdAt: { $gte: lastScrapeTimestamp.value } }, { changedAt: { $gte: lastScrapeTimestamp.value } } ] } : {}; // select only new items, if requested
-    const filterMissingToo = flags && flags.missingToo ? {} : { onHoliday: { $ne: true }, $or: [ { updatedAt: { $gte: lastScrapeTimestamp.value } }, { immutable: true } ] }; // select missing items, too, if requested
-
-console.log(filter, filterOnlyNew, filterOnlyNewAndChanged, filterMissingToo);
+    //const filterMissingToo = flags && flags.missingToo ? {} : { onHoliday: { $ne: true }, $or: [ { presentAt: { $gte: lastScrapeTimestamp.value } }, { immutable: true } ] }; // select missing items, too, if requested
+    const filterSuspiciousToo = flags && flags.suspiciousToo ? {} : { suspicious: { $ne: true } }; // select suspicious items, too, if requested
 
     let itemsList = await items.
       find(
@@ -29,13 +26,14 @@ console.log(filter, filterOnlyNew, filterOnlyNewAndChanged, filterMissingToo);
           ...filter,
           ...filterOnlyNew,
           ...filterOnlyNewAndChanged,
-          ...filterMissingToo,
+          //...filterMissingToo,
+          ...filterSuspiciousToo,
         },
         {
           _id: 0,
-          missing: 1,
-          dateUpdated: 1,
+          //missing: 1,
           provider: 1,
+          immutable: 1,
           id: 1,
           url: 1,
           title: 1,
@@ -43,19 +41,38 @@ console.log(filter, filterOnlyNew, filterOnlyNewAndChanged, filterMissingToo);
           suspicious: 1,
           images: 1,
           comments: 1,
+          onHoliday: 1,
           createdAt: 1,
+          presentAt: 1,
           updatedAt: 1,
           changedAt: 1,
           //group: 1,
         }
       )
-      .select({ // TODO: what happens if an item has no main image? we want it too...
-        images: 1,
-        comments: 1,
-      })
-      .sort({insertedAt: 'descending', changedAt: 'descending', updatedAt: 'descending'})
+      // .select({ // TODO: what happens if an item has no main image? we want it too...
+      //   images: 1,
+      //   comments: 1,
+      // })
+      .sort({createdAt: 'descending', changedAt: 'descending', updatedAt: 'descending'})
       .lean()
     ;
+
+    // populate missing prop
+    const providers = getProviders();
+    const timestamp = await globals.findOne({ key: 'lastScrapeTimestamp' }).exec();
+let hrstart = hrend = null;
+hrstart = process.hrtime();
+      itemsList = itemsList.map(item => {
+        const provider = Object.keys(providers).find(p => p === item.provider);
+        const immutable = providers[provider].immutable;
+        item.missing = item.onHoliday || (item.presentAt < timestamp && !item.immutable);
+console.log(item.id, item.missing);
+        delete item.onHoliday;
+        delete item.presentAt;
+        delete item.immutable;
+        return item;
+    });
+hrend = process.hrtime(hrstart); logger.info(` * call(itemsList.map) execution time (hr): ${hrend[1] / 1000000} ms`);
 
     // return only main images if requested
     if (flags && flags.onlyMainImages) {

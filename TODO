@@ -1,4 +1,7 @@
- V remove mongodb-memory-server
+  V remove mongodb-memory-server
+  V listPageEvaluate.provider.pf => providers...
+  - in itemPageEvaluate do not download of items we know (from listPageEvaluate) to be onHoliday
+  - PF: try reopening browser on page change
   - write a rag of a README.md
   - handle missing persons items, comparing date of last update and date of last scrape (use a virtual method)
   - protect system from multiple scrape requests (I think it's a good thing...)
@@ -16,6 +19,9 @@
   - decide if using throw(new Error(...)) or logger.error(...) on scraping errors (throw while inside inner functions, log while in top level functions)
   - add fake image in db without image on disk to debuf scrapeProvidersImages... (https://scontent-cdt1-1.xx.fbcdn.net/v/t1.0-1/43599420_1139655082879487_2594198514942607360_n.jpg)
   - mark duplicate images as duplicates, do not delete them
+  - in grid.html, if no image show missing image icon
+  - understand the difference among updatedAt (automatic mongo field) and changedAt (custom)... Do we need both? Can we avoud one?
+  - remember schedules to survive to server restarts...
   - test:
     V login with password unselectable in model
     - what happens if an item has no main image in getItems (should be returned nonetheless)

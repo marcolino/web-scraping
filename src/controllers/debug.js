@@ -3,9 +3,8 @@ const router = express.Router();
 const fs = require('fs');
 //const path = require("path");
 const { private } = require('../auth');
-
 const { someCommonImages, itemsMerge, showCommonImages } = require('../controllers/providers');
-
+const { getProviders } = require('../utils/misc');
 const logger = require('../logger');
 const config = require('../config');
 

@@ -21,7 +21,7 @@ router.post('/scrape', private, async (req, res, next) => {
 // endpoint to schedule scrape providers
 router.post('/scrapeSchedule', private, async (req, res, next) => {
   await scrapeSchedule(req);
-  res.status(200).json({ message: "Started scraping process", data: {id: req.requestId}});
+  res.status(200).json({ message: "Scheduled scraping process", data: {id: req.requestId}});
 });
 
 router.post('/group', private, async (req, res, next) => {

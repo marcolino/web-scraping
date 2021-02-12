@@ -64,7 +64,7 @@ async function listPageEvaluate(region, page) {
           }
 
           try { // id
-            data.id = data.url.replace(/accompagnatrici\//, '');
+            data.id = data.url.replace(/accompagnatrici\/[^-]+-/, '');
           } catch (err) {
             throw(new Error(`reading url ${url} looking for id: ${err.message}`));
           }

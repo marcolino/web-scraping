@@ -21,7 +21,7 @@ const info = {
 };
 
 const config = require('../config');
-const logger = require('../logger');
+//const logger = require('../logger');
 
 async function listPageEvaluate(region, page) {
   return new Promise(async (resolve, reject) => {
@@ -30,7 +30,7 @@ async function listPageEvaluate(region, page) {
     if (!url) {
       throw (new Error(`region ${region} for provider ${info.key} has no list url`));
     }
-    logger.info(`listPageEvaluate.provider.${info.key} ${url}`);
+    //logger.info(`listPageEvaluate.provider.${info.key} ${url}`);
 
     try {
       await page.goto(url);

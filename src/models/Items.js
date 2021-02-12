@@ -194,13 +194,28 @@ const schema = new Schema({
   group: {
     type: String,
   },
+  presentAt: {
+    type: Date,
+  },
   changedAt: {
     type: Date,
   }
-}, { timestamps: { createdAt: 'createdAt', updatedAt: 'updatedAt'} }); // timestamps option: automatically add 'createdAt' and 'updatedAt' timestamps
+}, {
+  timestamps: { createdAt: 'createdAt', updatedAt: 'updatedAt'},
+  toObject: { virtuals: true },
+  toJSON: { virtuals: true },
+}); // timestamps option: automatically add 'createdAt' and 'updatedAt' timestamps
 
 // indexes
 schema.index({ id: 1, provider: 1/*, region: 1*/ }, { unique: true });
+
+// // virtual methods
+// schema.virtual('missing').get(function() { // TODO: check performance of this method !
+  //   const timestamp = await Globals.findOne({ key: 'lastScrapeTimestamp' }).exec();
+  //   return (
+  //     this.onHoliday || (this.presentAt < timestamp && !this.immutable)
+  //   );
+// });
 
 // schema.pre('save', function(next) {
 //   this.wasNew = this.isNew;

@@ -18,8 +18,8 @@ const info = {
   login: {
     loginRequestTag: 'Hai raggiunto il numero massimo di visualizzazioni',
     url: 'https://community.punterforum.com/login/',
-    username: 'freeclimber2', // john_holmes giovanni_olmo esterrefatto IlPompiere ilburattinaio
-    password: 'Elsa1926', // supercazzola!666 supercazzola!666 esti.catsi!666
+    username: 'freeclimber2', // john_holmes giovanni_olmo esterrefatto IlPompiere ilburattinaio ilmarinaio
+    password: 'Elsa1926', // supercazzola!666 supercazzola!666 esti.catsi!666 esticatsi!111
     usernameSelector: "[name='login']",
     passwordSelector: "[name='password']",
     submitSelector: "[type='submit']",
@@ -27,7 +27,7 @@ const info = {
 };
 
 const config = require('../config');
-const logger = require('../logger');
+//const logger = require('../logger');
 
 async function listPageEvaluate(region, page, nextListPage) {
   return new Promise(async (resolve, reject) => {
@@ -36,7 +36,7 @@ async function listPageEvaluate(region, page, nextListPage) {
     if (!url) {
       throw (new Error(`region ${region} for provider ${info.key} has no list url`));
     }
-    logger.info(`listPageEvaluate.provider.${info.key} ${url}`);
+    //logger.info(`listPageEvaluate.provider.${info.key} ${url}`);
     try {
       await page.goto(url);
     } catch (err) {
@@ -48,7 +48,9 @@ async function listPageEvaluate(region, page, nextListPage) {
         let nextListPage = null;
 
         const group = document.querySelector("div.structItemContainer-group.js-threadList");
+        // TODO: check group for null
         group.querySelectorAll("div.structItem.structItem--thread").forEach(item => {
+          // TODO: check item for null
           const data = {};
           data.provider = info.key;
           data.region = region;
@@ -150,7 +152,9 @@ const itemPageEvaluate = async (region, page, item) => {
         }
 
         try { // images
+          // TODO: check bbImageWrapper for null
           document.querySelectorAll(/*"a.js-lbImage, */"div.bbImageWrapper.js-lbImage").forEach((imgElement) => {
+            // TODO: check imgElement for null
             if (imgElement) {
               const hostRegexp = new RegExp('^' + imagesUrl);
               let imageUrl = imgElement.querySelector("img").getAttribute("src").replace(/^\//, '').replace(/\?.*/, '').replace(hostRegexp, '');
@@ -171,6 +175,7 @@ const itemPageEvaluate = async (region, page, item) => {
         data.adUrlReferences = [];
 
         document.querySelectorAll("article.message.message--post").forEach((block, index) => { // TODO: elaborate ALL comment blocks
+          // TODO: check article.message for null
           let article = null;
           let articleElement = null;
           try {

@@ -289,6 +289,9 @@ const scrapeItems = async (provider, region, page, list) => {
               break;
             }
           }
+          if (item.onHoliday) { // do not scrape items we know are on holiday
+            continue;
+          }
           logger.info(`providers.scrapeItems.itemPageEvaluate ${provider.info.key}\t${item.id}\t[${1+i}/${len}]`);
           const itemFull = await provider.itemPageEvaluate(region, page, item);
           // show provider's item warnings, if any
@@ -307,6 +310,7 @@ const scrapeItems = async (provider, region, page, list) => {
               i = i - 1; // reprocess previous item page, which failed requesting login
             } else {
               itemFull.phone = phoneNormalize(itemFull.phone).number; // can't do it in provider.itemPageEvaluate() because can't pass functions into puppeteer evaluation...
+              itemFull.presentAt = new Date();
               await saveItem(itemFull); // TODO: we could run saveItem asynchronously...
               itemsFull.push(itemFull);
             }
@@ -439,22 +443,6 @@ const showCommonImages = (providers, items, commonImages) => {
   const url = `http://localhost:${config.defaultServerPort}/debug/sci/?img1=${commonImages[0]}&img2=${commonImages[1]}&url1=${url1}&url2=${url2}`;
   return url;
 
-}
-
-/**
- * Returns an array with all providers information
- */
-const getProviders = () => {
-  const glob = require('glob');
-  const path = require('path');
-  const providers = [];
-  glob.sync('src/providers/*.js').forEach(file => {
-    p = require(path.resolve(file));
-    if (p.info) {
-      providers[p.info.key] = p.info;
-    }
-  });
-  return providers;
 }
 
 const downloadImage = async (provider, region, item, image) => {
@@ -605,6 +593,7 @@ const itemsMerge = (o, n) => {
       case 'createdAt':
       case 'changedAt':
       case 'updatedAt':
+      case 'presentAt':
         break; // ignore special props
       case 'group':
         break; // ignore calculated props
@@ -998,6 +987,9 @@ const getProvidersByRegion = (regionDescriptor) => {
   const glob = require('glob');
   const path = require('path');
   const providers = [];
+
+  // TODO: use getProviders() in utils/misc ...
+
   glob.sync('src/providers/*.js').forEach(file => {
     p = require(path.resolve(file));
     if (p.info) {
@@ -1156,7 +1148,6 @@ module.exports = {
   groupProvidersItems,
   someCommonImages,
   itemsMerge,
-  getProviders,
   showCommonImages,
   scrapeSchedule,
 };
