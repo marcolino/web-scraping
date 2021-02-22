@@ -12,7 +12,6 @@ const info = {
   currency: "€", // TODO: put inside country...
   mediumPricePerHalfHour: 70,
   mediumPricePerHour: 120,
-  immutable: false,
 };
 
 const config = require('../config');
@@ -119,7 +118,7 @@ const itemPageEvaluate = async (region, page, item) => {
         try { // subtitle
           data.subtitle = document.querySelector("span.h5").innerText.replace(/^\s+|\s+$/g, '').replace(/^.*\n/, '');
         } catch (err) {
-          throw(new Error(`reading url ${url} looking for title: ${err.message}`));
+          throw(new Error(`reading url ${url} looking for subtitle: ${err.message}`));
         }
 
         try { // phone
@@ -158,7 +157,7 @@ const itemPageEvaluate = async (region, page, item) => {
             }
           });
         } catch (err) {
-          throw(new Error(`reading url ${url} looking for small images: ${err.message}`));
+          throw(new Error(`reading url ${url} looking for full images: ${err.message}`));
         }
 
 //         try { // address

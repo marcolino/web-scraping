@@ -5,18 +5,20 @@ const fs = require('fs');
 const mime = require('mime-types');
 const crypto = require('crypto');
 const uuid = require('uuid');
+const util = require('util'); 
 const Items = require('../models/Items');
 const UserStatuses = require('../models/UserStatuses');
 const Globals = require('../models/Globals');
+const Audits = require('../models/Audits');
 //const { dbConnect, dbClose } = require('../utils/db');
 const { phoneNormalize } = require('../utils/providers');
 const { browserLaunch, browserPageNew, browserPageClose, browserClose } = require('../utils/browser');
-const { mimeImage, dumperr } = require('../utils/misc');
+const { mimeImage, sleep, objectsEqual, dumperr } = require('../utils/misc');
 const { calculatePerceptualHash, comparePerceptualHashes, perceptuallyEqual } = require('../utils/image');
 //const { register, login } = require('./user');
-const globals = require('../models/Globals');
 const logger = require('../logger');
 const config = require('../config');
+const { MongooseDocument } = require('mongoose');
 
 const scrapeProviders = async(req) => {
   logger.info(`providers.scrapeProviders.starting.${req.requestId}`);
@@ -32,9 +34,9 @@ const scrapeProviders = async(req) => {
       });
     }
 
+    let itemsCreatedCount, itemsChangedCount, itemsUpdatedCount = 0;
     const lastScrapeTimestamp = new Date();
     globalsSet(`lastScrapeStatus`, `started`);
-    globalsSet(`lastScrapeTimestampStart`, lastScrapeTimestamp.toISOString());
     const regionDescriptor = req.body.regionDescriptor || '*';
 //logger.debug('regionDescriptor:', regionDescriptor);
     const providers = getProvidersByRegion(regionDescriptor);
@@ -56,16 +58,42 @@ const scrapeProviders = async(req) => {
             continue;
           }
           const result = await scrapeProvider(provider, region);
+
+          // audit the results of this scrape (to be able to later optimize scraping schedulings)
+          const all = await Items.find({provider: provider.info.key}).exec(); // all items
+          const audit = {};
+          audit.createdAt = all.reduce((a, o) => (a.push(o.createdAt), a), []);
+          audit.changedAt = all.reduce((a, o) => (a.push(o.changedAt), a), []);
+          audit.updatedAt = all.reduce((a, o) => (a.push(o.updatedAt), a), []);
+
+          itemsCreatedCount = audit.createdAt.filter(a => a >= lastScrapeTimestamp).length;
+          itemsChangedCount = audit.changedAt.filter(a => a >= lastScrapeTimestamp).length;
+          itemsUpdatedCount = audit.updatedAt.filter(a => a >= lastScrapeTimestamp).length;
+
+          auditsPush(`${provider.info.key}-${region}`, { date: lastScrapeTimestamp, created: itemsCreatedCount, changed: itemsChangedCount, updated: itemsUpdatedCount});
+
           results = results.concat(result);
         }
         return results;
       })
     )).flat(); // we flat-out due to Promise.All
-    // save last scrape timestamp in globals
-    globalsSet(`lastScrapeTimestamp`, lastScrapeTimestamp);
+   
+    // calculate last scrape timestamp and duration
     const lastScrapeTimestampEnd = new Date();
     const duration = (lastScrapeTimestampEnd - lastScrapeTimestamp).toHHMMSS();
-    logger.info(`providers.scrapeProviders.finishing.${req.requestId}.success ${data.length} items scraped in ${duration}`);
+    logger.info(`providers.scrapeProviders.finishing.${req.requestId}.success ${data.length} items scraped in ${duration} (created: ${itemsCreatedCount}, changed: ${itemsChangedCount}, updated: ${itemsUpdatedCount})`);
+
+    // config.onlyRegions // TODO: lastScrapeTimestamp should be region-scoped...
+    // save last scrape timestamp and duration to globals
+    if (
+      config.scrape.onlyProviders.length === 0 &&
+      config.scrape.onlyItemId.length === 0 &&
+      config.scrape.onlyFirstPages === 0 &&
+      config.scrape.onlyFirstItems === 0
+    ) { // a real and full scrape was finished, update last scrape timestamp and duration
+      globalsSet(`lastScrapeTimestamp`, lastScrapeTimestamp);
+      globalsSet(`lastScrapeTimestampDuration`, duration);
+    }
   } catch (err) {
     logger.error(`providers.scrapeProviders.finishing.${req.requestId}.error ${dumperr(err)}`);
   } finally {
@@ -78,8 +106,8 @@ const scrapeProvidersImages = async (req) => {
   try {
     if (config.scrape.debug.duplicateImagesCache) { // duplicate images cahce before starting
       const fse = require('fs-extra');
-      const srcDir = `${config.imagesBaseFolder}`;
-      const dstDir = `${config.imagesBaseFolder.replace(/\/$/, '')}.pre`;
+      const srcDir = `${config.images.baseFolder}`;
+      const dstDir = `${config.images.baseFolder.replace(/\/$/, '')}.pre`;
       try {
         fs.rmdirSync(dstDir, { recursive: true });
         //logger.debug(`cleared images cache duplicate successfully`);
@@ -145,23 +173,23 @@ logger.warn(`--- j: ${j}`);
         if (sameGroup(itemAll, itemNew)) { // check if the two items should be grouped
           if (!itemAll.group) { // all item has no group
             itemAll.group = uuid.v4();
-logger.warn(`item all:${itemAll.provider} ${itemAll.id} ${itemAll.title}, ${itemAll.phone} group: ${itemAll.group}`);
+logger.warn(`item all:${itemAll.key} ${itemAll.title}, ${itemAll.phone} group: ${itemAll.group}`);
             await Items.updateOne(
               { id: itemAll.id, provider: itemAll.provider },
               { group: itemAll.group }
             );
           } else { // all item has already a group
-logger.warn(`item all ${itemAll.provider} ${itemAll.id} ${itemAll.title}, ${itemAll.phone} has a group: ${itemAll.group}`);
+logger.warn(`item all ${itemAll.key} ${itemAll.title}, ${itemAll.phone} has a group: ${itemAll.group}`);
           }
           if (!itemNew.group) {
             itemNew.group = itemAll.group;
-logger.warn(`item new ${itemNew.provider} ${itemNew.id} ${itemNew.title}, ${itemNew.phone} group: ${itemNew.group}`);
+logger.warn(`item new ${itemNew.key} ${itemNew.title}, ${itemNew.phone} group: ${itemNew.group}`);
             await Items.updateOne(
               { id: itemNew.id, provider: itemNew.provider },
               { group: itemNew.group }
             );
           } else { // item new has a group already
-logger.warn(`item new ${itemNew.provider} ${itemNew.id} ${itemNew.title}, ${itemNew.phone} has a group: ${itemNew.group}`);
+logger.warn(`item new ${itemNew.key} ${itemNew.title}, ${itemNew.phone} has a group: ${itemNew.group}`);
           }
         }
       }
@@ -205,7 +233,7 @@ const someCommonImages = (a, b, threshold = 0.10 /*0.1094*/) => {
               if (comparePerceptualHashes(ai.phash, bj.phash, threshold)) {
                 // found a common image
                 //return true;
-                return [ ai.localPath, bj.localPath ]; // TODO: DEBUG only
+                return [ ai.localName, bj.localName ]; // TODO: DEBUG only
               }
             }
           }
@@ -222,13 +250,13 @@ scrapeProvider = async (provider, region, user) => {
     const page = await browserPageNew(browser);
 
     if (config.scrape.debug.puppeteer) page.on('console', msg => {
-      logger.debug(`provider ${provider.info.key} scrape message: ${msg.text()}, script row: ${msg._stackTraceLocations[0].lineNumber}, col: ${msg._stackTraceLocations[0].columnNumber}`);
+      logger.debug(`provider ${provider.info.key} scrape message: ${msg.text()} ${msg._stackTraceLocations[0].lineNumber && msg._stackTraceLocations[0].columnNumber ? msg._stackTraceLocations[0].lineNumber + ':' + msg._stackTraceLocations[0].columnNumber : ''}`);
     }); // do use console.log() inside page.evaluate
 
     const items = await scrapeProviderMultiListAndItems(provider, region, page)
 
-    try { await browserPageClose(page) } catch(err) { console.error('page close error:', err) }
-    try { await browserClose(browser) } catch(err) { console.error('browser close error:', err) }
+    try { await browserPageClose(page) } catch(err) { logger.error(`page close error: ${err}`) }
+    try { await browserClose(browser) } catch(err) { logger.error(`browser close error: ${err}`) }
 
     return items ? (await Promise.all(items)).flat() : []; // we flat-out due to Promise.All
   } catch(err) {
@@ -239,19 +267,19 @@ scrapeProvider = async (provider, region, user) => {
 const scrapeProviderMultiListAndItems = async (provider, region, page) => {
   let nextListPage = null;
   let itemsMultiPage = [];
-  let pages = 0;
+  let pageNum = 0;
   do {
     const list = await scrapeList(provider, region, page, nextListPage);
     nextListPage = list && list.length ? list[list.length-1].nextListPage : null;
 
-    let items = await scrapeItems(provider, region, page, list);
+    let items = await scrapeItems(provider, region, page, list, 1+pageNum);
     if (items && items.length && items[items.length-1].itemFoundBreakMultiPage) { // one item was found existing in immutable provider: break multi page loop
       items.pop();
       nextListPage = null; // break loop
     }
     itemsMultiPage = itemsMultiPage.concat(items);
-    pages++;
-    if (config.scrape.onlyFirstPages > 0 && pages >= config.scrape.onlyFirstPages) {
+    pageNum++;
+    if (config.scrape.onlyFirstPages > 0 && pageNum >= config.scrape.onlyFirstPages) {
       //logger.debug(`${provider.info.key} provider scrape multi list and items break due to scrape.onlyFirstPages: ${pages} >= ${config.scrape.onlyFirstPages}`);
       nextListPage = null; // break loop
     }
@@ -267,15 +295,18 @@ const scrapeList = async(provider, region, page, nextListPage) => {
   try {
     logger.info(`providers.scrapeList.listPageEvaluate ${provider.info.key}`);
     const list = await provider.listPageEvaluate(region, page, nextListPage);
+//console.log('LIST:', list.length, list)
     // show provider's list warnings, if any
     for (let warning in list.warnings) logger.warn(`provider ${provider.info.key} list scraping warning: ${warning}`);
+    // warn if provider list is empty
+    if (list.length === 0) logger.warn(`provider ${provider.info.key} returned empty list`);
     return list;
   } catch (err) {
-    console.warn(`error scraping list for provider ${provider.info.key}: ${err}`);
+    logger.warn(`error scraping list for provider ${provider.info.key}: ${err}`);
   }
 }
 
-const scrapeItems = async (provider, region, page, list) => {
+const scrapeItems = async (provider, region, page, list, pageNum) => {
   try {
     const itemsFull = [];
     if (list) {
@@ -283,17 +314,38 @@ const scrapeItems = async (provider, region, page, list) => {
       for (var i = 0; i < len; i++) {
         const item = list[i];
         if (item.id) { // this is not a dummy item for multi-page handling
+          // respect requested filters
+          if (config.scrape.onlyItemId.length && !config.scrape.onlyItemId.includes(item.id)) {
+            continue;
+          }
+
+          // handle immutable providers pages
           if (provider.info.immutable && !config.scrape.alsoImmutables) { // this provider pages are immutable: avoid reparsing already present items
             if (await itemExists(item)) { // item found existing in immutable provider list: break and signal multi-page handle to break
               itemsFull.push({itemFoundBreakMultiPage: true});
               break;
             }
           }
-          if (item.onHoliday) { // do not scrape items we know are on holiday
+
+          // do not scrape items whoare on holiday, if already present in database
+          if (item.onHoliday && await itemExists(item)) {
+            logger.debug(`item ${item.provider} ${item.id} is on holiday, and it is already present in database, skipping it`);
             continue;
           }
-          logger.info(`providers.scrapeItems.itemPageEvaluate ${provider.info.key}\t${item.id}\t[${1+i}/${len}]`);
-          const itemFull = await provider.itemPageEvaluate(region, page, item);
+
+          // scrape item
+          let itemFull = {retryAfter: null};
+          do {
+            logger.info(`providers.scrapeItems.itemPageEvaluate ${provider.info.key.paddingRight('     ')} ${item.id.paddingRight('       ')} [${(1+i).toString().paddingLeft('    ')}/${(len).toString().paddingLeft('    ')}   page ${(pageNum).toString().paddingLeft('   ')}]`);
+            itemFull = await provider.itemPageEvaluate(region, page, item);
+            if (itemFull.retryAfter) {
+              const retryAfter = itemFull.retryAfter + 1; // + 1 to be on the safe side...
+              logger.debug(`item ${item.provider} ${item.id} responded with "Too Many Requests", wait for ${retryAfter} seconds and retry`);
+              await sleep(1000 * retryAfter);
+              continue;
+            }
+          } while (itemFull.retryAfter);
+
           // show provider's item warnings, if any
           for (let warning in itemFull.warnings) logger.warn(`provider ${provider.info.key} item scraping warning: ${warning}`);
 
@@ -315,7 +367,7 @@ const scrapeItems = async (provider, region, page, list) => {
               itemsFull.push(itemFull);
             }
           } else {
-            console.warn(`null item from page`);
+            logger.warn(`null item from page`);
           }
         }
         if (config.scrape.onlyFirstItems > 0 && itemsFull.length >= config.scrape.onlyFirstItems) {
@@ -326,60 +378,80 @@ const scrapeItems = async (provider, region, page, list) => {
     }
     return itemsFull;
   } catch (err) {
-    console.warn(`error scraping items: ${err}`);
+    logger.warn(`error scraping items: ${dumperr(err)}`);
   }
 }
 
 scrapeProviderImages = async (provider, region) => {
   try {
-    const items = await Items.find({ // TODO: filter only new images, with no localPath ... (NO, FIND ALL ITEMS)
+    const items = await Items.find({ // find all items, wil lfilgter programmatically
       provider: provider.info.key,
       region: region,
-      //images: { $elemMatch: { localPath: null } }
     });
-//logger.debug('scrapeProviderImages items with some image without localPath:', items.length);
+    //logger.debug('scrapeProviderImages items with some image without localName:', items.length);
     let count = 0;
+//console.log('1', items.length);
     for (let i = 0; i < items.length; i++) {
-//logger.debug('*** scrapeProviderImages item:', items[i].id)
+      let item = items[i];
+      //logger.debug('*** scrapeProviderImages item:', items[i].id)
+
+      // respect requested filters
       if (config.scrape.onlyFirstItems > 0 && i > config.scrape.onlyFirstItems) {
         //logger.debug(`${provider.info.key} provider images scrape break due to scrape.onlyFirstItems ${i} > ${config.scrape.onlyFirstItems}`);
         break;
       }
-
-      let item = items[i];
-//logger.debug('scrapeProviderImages item images:', item.images);
+//console.log('2', item.id);
       if (config.scrape.onlyItemId.length && !config.scrape.onlyItemId.includes(item.id)) {
         continue;
       }
+//console.log('3');
+
+      // avoid scraping images of items on holiday
+      if (item.onHoliday) {
+        logger.debug(`${provider.info.key} ${item.id} is on holiday, avoid scraping images`);
+        continue;
+      }
+//console.log('3a');
+
       item.provider = provider.info.key;
       item.type = provider.info.type;
       item.region = region;
 
+//console.log('3aa images len:', item.images.length);
       for (let j = 0; j < item.images.length; j++) {
 //logger.error('j', item.images.length);
         let image = item.images[j];
 //logger.debug('scrapeProviderImages item image:', image)
-          image.cached = fs.existsSync(image.localPath); // check if file is already cached on fs
-          if (!image.localPath || !image.cached) { // only download images with no localPath, or missing file image
-//logger.debug(`--- downloading image of person ${item.provider} ${item.id} - n° ${1+j} / ${item.images.length} image: ${image} ---`);
+        const outputFile = image.localName;
+        const outputPath = `${config.images.baseFolder}${provider.info.key}`;
+        image.cached = fs.existsSync(`${outputPath}/${outputFile}`); // check if file is already cached on fs
+//console.log('3b', image.localName, image.cached);
+        if (!image.localName || !image.cached) { // only download images with no localName, or missing file image
+//console.log('4');
+          //logger.debug(`--- downloading image of person ${item.key} - n° ${1+j} / ${item.images.length} image: ${image} ---`);
 
-          logger.info(`scrapeProvidersImages.provider.${provider.info.key}\t${item.id}\t[item ${1+i}/${items.length}] [image ${1+j}/${item.images.length}]`);
+          logger.info(`providers.scrapeProvidersImages.downloadImage ${provider.info.key.paddingRight('     ')} ${item.id.paddingRight('       ')} [item ${(1+i).toString().paddingLeft('    ')}/${(items.length).toString().paddingLeft('    ')}] [image ${(1+j).toString().paddingLeft('    ')}/${(item.images.length).toString().paddingLeft('    ')}]`);
+
           const response = await downloadImage(provider, region, item, image);
           if (!response || !response.success) {
+//console.log('5');
             continue;
           }
-          // if (!response.changed) {
-          //   logger.warn(`no change downloading image ${image.url}, ignoring it...`);
-          //   continue;
-          // }
+
           const imageDownloaded = response.image;
-            //logger.debug(`image phash: ${JSON.stringify(image.phash)}`);
 
+          // handle not found images
+          if (response.notFound) { // image not found (and not cached): remove this image from item's images
+            // TODO: move to function, and force rescan of image next time...
+            await removeItemImage(item, imageDownloaded);
+//console.log('6');
+            continue;
+          }
+
+//console.log('7');
           // calculate image perceptual hash
-          imageDownloaded.phash = await calculatePerceptualHash(imageDownloaded.localPath);
+          imageDownloaded.phash = await calculatePerceptualHash(`${config.images.baseFolder}${provider.info.key}`, imageDownloaded.localName);
           
-//logger.warn(` +++ image before dow:`, image);
-
           // copy downloaded image props to items image
           delete imageDownloaded.success;
           for (var prop in imageDownloaded) image[prop] = imageDownloaded[prop];
@@ -404,23 +476,24 @@ scrapeProviderImages = async (provider, region) => {
                 foundSimilarImage = k;
                 break;                 
               } else { // this is the standard case, two images do not match
-                //logger.warn(`Item ${item.provider} ${item.id} ${item.title} image n. ${k} category ${item.images[k].category} image is different by image n. ${j}`);
+                //logger.warn(`Item ${item.key} ${item.title} image n. ${k} category ${item.images[k].category} image is different by image n. ${j}`);
               }
             } else { // image of new item has no phash, yet
-              if (image2.localPath) { // no phsh should not happen on images already downloaded...
-                logger.warn(`item ${item.provider} ${item.id} ${item.title} image n. ${k} category ${image2.category} has no phash, should not happen...`);
+              if (image2.localName) { // no phsh should not happen on images already downloaded...
+                logger.warn(`item ${item.key} ${item.title} image n. ${k} category ${image2.category} has no phash, should not happen...`);
               }
             }
           }
           if (foundSimilarImage >= 0) {
             if (!image2.duplicate) {
-              logger.debug(`two perceptually equal images for person ${item.provider} ${item.id} ${item.url}, images ${j} and ${foundSimilarImage}, marking it as duplicate`);
+              //logger.debug(`two perceptually equal images for person ${item.key} ${item.url}, images ${j} and ${foundSimilarImage}, marking it as duplicate`);
               //await deleteItemImage(item, image); // TODO: we could delete asynchrounously, without await, in production...
               image.duplicate = true;
             }
           }
 
           // save item image
+//console.log('9');
           await saveItemImage(item, image/*Downloaded*/); // TODO: we could save asynchrounously, without await, in production...
           count++;
         }
@@ -429,7 +502,7 @@ scrapeProviderImages = async (provider, region) => {
     }
     return count; 
   } catch (err) {
-    logger.error(`error scraping provider images: ${err}`);
+    logger.error(`error scraping provider images: ${dumperr(err)}`);
   }
 }
 
@@ -451,84 +524,109 @@ const downloadImage = async (provider, region, item, image) => {
     const retval = {success: false, changed: true, already: false};
     //const response = await fetch(imageUrl, {
     const response = await got(imageUrl, {
+      throwHttpErrors: false, // do not throw http errors (404, for example)
+      //retry: { limit: 1, methods: [ "GET" ], statusCodes: [ 404 ] },
       headers: image.cached ? // add cache headers if image is already cached
       {
         'If-Modified-Since': image.date ? image.date.toUTCString() : undefined,
         'If-None-Match': image.etag,
       } : {},
     });
+
+    let mimeType, date, etag;
+
     switch (response.statusCode) {
       case 404:
-        logger.warn(`image ${imageUrl} not found: ignoring`);
+        // if not cached already, remove this image from db
+        if (!image.cached) {
+          logger.warn(`image ${imageUrl} not found and not cached, giving up and removing it`);
+          retval.success = true; // to allow post processing and removing from db
+          retval.notFound = true; // parent (scrapeProviderImages) will handle this flag and remove this image from item's images, to avoid retrying forever
+          retval.image = {};
+          retval.image.url = imageUrl;
+        } else { // already cached, should not happen
+          logger.warn(`image ${imageUrl} not found, ignoring it`);
+        }
         return retval;
       case 304:
         logger.debug(`image ${imageUrl} did not change`);
+//logger.error('304 - IMAGE:', image);
+//logger.error('304 - CH:', response.headers['content-type']);
         //retval.success = true;
         retval.changed = false;
+        mimeType = image.mimeType; // image not retrieved, use cached image value
+        date = image.date; // image not retrieved, use cached image value
+        etag = image.etag; // image not retrieved, use cached image value
         //return retval;
         break;
       case 200:
+        mimeType = response.headers['content-type'];
+        date = response.headers['last-modified'];
+        etag = response.headers['etag'];
         break;
       default:
-        logger.warn(`image ${imageUrl} download status was ${statusCode}: ignoring`);
+        logger.warn(`image ${imageUrl} download status was ${response.statusCode}, ignoring`);
         return retval;
     }
 
-    const mimeType = response.headers['content-type'];
-    const date = response.headers['last-modified'];
-    const etag = response.headers['etag'];
-
-    if (etag === image.etag) {
-      logger.debug(`etag not changed for ${imageUrl}`);
+//logger.info('ETAG IN HEADER:', etag);
+//logger.info('ETAG IMAGE:', image.etag);
+        if (etag === image.etag) { // eTag not changed, server says image is the same
+      //logger.debug(`etag not changed for ${imageUrl}`);
       retval.changed = false;
-      //return retval;
+//logger.error('SAME ETAG - IMAGE:', image.cached, image);
+      if (image.cached) {
+        return retval; // avoid proceeding to save image
+//       } else {
+// logger.error('ETAG EQUAL AND IMAGE NOT CACHES, SHOULD NOT HAPPEN...');
+// return retval;
+      }
     }
     if (!mimeType) {
-      logger.warn(`image ${imageUrl} content type was not defined: ignoring`);
+      logger.warn(`image ${imageUrl} content type was not defined, ignoring`);
       return retval;
     }
     if (!mimeImage(mimeType)) {
-      logger.warn(`image ${imageUrl} content type was not image (${mimeType}): ignoring`);
+      logger.warn(`image ${imageUrl} content type was not image (${mimeType}), ignoring`);
       return retval;
     }
-    
+
     const extension = mime.extension(mimeType).replace(/^jpeg$/, 'jpg');
     const id = item.id.replace(/\s/g, '_');
     const category = image.category;
     const title = item.title.toLowerCase().replace(/[^a-z]/g, '');
-    const md5 = crypto.createHash('md5').update(imageUrl).digest('hex');
-    const outputFileName = `${config.imagesBaseFolder}${provider.info.key}/${id}_${title}_${category}_${md5}.${extension}`;
+    const md5 = crypto.createHash('md5').update(imageUrl).digest('hex').substring(0, 10);
+    const outputPath = `${config.images.baseFolder}${provider.info.key}`;
+    const outputFile = `${id}_${title}_${category}_${md5}.${extension}`;
     //logger.debug('downloadImage - outputFileName:', outputFileName);
-    fs.mkdirSync(`${config.imagesBaseFolder}${provider.info.key}`, { recursive: true }); // be sure folder exists
+    fs.mkdirSync(outputPath, { recursive: true }); // be sure folder exists
     const buffer = await response.rawBody;
-    try { // check if image exists already
-      fs.accessSync(outputFileName, fs.constants.R_OK); 
-      logger.info(`downloaded image ${imageUrl} file skipped because already present`);
+
+    if (fs.existsSync(`${outputPath}/${outputFile}`)) {
+      logger.info(`downloaded image ${imageUrl} file already present, skipped`, item.key, image); // TODO: why this happens often? (FORCEDOWNLOAD WAS TRUE...)
       retval.already = true;
-    } catch (err) {
-      if (err.code !== 'ENOENT') { // some error accessing file
-        logger.warn(`file ${outputFileName} has some problem accessing: ${err.code}`);
+    } else { // image does not exist, save it to filesystem
+      try {
+        fs.writeFileSync(`${outputPath}/${outputFile}`, buffer);
+        imageResize(outputPath, outputFile);
+        //logger.info(`downloaded image ${imageUrl} file saved`);
+      } catch (err) {
+        logger.warn(`cannot save downloaded image file ${outputPath}/${outputFile}: ${dumperr(err)}`);
         return retval;
-      } else { // image does not exist, save it to filesystem
-        try {
-          fs.writeFileSync(outputFileName, buffer);
-          logger.info(`downloaded image ${imageUrl} file saved`);
-        } catch (err) {
-          logger.warn(`cannot save downloaded image file ${outputFileName}: ${err}`);
-          return retval;
-        }
       }
     }
+
     retval.success = true;
     retval.image = {};
     retval.image.url = image.url;
     retval.image.category = image.category;
     retval.image.date = date;
     retval.image.etag = etag;
-    retval.image.localPath = outputFileName;
+    retval.image.mimeType = mimeType;
+    retval.image.localName = outputFile;
     return retval;
   } catch (err) {
-    logger.warn(`error downloading image at ${imageUrl}: ${dumperr(err)}`);
+    logger.warn(`error downloading image at ${imageUrl} : ${dumperr(err)}`);
   }
 }
 
@@ -562,11 +660,16 @@ const saveItem = async(item) => {
         });
       } else { // an existing item
         const itemOldLean = JSON.parse(JSON.stringify(itemOld));
-        const itemMerged = itemsMerge(itemOldLean, item);
+        const result = itemsMerge(itemOldLean, item);
+        const itemMerged = result.merged;
+        const itemChanged = result.changed;
+//logger.warn('merge result changed:', itemChanged);
         if (!itemMerged) {
           return;
         }
+        itemMerged.changedAt = itemChanged ? new Date() : null;
         itemOld.set({...itemMerged});
+//logger.warn('saving item changedAt:', itemMerged.changedAt);
         itemOld.save((err, itemNew) => {
           if (err) {
             throw (new Error(`error updating item: ${err}`));
@@ -580,9 +683,17 @@ const saveItem = async(item) => {
   );
 }
 
+const removeItemImage = async(item, image) => {
+  const imageUrl = image && image.url ? image.url : null;
+  Items.updateOne({provider: item.provider, id: item.id}, { "$pull": { "images": { "url": imageUrl } }}/*, { safe: true }*/, (err, res) => {
+    logger.debug(`removed image which is not online anymore ${imageUrl} - result:`, err, res); // TODO: remove me
+  });
+}
+
 const itemsMerge = (o, n) => {
-  const Items = require("../models/Items");
+  const Items = require('../models/Items');
   //logger.debug('itemsMerge - Items schema.paths:', Object.keys(Items.schema.paths));
+  let changed = false;
   const merged = {};
   const props = Object.keys(Items.schema.paths);
   props.map(prop => {
@@ -590,6 +701,7 @@ const itemsMerge = (o, n) => {
     switch (prop) {
       case '_id':
       case '__v':
+      case 'key':
       case 'createdAt':
       case 'changedAt':
       case 'updatedAt':
@@ -634,31 +746,52 @@ const itemsMerge = (o, n) => {
       case 'price':
       case 'additionalInfo':
       case 'onHoliday':
-      case 'suspicious':
+      case 'suspicious': // strings
+        if (!n[prop]) n.prop = null;
+        if (n[prop] != o[prop]) changed = true;
+        merged[prop] = n[prop]; // use new prop, even if undefined
+        break;
+      case 'addressCoordinates': // array of strings
       case 'spokenLanguages': // array of strings
       case 'adUrlReferences': // array of strings
-        merged[prop] = typeof n[prop] !== 'undefined' ? n[prop] : o[prop]; // return new prop if present, otherwise keep old prop
+        if (!n[prop]) n[prop] = [];
+        //merged[prop] = typeof n[prop] !== 'undefined' ? n[prop] : o[prop]; // return new prop if present, otherwise keep old prop
+        if (!arraysAreEquivalent(n[prop], o[prop])) changed = true;
+        //merged[prop] = typeof n[prop] !== 'undefined' ? n[prop] : o[prop]; // return new prop if present, otherwise keep old prop
+        merged[prop] = n[prop]; // use new prop, even if undefined
         break;
-      case 'images': // array of objects (url, category, date, etag, phash, localPath)
-        o[prop] = o[prop].map(p => { p.active = false; return p; }); // set active to false on all items of old prop array
-        n[prop] = n[prop].map(p => { p.active = true; return p; }); // set active to true on all items of old prop array
+      case 'images': // array of objects (url, category, date, etag, phash, localName)
+        if (!n[prop]) n[prop] = [];
+      // console.log('images old:', o[prop].map(x=>x.url));
+// console.log('images new:', n[prop].map(x=>x.url));
+        if (o[prop]) o[prop] = o[prop].map(p => { p.active = false; return p; }); // set active to false on all items of old prop array
+        if (n[prop]) n[prop] = n[prop].map(p => { p.active = true; return p; }); // set active to true on all items of old prop array
 //console.log('before images arrays merge - o[prop]:', o[prop]);
 //console.log('before images arrays merge - n[prop]:', n[prop]);
-        merged[prop] = arraysMerge(o[prop], n[prop], [ 'url' ]); // merge old and new arrays, excluding objects with a common set of props
+        if (n[prop])
+          merged[prop] = arraysMerge(o[prop], n[prop], [ 'url' ]); // merge old and new arrays, excluding objects with a common set of props
+        else
+          merged[prop] = o[prop];
 //console.log('after  images arrays merge - merged[prop]:', merged[prop]);
         break;
       case 'comments': // array of objects (author, authorCommentsCount, text, date, vote)
+        if (!n[prop]) n[prop] = [];
 //console.log('before comments arrays merge - o[prop]:', o[prop]);
 //console.log('before comments arrays merge - n[prop]:', n[prop]);
-        o[prop] = o[prop].map(p => { p.active = false; return p; }); // set active to false on all items of old prop array
-        n[prop] = n[prop].map(p => { p.active = true; return p; }); // set active to true on all items of old prop array
-        merged[prop] = arraysMerge(o[prop], n[prop], [ 'author', 'text', 'date' ]); // merge old and new arrays, excluding objects with a common set of props
+        if (n.prop) o[prop] = o[prop].map(p => { p.active = false; return p; }); // set active to false on all items of old prop array
+        if (n.prop) n[prop] = n[prop].map(p => { p.active = true; return p; }); // set active to true on all items of old prop array
+        if (n.prop)
+          merged[prop] = arraysMerge(o[prop], n[prop], [ 'author', 'text', 'date' ]); // merge old and new arrays, excluding objects with a common set of props
+        else
+          merged[prop] = o[prop];
         break;
       default:
-        logger.warn('itemsMerge unforeseen prop', prop, n[prop], typeof n[prop]);
-    }
+        logger.debug('itemsMerge unforeseen prop', prop, n[prop], typeof n[prop]);
+        if (!n[prop]) n[prop] = null;
+        merged[prop] = n[prop]; // return new prop even if undefined
+      }
   });
-  return merged;
+  return { merged, changed };
 }
 
 /**
@@ -701,14 +834,14 @@ const compareItemsHistoryes = async (itemOldLean, itemNewLean, itemNew) => {
     logger.warn(`${key} neither new nor old item is set!`);
     return;
   }
-  let added = changed = false;
+  //let added = changed = false;
   if (!itemOldLean) { // a new item
     logger.info(`${key} new`);
-    added = true;
+    //added = true;
   } else {
     // a changed item
     Object.keys(itemOldLean).map(prop => {
-      if (!['__v', '_id', 'provider', 'id', 'region', 'createdAt', 'updatedAt'].includes(prop)) {
+      if (!['__v', '_id', 'key', 'provider', 'id', 'region', 'imagesCount', 'commentsCount', 'createdAt', 'updatedAt', 'changedAt'].includes(prop)) {
         //logger.debug(`--- ${prop} ---`);
         const type = Array.isArray(itemOldLean[prop]) ? 'array' : typeof itemOldLean[prop];
   //logger.debug(`typeof itemOldLean[${prop}]: ${type}`);
@@ -717,7 +850,7 @@ const compareItemsHistoryes = async (itemOldLean, itemNewLean, itemNew) => {
             //logger.warn(itemNewLean[prop]);
             if (itemOldLean[prop] != itemNewLean[prop]) {
               logger.info(`${key} changed ${prop}: ${itemNewLean[prop] ? 'false => true' : 'true => false'}`);
-              changed = true;
+              //changed = true;
             }
             break;
           case 'string':
@@ -727,7 +860,9 @@ const compareItemsHistoryes = async (itemOldLean, itemNewLean, itemNew) => {
             if (itemOldLean[prop] !== itemNewLean[prop]) {
               require('colors');
               const diff = require('diff');
-              const differences = diff.diffWords(itemOldLean[prop], itemNewLean[prop]);
+              let o = itemOldLean[prop]; o = o ? o.toString() : '';
+              let n = itemNewLean[prop]; n = n ? n.toString() : '';
+              const differences = diff.diffSentences(o, n);
               let difference = '';
               differences.forEach((part) => {
                 // green for additions, red for deletion, grey for common parts
@@ -741,14 +876,14 @@ const compareItemsHistoryes = async (itemOldLean, itemNewLean, itemNew) => {
 
               //logger.info(`${key} changed ${prop}: ${itemOldLean[prop]} => ${itemNewLean[prop]}`);
 
-              changed = true;
+              //changed = true;
             }
             break;
           case 'array': // we assume one level only arrays (shallow compare)
 //if(prop !== 'images') break;
-            const o = itemOldLean[prop];
-            const n = itemNewLean[prop];
-
+            const o = itemOldLean[prop] || [];
+            const n = itemNewLean[prop] || [];
+///console.log('PROP:', prop);
             // check for removed elements in array
             const removed = [];
             for (var oi = 0; oi < o.length; oi++) {
@@ -756,7 +891,7 @@ const compareItemsHistoryes = async (itemOldLean, itemNewLean, itemNew) => {
               let found = false;
               for (var ni = 0; ni < n.length; ni++) {
                 const nObj = n[ni];
-                if (areEquivalent(nObj, oObj, ['_id', 'authorCommentsCount', 'date', 'etag', /*'type'*/, 'phash', 'localPath', 'active', 'duplicate'])) {
+                if (objectsAreEquivalent(nObj, oObj, ['_id', 'key', 'authorCommentsCount', 'date', 'etag', /*'type'*/, 'phash', 'localName', 'active', 'duplicate'])) {
                   found = true;
                   break;
                 }
@@ -770,7 +905,7 @@ const compareItemsHistoryes = async (itemOldLean, itemNewLean, itemNew) => {
             }
             if (removed.length) {
               logger.info(`${key} removed ${removed.length} ${prop}`/*: ${JSON.stringify(removed)}*/);
-              changed = true;
+              //changed = true;
             }
 
             // check for added elements in array
@@ -782,8 +917,8 @@ const compareItemsHistoryes = async (itemOldLean, itemNewLean, itemNew) => {
               for (var oi = 0; oi < o.length; oi++) {
                 const oObj = o[oi];
 //console.log('COMPARING:', oObj, nObj);
-                //if (areEquivalent(oObj, nObj, ['_id'])) {
-                if (areEquivalent(nObj, oObj, ['_id', 'authorCommentsCount', 'date', 'etag', /*'type'*/, 'phash', 'localPath', 'active', 'duplicate'])) {
+                //if (objectsAreEquivalent(oObj, nObj, ['_id'])) {
+                if (objectsAreEquivalent(nObj, oObj, ['_id', 'key', 'authorCommentsCount', 'date', 'etag', /*'type'*/, 'phash', 'localName', 'active', 'duplicate'])) {
                   found = true;
                   break;
                 }
@@ -794,25 +929,38 @@ const compareItemsHistoryes = async (itemOldLean, itemNewLean, itemNew) => {
             }
             if (added.length) {
               logger.info(`${key} added ${added.length} ${prop}`/*: ${added}`*/);
-              changed = true;
+              //changed = true;
             }
 
             break;
           default:
-            logger.warn(`${prop}: type ${type} compare is not yet implemented`);
+            logger.warn(`${prop}: type ${type} compare is not yet implemented`); // should not happen
             break;
         }
       }
     });
   }
-  if (added || changed) { // save changetAt now timestamp
-    itemNew.update({ changedAt: new Date() }); // TODO: return changedAt date, do not update here
-  } else {
-    //logger.debug(`${key} unchanged`);
-  }
+  // if (added || changed) { // save changetAt now timestamp
+  //   itemNew.update({ changedAt: new Date() }); // TODO: return changedAt date, do not update here
+  // } else {
+  //   //logger.debug(`${key} unchanged`);
+  // }
 }
 
 /**
+ * Chompares two arrays of strings to be equivalent
+ *
+ * @param {Object} a             first array
+ * @param {Object} b             second array
+ * @returns {boolean}            true if the two arrays are equivalent
+ *                               (they share all values, in the same order, and ignoring types)
+ */
+const arraysAreEquivalent = (a, b) => {
+  return a && b && a.length == b.length && a.every((value, index) => value == b[index]);
+}
+
+/**
+ * Chompares two objects to be equivalent
  * 
  * @param {Object} a             first object
  * @param {Object} b             second object
@@ -820,7 +968,7 @@ const compareItemsHistoryes = async (itemOldLean, itemNewLean, itemNew) => {
  * @returns {boolean}            true if the two objects are equivalent
  *                               (they share all properties values, except for the `ignoredProps`)
  */
-const areEquivalent = (a, b, ignoredProps) => {
+const objectsAreEquivalent = (a, b, ignoredProps) => {
   // create arrays of property names, ignoring props to be ignored
   const aProps = Object.getOwnPropertyNames(a).filter(p => !ignoredProps.includes(p));
   const bProps = Object.getOwnPropertyNames(b).filter(p => !ignoredProps.includes(p));
@@ -870,8 +1018,8 @@ const saveItemImage = async(item, imageDownloaded) => {
 //     throw (`error deleting item image: ${err}`);
 //   }
 //   try {
-//     if (fs.existsSync(image.localPath)) { // remove also image file
-//       fs.unlinkSync(image.localPath);
+//     if (fs.existsSync(image.localName)) { // remove also image file
+//       fs.unlinkSync(image.localName);
 //     }
 //   } catch (err) {
 //     throw (`error deleting item image: ${err}`);
@@ -880,7 +1028,7 @@ const saveItemImage = async(item, imageDownloaded) => {
 
 updateUserStatus = async (user) => { // TODO: DEBUG ME !
   try {
-    //const Items = require("../models/Items");
+    //const Items = require('../models/Items');
 logger.debug('updateUserStatus started for user:', user.name, user.role);
     const items = await Items.find({}).exec();
 
@@ -970,7 +1118,7 @@ const _updateUserStatus = async () => {
     //   throw('user is not enabled for this action');
     // }
     const item = {vote: 0.7, note: 'nice'};
-    console.info('updateUserStatus:', await updateUserStatus(user));
+    logger.info('updateUserStatus:', await updateUserStatus(user));
   } catch(err) {
     throw (new Error(`error updating user status: ${dumperr(err)}`));
   }
@@ -980,7 +1128,7 @@ const _updateUserProps = async (item, props) => {
   const user = {email: 'marcosolari+1@gmail.com', password: 'password'};
   const _item = item ? item : {id: '9317', provider: 'toe'};
   const _props = props ? props : {vote: 0.7, note: 'nice'};
-  console.info('updateUserProps:', await updateUserProps(user, _item, _props));
+  logger.info('updateUserProps:', await updateUserProps(user, _item, _props));
 }
 
 const getProvidersByRegion = (regionDescriptor) => {
@@ -1038,7 +1186,7 @@ const getProvidersByRegion = (regionDescriptor) => {
               }
             }
           } else {
-            console.error('invalid regionDescriptor type:', typeof regionDescriptor);
+            logger.error('invalid regionDescriptor type:', typeof regionDescriptor);
           }
           return false;
         }
@@ -1103,7 +1251,7 @@ const getProviderRegions = (provider, regionDescriptor) => {
           }
           return regions;
         } else {
-          console.error('invalid regionDescriptor type:', typeof regionDescriptor);
+          logger.error('invalid regionDescriptor type:', typeof regionDescriptor);
         }
         return regions;
       }
@@ -1113,11 +1261,15 @@ const getProviderRegions = (provider, regionDescriptor) => {
 }
 
 globalsGet = async (key) => {
-  return (await globals.findOne({ key }).exec()).value;
+  return (await Globals.findOne({ key }).exec()).value;
 }
 
 globalsSet = async(key, value) => {
-  await globals.updateOne({ key }, { value }, { upsert: true }).exec();
+  await Globals.updateOne({ key }, { value }, { upsert: true }).exec();
+}
+
+auditsPush = async(key, value) => {
+  Audits.updateOne({ key }, { $push: { value } }, { upsert: true }).exec();
 }
 
 String.prototype.toHHMMSS = function() {
@@ -1140,6 +1292,14 @@ Number.prototype.toHHMMSS = function() {
   if (minutes < 10) { minutes = "0" + minutes; }
   if (seconds < 10) { seconds = "0" + seconds; }
   return hours + ':' + minutes + ':' + seconds;
+};
+
+String.prototype.paddingLeft = function (paddingValue) {
+  return String(paddingValue + this).slice(-paddingValue.length);
+};
+
+String.prototype.paddingRight = function (paddingValue) {
+  return String(this + paddingValue).slice(0, paddingValue.length);
 };
 
 module.exports = {

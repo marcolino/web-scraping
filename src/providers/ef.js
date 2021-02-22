@@ -17,7 +17,6 @@ const info = {
   currency: "€", // TODO: put inside country...
   mediumPricePerHalfHour: 120,
   mediumPricePerHour: 200,
-  immutable: false,
 };
 
 const config = require('../config');
@@ -40,7 +39,9 @@ async function listPageEvaluate(region, page) {
     }
 
     try {
-      await page.goto(url);
+      //await page.goto(url);
+      let response = await page.goto(url, { waitUntil: 'networkidle0' }); // waitUntil: 'networkidle0' to load all scripts
+
     } catch (err) {
       return reject(err.message);
     }
@@ -64,7 +65,7 @@ async function listPageEvaluate(region, page) {
           }
 
           try { // id
-            data.id = data.url.replace(/accompagnatrici\/[^-]+-/, '');
+            data.id = data.url.replace(/accompagnatrici\/.*?(\d+)$/, '$1');
           } catch (err) {
             throw(new Error(`reading url ${url} looking for id: ${err.message}`));
           }

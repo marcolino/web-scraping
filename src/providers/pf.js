@@ -18,12 +18,13 @@ const info = {
   login: {
     loginRequestTag: 'Hai raggiunto il numero massimo di visualizzazioni',
     url: 'https://community.punterforum.com/login/',
-    username: 'freeclimber2', // john_holmes giovanni_olmo esterrefatto IlPompiere ilburattinaio ilmarinaio
-    password: 'Elsa1926', // supercazzola!666 supercazzola!666 esti.catsi!666 esticatsi!111
+    username: 'ilbeluga', // (email: ilbeluga666@gmail.com)
+    password: 'esticatsi.666',
     usernameSelector: "[name='login']",
     passwordSelector: "[name='password']",
     submitSelector: "[type='submit']",
   },
+  commentsOnly: true,
 };
 
 const config = require('../config');
@@ -38,7 +39,7 @@ async function listPageEvaluate(region, page, nextListPage) {
     }
     //logger.info(`listPageEvaluate.provider.${info.key} ${url}`);
     try {
-      await page.goto(url);
+      const response = await page.goto(url, { waitUntil: 'networkidle0' }); // waitUntil: 'networkidle0' to load all scripts
     } catch (err) {
       return reject(err.message);
     }
@@ -48,9 +49,10 @@ async function listPageEvaluate(region, page, nextListPage) {
         let nextListPage = null;
 
         const group = document.querySelector("div.structItemContainer-group.js-threadList");
-        // TODO: check group for null
+        if (!group) throw(new Error(`reading url ${url}, empty group`));
+        
         group.querySelectorAll("div.structItem.structItem--thread").forEach(item => {
-          // TODO: check item for null
+          if (!item) throw(new Error(`reading url ${url}, empty item`));
           const data = {};
           data.provider = info.key;
           data.region = region;
@@ -93,10 +95,13 @@ async function listPageEvaluate(region, page, nextListPage) {
             const imgElement = item.querySelector("div.structItem-iconContainer > a > img");
             if (imgElement) {
               const hostRegexp = new RegExp('^' + imagesUrl);
-              let imageUrl = imgElement.getAttribute("src").replace(/^\//, '').replace(/\?.*/, '').replace(hostRegexp, '');
-              if (!imageUrl.match(/^proxy\.php\?image=/)) { // skip local icons
+              let imageUrl = imgElement.getAttribute("src").replace(/^\//, '').replace(/\?.*/, '').replace(/https:\/\/punterforum.com\//, '').replace(hostRegexp, '');
+              if (!imageUrl.match(/proxy\.php/)) { // skip local icons
                 const image = { url: imageUrl, category: 'main' };
-                if (imageUrl !== "images/placeholder.jpg") { // skip placeholders
+                if ( // ignore placeholders
+                  (!imageUrl.match(/images\/placeholder/)) &&
+                  (!imageUrl.match(/images\/image_not/))
+                ) {
                   data.images.push(image);
                 }
               }
@@ -133,7 +138,6 @@ const itemPageEvaluate = async (region, page, item) => {
       throw(new Error(`url not defined for provider ${info.key} at region region ${region}`));
     }
     const url = baseUrl + itemUrl;
-    //logger.info(`itemPageEvaluate.provider.${info.key} ${url}`);
     try {
       const response = await page.goto(url);
     } catch (err) {
@@ -157,12 +161,17 @@ const itemPageEvaluate = async (region, page, item) => {
             // TODO: check imgElement for null
             if (imgElement) {
               const hostRegexp = new RegExp('^' + imagesUrl);
-              let imageUrl = imgElement.querySelector("img").getAttribute("src").replace(/^\//, '').replace(/\?.*/, '').replace(hostRegexp, '');
+              let imageUrl = imgElement.querySelector("img").getAttribute("src").replace(/^\//, '').replace(/\?.*/, '').replace(/https:\/\/punterforum.com\//, '').replace(hostRegexp, '');
               const image = { url: imageUrl, category: null };
-              if (!imageUrl.match(/^proxy\.php\?image=/)) { // skip local icons
-                if (!data.images.some(img => img.url === imageUrl)) { // skip duplicates
-                  image.category = 'full';
-                  data.images.push(image);
+              if (!imageUrl.match(/proxy\.php/)) { // skip local icons
+                if ( // ignore placeholders
+                  (!imageUrl.match(/images\/placeholder/)) &&
+                  (!imageUrl.match(/images\/image_not/))
+                ) {
+                  if (!data.images.some(img => img.url === imageUrl)) { // skip duplicates
+                    image.category = 'full';
+                    data.images.push(image);
+                  }
                 }
               }
             }
@@ -205,11 +214,23 @@ const itemPageEvaluate = async (region, page, item) => {
 
           try { // ad url references
             const articleHeader = article.replace(/SERVIZI .*$/gsi, ''); // keep only the header part of the articke, where ad url references should be...
-            const hrefRegexp = /a href="([^"]+)"/g;
-            const matches = articleHeader.matchAll(hrefRegexp);
+            const hrefRe = new RegExp(`a href="([^"]+)`, 'g');
+            const rel1Re = new RegExp(`^\/`);
+            const rel2Re = new RegExp(`^${info.url}`);
+            const rel3Re = new RegExp(`^${info.url.replace(/^https:\/\//, 'http://')}`);
+            const rel4Re = new RegExp(`^https?:\/\/.*?\.wikipedia\.org`);
+            const rel5Re = new RegExp(`^https?:\/\/archive\.is`);
+
+            const matches = articleHeader.matchAll(hrefRe);
             for (const match of matches) {
               const href = match[1];
-              if (!href.match(/^\//)) { // skip relative links
+              if (
+                !href.match(rel1Re) &&
+                !href.match(rel2Re) &&
+                !href.match(rel3Re) &&
+                !href.match(rel4Re) &&
+                !href.match(rel5Re)
+              ) { // skip relative links
                 if (data.adUrlReferences.indexOf(href) === -1) { // avoid duplicate links
                   data.adUrlReferences.push(href);
                 }

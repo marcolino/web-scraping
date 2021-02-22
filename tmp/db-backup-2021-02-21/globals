@@ -1,0 +1,24 @@
+[{
+  "_id": {
+    "$oid": "5ff9ca09edc55522743f5724"
+  },
+  "key": "lastScrapeTimestamp",
+  "__v": 0,
+  "value": {
+    "$date": "2021-02-20T18:04:58.984Z"
+  }
+},{
+  "_id": {
+    "$oid": "600b3357350a8cfb24b76a49"
+  },
+  "key": "lastScrapeStatus",
+  "__v": 0,
+  "value": "started"
+},{
+  "_id": {
+    "$oid": "602cd3589ad91885ea2889fd"
+  },
+  "key": "lastScrapeTimestampDuration",
+  "__v": 0,
+  "value": "00:12:28"
+}]

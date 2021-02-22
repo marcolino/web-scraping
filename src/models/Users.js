@@ -1,6 +1,6 @@
-require("dotenv").config();
-const config = require("../config");
-const mongoose = require("mongoose");
+require('dotenv').config();
+const config = require('../config');
+const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const languages = require('language-list')().getLanguageCodes(); // ISO 639-1 languages list
 const saltRounds = 10;

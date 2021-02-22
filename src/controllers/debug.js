@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const fs = require('fs');
-//const path = require("path");
+//const path = require('path');
 const { private } = require('../auth');
 const { someCommonImages, itemsMerge, showCommonImages } = require('../controllers/providers');
 const { getProviders } = require('../utils/misc');
@@ -11,7 +11,7 @@ const config = require('../config');
 // verify db and fs consistency
 
 async function verifyConsistency(filter) {
-  const Items = require("../models/Items");
+  const Items = require('../models/Items');
 
   try {
     const project = {};
@@ -73,7 +73,7 @@ async function verifyConsistency(filter) {
 }
 
 async function verifyOrphanedImages(filter) {
-  const Items = require("../models/Items");
+  const Items = require('../models/Items');
   const result = {};
 
   try {
@@ -91,9 +91,9 @@ async function verifyOrphanedImages(filter) {
     const imagesSet = new Set();
     items.forEach(async (item) => {
       item.images.forEach(async (image) => {
-        if (image.localPath) {
-          imagesSet.add(`${image.localPath}`);
-          //console.log(`db image localPath: ${image.localPath}`);
+        if (image.localName) {
+          imagesSet.add(`${image.localName}`);
+          //console.log(`db image localName: ${image.localName}`);
         }
       });
     });
@@ -101,10 +101,10 @@ async function verifyOrphanedImages(filter) {
 
     // read images files on fs
     const filesSet = new Set();
-    fs.readdirSync(config.imagesBaseFolder).forEach(dir => {
+    fs.readdirSync(config.images.baseFolder).forEach(dir => {
       //console.log(`dir: ${dir}`);
-      fs.readdirSync(`${config.imagesBaseFolder}${dir}`).forEach(file => {
-        filesSet.add(`${config.imagesBaseFolder}${dir}/${file}`);
+      fs.readdirSync(`${config.images.baseFolder}${dir}`).forEach(file => {
+        filesSet.add(`${config.images.baseFolder}${dir}/${file}`);
       });
     });
     //logger.debug('image files on fs count:', filesSet.size);
@@ -151,12 +151,12 @@ async function verifyOrphanedImages(filter) {
 }
 
 router.post('/verifyDuplicateImagesForPerson', private, async (req, res, next) => {
-  const Items = require("../models/Items");
+  const Items = require('../models/Items');
 
   try {
     const filter = req.body.filter;
     const threshold = typeof req.body.threshold !== 'undefined' ? req.body.threshold : 0.20;
-    const project = { provider: 1, id: 1, region: 1, title: 1, url: 1, images: 1 };
+    const project = { provider: 1, id: 1, key: 1, region: 1, title: 1, url: 1, images: 1 };
 
     // logger.debug('filter:', filter);
     // logger.debug('threshold:', threshold);
@@ -172,7 +172,7 @@ router.post('/verifyDuplicateImagesForPerson', private, async (req, res, next) =
       if (commonImages = someCommonImages(item, item, threshold)) { // TODO: skip same image
         showUrls.push(showCommonImages(providers, [item, item], commonImages));
       } else {
-        //logger.debug(`item ${item.provider} ${item.id} ${item.title} DO NOT have duplicate images`);
+        //logger.debug(`item ${item.key} ${item.title} DO NOT have duplicate images`);
       }
     });
 
@@ -185,7 +185,7 @@ router.post('/verifyDuplicateImagesForPerson', private, async (req, res, next) =
 
 // system only routes (debug)
 router.post('/debugSomeCommonImages', private, async (req, res, next) => {
-  const Items = require("../models/Items");
+  const Items = require('../models/Items');
 
   try {
     let filterA = req.body.filterA ? req.body.filterA : {};
@@ -312,8 +312,10 @@ router.post('/debugItemsMerge', private, async (req, res, next) => {
       }
     ],
   };
-  const mergedItems = itemsMerge(oldItem, newItem);
-  res.status(200).json({ message: "Merged items:", data: mergedItems });
+  const result = itemsMerge(oldItem, newItem);
+  const mergedItems = result.merged;
+  const changed = result.changed;
+  res.status(200).json({ message: "Merged items:", data: mergedItems, changed });
 });
 
 Object.defineProperty(String.prototype, 'hashCode', {

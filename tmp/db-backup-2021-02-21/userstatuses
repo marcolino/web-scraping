@@ -1,0 +1,20 @@
+[{
+  "_id": {
+    "$oid": "5f420d946f9abac0cdac8981"
+  },
+  "item": {
+    "$oid": "5f414188f291dc6872eb3e8d"
+  },
+  "user": {
+    "$oid": "5f4109b424c0014651192f81"
+  },
+  "__v": 0,
+  "dateCreated": {
+    "$date": "2020-08-23T06:32:52.629Z"
+  },
+  "dateUpdated": {
+    "$date": "2020-08-23T06:34:01.890Z"
+  },
+  "note": "very nice",
+  "vote": 0.8
+}]

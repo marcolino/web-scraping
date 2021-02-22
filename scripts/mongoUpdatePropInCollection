@@ -5,8 +5,8 @@
 db=${1:-web-scraping}
 collection=${2:-items}
 filter=${3:-{}}
-propName=${3}
-propValue=${4}
+propName=${4}
+propValue=${5}
 
 if [ -z "$db" ]; then
   echo "Please specify db as first parameter"; exit -1

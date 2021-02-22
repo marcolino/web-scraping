@@ -9,7 +9,7 @@ var options = {
     filename: `${appRoot}/logs/web-scraping.log`,
     handleExceptions: true,
     json: true,
-    maxSize: 5242880, // 5 MB
+    maxsize: 5242880, // 5 MB
     maxFiles: '10d', // 10 days
     colorize: true,
   },

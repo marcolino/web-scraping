@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 const mongooseHistory = require('mongoose-history');
 const Schema = mongoose.Schema;
 const name = "Items.audiobook";

@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const fs = require('fs');
-const path = require("path");
+const path = require('path');
 const { private } = require('../auth');
 const { scrapeProviders, scrapeProvidersImages, scrapeSchedule, groupProvidersItems, someCommonImages, itemsMerge, showCommonImages } = require('../controllers/providers');
 const { verifyConsistency, verifyOrphanedImages } = require('../controllers/debug');

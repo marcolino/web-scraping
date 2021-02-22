@@ -1,7 +1,7 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-const Globals = require("../models/Globals");
-const logger = require("../logger");
+const Globals = require('../models/Globals');
+const logger = require('../logger');
 
 const model = "Item";
 
@@ -34,6 +34,11 @@ const schema = new Schema({
   address: {
     type: String,
   },
+  addressCoordinates: [
+    {
+      type: Number,
+    }
+  ],
   phone: {
     type: String,
   },
@@ -109,10 +114,13 @@ const schema = new Schema({
     etag: {
       type: String,
     },
+    mimeType: {
+      type: String,
+    },
     phash: {
       type: String,
     },
-    localPath: {
+    localName: {
       type: String,
     },
     active: {
@@ -194,6 +202,9 @@ const schema = new Schema({
   group: {
     type: String,
   },
+  onHoliday: {
+    type: Boolean,
+  },
   presentAt: {
     type: Date,
   },
@@ -202,14 +213,31 @@ const schema = new Schema({
   }
 }, {
   timestamps: { createdAt: 'createdAt', updatedAt: 'updatedAt'},
-  toObject: { virtuals: true },
+  // toObject: { virtuals: true },
   toJSON: { virtuals: true },
 }); // timestamps option: automatically add 'createdAt' and 'updatedAt' timestamps
 
 // indexes
 schema.index({ id: 1, provider: 1/*, region: 1*/ }, { unique: true });
 
-// // virtual methods
+// virtual methods
+schema.virtual('key').get(function() {
+  return `${this.provider}•${this.id}•${this.title}`;
+});
+
+// pre hooks
+//schema.pre('save', function(next) {
+//   const props = Object.keys(schema.paths);
+//   props.map(prop => {
+//     if (!this.isModified(prop)) {
+//       console.log(`pre-save ${this.provider} ${this.id} prop ${prop} is NOT modified`);
+//     } else {
+//       console.log(`pre-save ${this.provider} ${this.id} prop ${prop} is modified`);
+//     }
+//   });
+//   next();
+// });
+
 // schema.virtual('missing').get(function() { // TODO: check performance of this method !
   //   const timestamp = await Globals.findOne({ key: 'lastScrapeTimestamp' }).exec();
   //   return (

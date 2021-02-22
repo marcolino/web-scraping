@@ -1,7 +1,7 @@
-require("dotenv").config();
-const mongoose = require("mongoose");
-const bcrypt = require("bcrypt");
-const config = require("../config");
+require('dotenv').config();
+const mongoose = require('mongoose');
+const bcrypt = require('bcrypt');
+const config = require('../config');
 
 const saltRounds = 10;
 

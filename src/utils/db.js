@@ -1,7 +1,7 @@
  
-const mongoose = require("mongoose");
-const logger = require("../logger");
-const config = require("../config");
+const mongoose = require('mongoose');
+const logger = require('../logger');
+const config = require('../config');
 
 dbConnect = async () => {
   try {

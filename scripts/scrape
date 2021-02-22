@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+#
+# Scrape items for a region
+#
+#######################################
+
+token="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVmZjFhMzAzODcyMTRhNGRkNWM2MzEwMSIsInJvbGUiOiJzeXN0ZW0iLCJpYXQiOjE2MTE3Njc1NjB9.QwjvchCNpn_S_FMQ6QM8CSuo4us5YX2EAGEfM9PO14w"
+url="http://localhost:3001/providers/scrape"
+
+region="${1:-italy.torino}"
+
+curl --location --request POST "$url" \
+--header 'Authorization: Bearer '$token \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "regionDescriptior": "$region"
+}'
+echo

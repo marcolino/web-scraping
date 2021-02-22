@@ -20,7 +20,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
-const { Console } = require("winston/lib/winston/transports");
+const { Console } = require('winston/lib/winston/transports');
 
 // https://code.google.com/p/ironchef-team21/source/browse/ironchef_team21/src/ImagePHash.java
 

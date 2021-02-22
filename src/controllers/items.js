@@ -15,10 +15,20 @@ async function getItems(req, res, next) {
     // call();
     // hrend = process.hrtime(hrstart); logger.info(`call() execution time (hr): ${hrend[1] / 1000000} ms`);
 
+    const providers = getProviders();
+    const immutableProviders = Object.keys(providers).filter(p => providers[p].immutable === true);
+    const commentsOnlyProviders = Object.keys(providers).filter(p => providers[p].commentsOnly === true);
+    const lastScrapeTimestamp = await globals.findOne({ key: 'lastScrapeTimestamp' }).exec();
+console.log('lastScrapeTimestamp:', lastScrapeTimestamp.value);
+
     const filterOnlyNew = flags && flags.onlyNew ? { createdAt: { $gte: lastScrapeTimestamp.value } } : {}; // select only new items, if requested
     const filterOnlyNewAndChanged = flags && flags.onlyNewAndChanged ? { $or: [ { createdAt: { $gte: lastScrapeTimestamp.value } }, { changedAt: { $gte: lastScrapeTimestamp.value } } ] } : {}; // select only new items, if requested
-    //const filterMissingToo = flags && flags.missingToo ? {} : { onHoliday: { $ne: true }, $or: [ { presentAt: { $gte: lastScrapeTimestamp.value } }, { immutable: true } ] }; // select missing items, too, if requested
+    const filterMissingToo = flags && flags.missingToo ? {} : { onHoliday: { $ne: true }, $or: [ { updatedAt: { $gte: lastScrapeTimestamp.value } }, { provider: { $in: immutableProviders } } ] }; // select missing items, too, if requested
     const filterSuspiciousToo = flags && flags.suspiciousToo ? {} : { suspicious: { $ne: true } }; // select suspicious items, too, if requested
+    const filterCommentsOnlyToo = flags && flags.commentsOnlyToo ? {} : { provider: { $nin: commentsOnlyProviders } }; // select comments-only providers, too, if requested
+
+    let hrstart = hrend = null;
+hrstart = process.hrtime();
 
     let itemsList = await items.
       find(
@@ -26,27 +36,40 @@ async function getItems(req, res, next) {
           ...filter,
           ...filterOnlyNew,
           ...filterOnlyNewAndChanged,
-          //...filterMissingToo,
+          ...filterMissingToo,
           ...filterSuspiciousToo,
+          ...filterCommentsOnlyToo,
         },
         {
           _id: 0,
-          //missing: 1,
+          missing: 1,
           provider: 1,
-          immutable: 1,
           id: 1,
           url: 1,
           title: 1,
           phone: 1,
+          address: 1,
           suspicious: 1,
-          images: 1,
+          //images: 1,
           comments: 1,
           onHoliday: 1,
           createdAt: 1,
           presentAt: 1,
-          updatedAt: 1,
+          //updatedAt: 1,
           changedAt: 1,
           //group: 1,
+          images: {
+            $filter: {
+              input: "$images",
+              as: "images",
+              cond: {
+                $ne: [
+                  "$$images.active",
+                  false
+                ]
+              }
+            }
+          }
         }
       )
       // .select({ // TODO: what happens if an item has no main image? we want it too...
@@ -56,28 +79,30 @@ async function getItems(req, res, next) {
       .sort({createdAt: 'descending', changedAt: 'descending', updatedAt: 'descending'})
       .lean()
     ;
+hrend = process.hrtime(hrstart); logger.info(` * call(find) execution time (hr): ${hrend[1] / 1000000} ms`);
 
-    // populate missing prop
-    const providers = getProviders();
-    const timestamp = await globals.findOne({ key: 'lastScrapeTimestamp' }).exec();
-let hrstart = hrend = null;
-hrstart = process.hrtime();
-      itemsList = itemsList.map(item => {
-        const provider = Object.keys(providers).find(p => p === item.provider);
-        const immutable = providers[provider].immutable;
-        item.missing = item.onHoliday || (item.presentAt < timestamp && !item.immutable);
-console.log(item.id, item.missing);
-        delete item.onHoliday;
-        delete item.presentAt;
-        delete item.immutable;
-        return item;
-    });
-hrend = process.hrtime(hrstart); logger.info(` * call(itemsList.map) execution time (hr): ${hrend[1] / 1000000} ms`);
+//     // populate missing prop
+//     const providers = getProviders();
+//     const timestamp = await globals.findOne({ key: 'lastScrapeTimestamp' }).exec();
+//     itemsList = itemsList.filter(item => {
+//       const provider = Object.keys(providers).find(p => p === item.provider);
+//       const immutable = providers[provider].immutable;
+//       item.missing = item.onHoliday || (item.presentAt < timestamp && !item.immutable);
+//       return (!item.missing || flags.missingToo);
+//     });
+// hrend = process.hrtime(hrstart); logger.info(` * call(find + itemsList.map) execution time (hr): ${hrend[1] / 1000000} ms`);
+
+    // // remove unneeded props
+    // itemsList = itemsList.map(item => {
+    //   delete item.onHoliday;
+    //   delete item.presentAt;
+    //   return item;
+    // });
 
     // return only main images if requested
     if (flags && flags.onlyMainImages) {
       itemsList = itemsList.map(item => {
-        item.images = item.images.filter(image => image.category === 'main');
+        item.images = item && item.images ? item.images.filter(image => image.category === 'main') : [];
         return item;
       });
     }
@@ -111,6 +136,7 @@ hrend = process.hrtime(hrstart); logger.info(` * call(itemsList.map) execution t
 // logger.debug(`itemsList for end  : ${new Date()}`);
 
     //itemsList = groupBy(itemsList, item => item.group); // group items list (return only first item in each group)
+hrend = process.hrtime(hrstart); logger.info(` * call(find + itemsList.map + other maps) execution time (hr): ${hrend[1] / 1000000} ms`);
 
     res.status(200).json({ message: `${itemsList.length} items found`, data: itemsList });
   } catch (err) {
@@ -210,7 +236,7 @@ async function updateItemById(id) {
 async function test(req, res, next) {
   try {
     const item = req.body.item;
-    const Items = require("../models/Items");
+    const Items = require('../models/Items');
     const persons = await Items.find({
       provider: item.provider,
       //id: '396863',

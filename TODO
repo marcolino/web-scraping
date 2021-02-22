@@ -1,33 +1,39 @@
   V remove mongodb-memory-server
   V listPageEvaluate.provider.pf => providers...
-  - in itemPageEvaluate do not download of items we know (from listPageEvaluate) to be onHoliday
-  - PF: try reopening browser on page change
+  V in itemPageEvaluate do not download of items we know (from listPageEvaluate) to be onHoliday
+  V PF: try reopening browser on page change (no, we could create a valid account using gmail address, only waiting for approval...)
+  - at each successful finish of items scrape store date of start and count of new/changed items, to later optimize scraping schedules
   - write a rag of a README.md
   - handle missing persons items, comparing date of last update and date of last scrape (use a virtual method)
   - protect system from multiple scrape requests (I think it's a good thing...)
-  - in providers do avoid `document.querySelectorAll(...).something...`, but do `const el = document.querySelectorAll(...); if (el) { el.something... }`
+  - in providers - everywhere - do avoid `document.querySelector(...).something...`, but do `const el = document.querySelector(...); if (el) { el.something... }`
   - review cloud.mongodb.com network access list (https://cloud.mongodb.com/v2/5ffc6bd7ff8754133fc84727#security/network/accessList)
   - auth endpointRoles better to be in database ?
   V add etag to item.persons (unuseful, no etag arrives for html pages...)
-  - remove region from key, use only for filtering (done, be sure it is not used nowhere anymore)
+  V remove region from key, use only for filtering (done, be sure it is not used nowhere anymore)
   V dateCreated, dateUpdated => default names
   - when grouping, consider phone, images, and adUrlReferences
-  - in compareItemsHistoryes, handle objects
-  - in compareItemsHistoryes, in images array do not consider changes in localPath, pHas, ... but only in url (?)
-  - finish debug/grid, to view a grid of images from some debug endpoin, if needed...
-  - wrtite to globals date and time and result of each scrape
+  V in compareItemsHistoryes, handle objects
+  V in compareItemsHistoryes, in images array do not consider changes in localName, pHash, ...
+  V finish debug/grid, to view a grid of images from some debug endpoint, if needed...
   - decide if using throw(new Error(...)) or logger.error(...) on scraping errors (throw while inside inner functions, log while in top level functions)
   - add fake image in db without image on disk to debuf scrapeProvidersImages... (https://scontent-cdt1-1.xx.fbcdn.net/v/t1.0-1/43599420_1139655082879487_2594198514942607360_n.jpg)
-  - mark duplicate images as duplicates, do not delete them
-  - in grid.html, if no image show missing image icon
+  V mark duplicate images as duplicates, do not delete them
+  V in grid.html, if no image show missing image icon
   - understand the difference among updatedAt (automatic mongo field) and changedAt (custom)... Do we need both? Can we avoud one?
   - remember schedules to survive to server restarts...
+  - understand why descriptions miss newlines completely
+  V add virtual 'key' with provider and id
+  - remove moment module if not requested anymore
+  - when avoiding building w300 image, find a way to use the main one, or otherwise copy it...
+  - avoid showing new items which do not have yet a cached image (or show image on site...)
   - test:
     V login with password unselectable in model
-    - what happens if an item has no main image in getItems (should be returned nonetheless)
+    V what happens if an item has no main image in getItems (should be returned nonetheless)
     V stars in PF providerScraping (temporarily enable only PF provider, and set it as not immutable)
     - extraction of comments votes from getItems query
     - filterFresh in getItems
     - filterMissing (check on holiday items, missing items, and immutable items) in getItems
     - groupItems() (use js to group after mongo db find())
+    - provider pf with alsoImmutables = true
     

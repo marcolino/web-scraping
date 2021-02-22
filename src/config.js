@@ -1,7 +1,7 @@
 exports.type = "persons"; // type of objects we treat
 exports.defaultServerPort = 3001; // the server port we listen on
 exports.jwtTokenExpiresIn = "8h"; // token expiration time
-exports.schedule = "*/15 * * * *"; // run every 5 minutes
+exports.schedule = "*/30 * * * *"; // run every 5 minutes
 exports.networkTimeout = 60 * 1000; // network fetch timeout
 exports.roles = [ // roles we recognize
   { name: "admin" },
@@ -9,20 +9,27 @@ exports.roles = [ // roles we recognize
   { name: "user" },
   { name: "guest" },
 ];
-exports.imagesBaseFolder = "./cache/persons/images/";
 exports.scrape = {
   debug: {
     puppeteer: false, // debug puppeteer while scraping providers
     duplicateItemsPersonsCollection: true, // duplicate db collection 'items.persons' before starting
     duplicateImagesCache: true, // duplicate images cache before starting
   },
-  onlyProviders: ["ef"], // scrape only a subset of providers
   onlyRegions: ["italy.torino"], // scrape only a subset of regions
-  onlyItemId: [], // scrape only a subset of items id's
-  onlyFirstPages: 0, // scrape olny the first n pages (0 means all pages)
+  onlyProviders: ["sgi"], // scrape only a subset of providers
+  onlyItemId: ["adv7150"], // scrape only a subset of items id's
+  onlyFirstPages: 0, // scrape only the first n pages (0 means all pages)
   onlyFirstItems: 0, // scrape only the first n items (0 means all items)
   alsoImmutables: false, // scrape also immutable providers (by default, scrape only added items of immutable providers)
-}
+};
+exports.images = {
+  baseFolder: "./cache/persons/images/",
+  size: {
+    width: 300,
+    height: 'auto',
+  },
+  quality: 66,
+};
 
 if (process.env.DB === "cloud") { // TODO: put MONGO_URI in environment, in production
   const MONGO_USER = "marco";

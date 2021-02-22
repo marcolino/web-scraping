@@ -1,0 +1,16 @@
+[{
+  "_id": {
+    "$oid": "5ff1a30387214a4dd5c63101"
+  },
+  "name": "Marco",
+  "email": "marcosolari@gmail.com",
+  "password": "$2b$10$7MCAPnTp9caatzx4nQTuxeJC1McPTuXGrBNkqY0EL.dy169PzXkam",
+  "dateCreated": {
+    "$date": "2021-01-03T10:57:07.160Z"
+  },
+  "dateUpdated": {
+    "$date": "2021-01-03T10:57:07.160Z"
+  },
+  "__v": 0,
+  "role": "system"
+}]

@@ -66,7 +66,7 @@ Tips:
  - an example to query quickly mongo db:
     provider="pf"; cols="id:1, url:1"; db="web-scraping"; echo "DBQuery.shellBatchSize = 10000; db.items.persons.find( {provider:'$provider'}, { _id:0, $cols } )" | mongo "$db" | grep -v '^bye$' 
  - selector for persons with images not in cache:
-    db.collection.find({'images.localPath': {$eq: null}})
+    db.collection.find({'images.localName': {$eq: null}})
  - to get array length:
     //db.collection.aggregate([{$project: { count: { $size: "$images" }}}])
     db.collection.find({}, { _id: 0, name: 1, images: { $size: "$images" })

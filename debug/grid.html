@@ -80,14 +80,13 @@
         },
         body: JSON.stringify(
           {
-            "filter": {
-              "provider": "sgi"
-            },
-            "flags": {
-              "onlyMainImages": true,
-              "onlyCommentsCount": true,
-              "missingToo": true,
-            }
+            // "filter": {
+            //   "provider": "pf"
+            // },
+            // "flags": {
+            //   "missingToo": true,
+            //   "commentsOnlyToo": true,
+            // }
           }
         )
       })
@@ -105,7 +104,7 @@
           //console.log(provider);
           switch (provider) {
             case 'sgi':
-              baseurl = 'https://sexyguidaitalia.com/';
+              baseurl = 'https://sexyguidaitalia.com/escort/';
               baseurlimg = 'https://sexyguidaitalia.com/';
               break;
             case 'toe':
@@ -120,15 +119,23 @@
               baseurl = 'https://escortforumit.xxx/';
               baseurlimg = 'https://pic.escortforumit.xxx/escortforumit.xxx/';
               break;
+            case 'mr':
+              baseurl = 'https://www.moscarossa.biz/';
+              baseurlimg = 'https://foto.moscarossa.biz/';
+              break;
             default: throw new Error(`Unforeseen provider ${provider}`);
           }
           link.href = baseurl + result.data[i].url;
           link.target = baseurl + result.data[i].url;
-          if (result.data[i].images[0]) {
-            img.src = baseurlimg + (result.data[i].images[0] ? result.data[i].images[0].url : '');
+          if (result.data[i].images[0] && result.data[i].images[0].localName) {
+            //img.src = baseurlimg + result.data[i].images[0];
+            //img.src = result.data[i].images[0].localName;
+            const path = `./cache/persons/images/${provider}`;
+            const file = result.data[i].images[0].localName;
+            img.src = path + `/w${size}/` + file;
           } else {
-            console.warn('no first image item:', result.data[i]);
-            img.src = `https://via.placeholder.com/200x300/FF0000/FFF?text=no image`;
+            //console.warn('no first image item:', result.data[i]);
+            img.src = `https://via.placeholder.com/200x300/222222/AAAAAA?text=no image`;
           }
           img.style.maxWidth = `${size}px`;
           img.style.maxHeight = `${size}px`;
@@ -214,6 +221,23 @@
         return `${years} anni e ${months} mesi fa`;
       }
     }
+
+    const serialize = (obj, prefix) => {
+      var str = [], p;
+      for (p in obj) {
+        if (obj.hasOwnProperty(p)) {
+          const k = prefix ? prefix + "[" + p + "]" : p, v = obj[p];
+          str.push((v !== null && typeof v === "object") ?
+            serialize(v, k)
+          :
+            encodeURIComponent(k) + "=" + encodeURIComponent(v))
+          ;
+        }
+      }
+      return str.join("&");
+    }
+
+
   </script>
 </head>
 

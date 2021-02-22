@@ -17,7 +17,6 @@ const info = {
   currency: "€", // TODO: put inside country...
   mediumPricePerHalfHour: 70,
   mediumPricePerHour: 120,
-  immutable: false,
 };
 
 const config = require('../config');
@@ -124,15 +123,22 @@ async function listPageEvaluate(region, page) {
           }
 
           try { // on holiday
-            data.onHoliday = !!item.querySelector("h3.nome.nome-off");
+            data.onHoliday = false;
+            const onHolidayMarkerElement = item.querySelector("h3.nome > div:first-child");
+            if (onHolidayMarkerElement) {
+              const onHolidayImageElement = onHolidayMarkerElement.querySelector("img"/*[src='/images/sgi/label-off.png']"*/);
+              if (onHolidayImageElement) {
+                data.onHoliday = !!onHolidayImageElement.getAttribute("src").match(/label_off/);
+              }
+            } else {
+              data.warnings.onHoliday = false;
+            }
             if (data.onHoliday) {
               delete data.phone; // avoid returning a phone of a missing person (to avoid overwriting old value, possibly a better one)
             }
-            if (typeof data.onHoliday === 'undefined') data.warnings.onHoliday = false;
           } catch (err) {
             throw(new Error(`reading url ${url} looking for title: ${err.message}`));
           }
-//console.log('SGI HOLIDAY:', data.onHoliday);
 
           list.push(data);
         });

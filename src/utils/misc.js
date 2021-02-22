@@ -52,8 +52,8 @@ exports.dumperr = (error) => {
 }
 
 /**
- * Provides a natural language (fuzzy) representation of a time distance from now
- * Currently it is localized for Italian only.
+ * Provides a natural language (fuzzy) representation of a time distance since now
+ * Currently it works for past only and is localized for Italian only.
  */
 exports.fuzzyTimeDistanceFromNow = (date) => {
   const delta = Math.round((+new Date - date) / 1000);
@@ -62,7 +62,7 @@ exports.fuzzyTimeDistanceFromNow = (date) => {
     minute = 60,
     hour = minute * 60,
     day = hour * 24,
-    week = day * 7,
+    //week = day * 7,
     month = day * 30,
     year = day * 365
   ;
@@ -110,3 +110,20 @@ exports.getProviders = () => {
   return providers;
 }
 
+/**
+ * Sleep for a number of milliseconds
+ */
+exports.sleep = (ms) => {
+  return new Promise((resolve) => {
+    setTimeout(resolve, ms);
+  });
+}
+
+/**
+ * Check if two arrays of objects are equal
+ */
+exports.objectsEqual = (o1, o2) => {
+  Object.keys(o1).length === Object.keys(o2).length 
+    && Object.keys(o1).every(p => o1[p] === o2[p])
+  ;
+}
