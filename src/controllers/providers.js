@@ -13,7 +13,7 @@ const Audits = require('../models/Audits');
 //const { dbConnect, dbClose } = require('../utils/db');
 const { phoneNormalize } = require('../utils/providers');
 const { browserLaunch, browserPageNew, browserPageClose, browserClose } = require('../utils/browser');
-const { mimeImage, sleep, objectsEqual, dumperr } = require('../utils/misc');
+const { mimeImage, sleep, dumperr } = require('../utils/misc');
 const { calculatePerceptualHash, comparePerceptualHashes, perceptuallyEqual } = require('../utils/image');
 //const { register, login } = require('./user');
 const logger = require('../logger');
@@ -363,7 +363,11 @@ const scrapeItems = async (provider, region, page, list, pageNum) => {
             } else {
               itemFull.phone = phoneNormalize(itemFull.phone).number; // can't do it in provider.itemPageEvaluate() because can't pass functions into puppeteer evaluation...
               itemFull.presentAt = new Date();
-              await saveItem(itemFull); // TODO: we could run saveItem asynchronously...
+
+              await saveItem(itemFull);
+
+              await scrapeProviderImage(provider, region, itemFull); // TODO: we could run scrapeProviderImage asynchronously...
+
               itemsFull.push(itemFull);
             }
           } else {
@@ -378,13 +382,113 @@ const scrapeItems = async (provider, region, page, list, pageNum) => {
     }
     return itemsFull;
   } catch (err) {
-    logger.warn(`error scraping items: ${dumperr(err)}`);
+    logger.warn(`error scraping items for provider ${provider.info.key}: ${dumperr(err)}`);
+  }
+}
+
+scrapeProviderImage = async (provider, region, item) => {
+  try {
+    // avoid scraping images of items on holiday
+    if (item.onHoliday) {
+      logger.debug(`${item.provider} ${item.id} is on holiday, avoid scraping images`);
+      return;
+    }
+
+    let count = 0;
+//console.log('scrapeProviderImage', item.provider, item.id, item.images.length, item.images[0].category);
+    for (let i = 0; i < item.images.length; i++) {
+      //let image = item.images[i];
+//console.log(`scrapeProviderImage - downloading image ${i} at ${item.images[i].url}, ${provider.info.key}, ${item.id}`);
+//console.log('scrapeProviderImage - item.images:', item.images);
+      const images = await Items.findOne({ // find all items, will filter programmatically
+        provider: provider.info.key,
+        id: item.id,
+        'images.url': item.images[i].url,
+      }, {
+        _id: 0, images: {$elemMatch: {url: item.images[i].url}}
+      });
+      if (!images) { // no images in db, should happen only for new items
+        logger.debug(`item ${item.provider} ${item.id} ${item.title} image n. ${i} url ${item.images[i].url} not found in db, should not happen...`);
+        continue;
+      }
+//console.log(`scrapeProviderImage - found images: ${images}`);
+      const image = images.images[0]; 
+      const outputFile = image.localName;
+      const outputPath = `${config.images.baseFolder}${item.provider}`;
+      image.cached = fs.existsSync(`${outputPath}/${outputFile}`); // check if file is already cached on fs - TODO: check why next test passes, and thed we have warning "downloaded image ... file already present, skipped" ***********************
+//console.log('downloadImage ??', (!image.localName || !image.cached), image.cached, image.category, item.provider, item.id, outputPath, outputFile);
+      if (!image.localName || !image.cached) { // only download images with no localName, or missing file image
+        logger.info(`providers.scrapeProvidersImage ${item.provider.paddingRight('     ')} ${item.id.paddingRight('       ')} [image ${(1+i).toString().paddingLeft('    ')}/${(item.images.length).toString().paddingLeft('    ')}]`);
+        const response = await downloadImage(provider, region, item, image);
+// console.log('downloadImage =>', response);
+        if (!response || !response.success) {
+          continue;
+        }
+// console.log('downloadImage =>', 1);
+        const imageDownloaded = response.image;
+        if (response.notFound) { // image not found (and not cached): remove this image from item's images
+          await removeItemImage(item, imageDownloaded);
+          continue;
+        }
+// console.log('downloadImage =>', 2);
+       
+        // copy downloaded image props to items image
+        delete imageDownloaded.success;
+        for (var prop in imageDownloaded) image[prop] = imageDownloaded[prop];
+
+        // calculate image perceptual hash
+        image.phash = await calculatePerceptualHash(`${config.images.baseFolder}${item.provider}`, image.localName);
+// console.log('downloadImage =>', 3);
+
+        // compare downloaded image phash with other images phashes (of the same item) to detect duplicates
+        let foundSimilarImage = -1;
+        let image2 = null;
+        for (let j = 0; j < item.images.length; j++) {
+          image2 = item.images[j];
+          if (j == i) continue; // do not compare the an image to itself
+          if (image2.duplicate) continue; // do not compare an image which is for sure a duplicate
+          if (image2.phash) { // check images being compared has a phash already
+            if (perceptuallyEqual(image.phash, image2.phash)) {
+              foundSimilarImage = j;
+              break;                 
+            } else { // this is the common case, two images do not match
+              //logger.warn(`Item ${item.key} ${item.title} image n. ${j} category ${item.images[j].category} image is different by image n. ${i}`);
+            }
+          } else { // image of new item has no phash, yet
+            if (image2.localName) { // no phash should not happen on images already downloaded...
+              logger.warn(`item ${item.provider} ${item.key} ${item.title} image n. ${j} category ${image2.category} has no phash, should not happen...`);
+            }
+          }
+        }
+// console.log('downloadImage =>', 4);
+        if (foundSimilarImage >= 0) {
+          if (!image2.duplicate) {
+            logger.debug(`two perceptually equal images for person ${item.key} ${item.url}, images ${i} and ${foundSimilarImage}, marking it as duplicate`);
+            image.duplicate = true;
+          }
+        }
+// console.log('downloadImage =>', 5);
+
+        // save item image
+        try {
+// console.log('saving image', image);
+          await saveItemImage(item, image); // TODO: we could save asynchrounously, without await...
+// console.log('saved image');
+        } catch (err) {
+          logger.error(`error saving item image in scrapeProviderImage: ${dumperr(err)}`);
+        }
+        count++;
+      }
+    }
+    return count; 
+  } catch (err) {
+    logger.error(`error scraping item images: ${dumperr(err)}`);
   }
 }
 
 scrapeProviderImages = async (provider, region) => {
   try {
-    const items = await Items.find({ // find all items, wil lfilgter programmatically
+    const items = await Items.find({ // find all items, will filter programmatically
       provider: provider.info.key,
       region: region,
     });
@@ -414,7 +518,6 @@ scrapeProviderImages = async (provider, region) => {
 //console.log('3a');
 
       item.provider = provider.info.key;
-      item.type = provider.info.type;
       item.region = region;
 
 //console.log('3aa images len:', item.images.length);
@@ -479,7 +582,7 @@ scrapeProviderImages = async (provider, region) => {
                 //logger.warn(`Item ${item.key} ${item.title} image n. ${k} category ${item.images[k].category} image is different by image n. ${j}`);
               }
             } else { // image of new item has no phash, yet
-              if (image2.localName) { // no phsh should not happen on images already downloaded...
+              if (image2.localName) { // no phash should not happen on images already downloaded...
                 logger.warn(`item ${item.key} ${item.title} image n. ${k} category ${image2.category} has no phash, should not happen...`);
               }
             }
@@ -539,7 +642,7 @@ const downloadImage = async (provider, region, item, image) => {
       case 404:
         // if not cached already, remove this image from db
         if (!image.cached) {
-          logger.warn(`image ${imageUrl} not found and not cached, giving up and removing it`);
+          logger.debug(`image ${imageUrl} not found and not cached, giving up and removing it`);
           retval.success = true; // to allow post processing and removing from db
           retval.notFound = true; // parent (scrapeProviderImages) will handle this flag and remove this image from item's images, to avoid retrying forever
           retval.image = {};
@@ -603,7 +706,8 @@ const downloadImage = async (provider, region, item, image) => {
     const buffer = await response.rawBody;
 
     if (fs.existsSync(`${outputPath}/${outputFile}`)) {
-      logger.info(`downloaded image ${imageUrl} file already present, skipped`, item.key, image); // TODO: why this happens often? (FORCEDOWNLOAD WAS TRUE...)
+//console.log('yyy:', outputPath, outputFile);
+      logger.info(`downloaded image ${imageUrl} file already present, skipped`, image); // TODO: why this happens often? (FORCEDOWNLOAD WAS TRUE...)
       retval.already = true;
     } else { // image does not exist, save it to filesystem
       try {
@@ -643,15 +747,15 @@ const itemExists = async(item) => {
 }
 
 const saveItem = async(item) => {
-  Items.findOne(
+  await Items.findOne(
     { id: item.id, provider: item.provider/*, region: item.region*/ },
-    (err, itemOld) => {
+    async (err, itemOld) => {
       if (err) {
         throw (new Error(`error finding item to save: ${err}`));
       }
       if (!itemOld) { // a new item
         itemOld = new Items(item);
-        itemOld.save((err, itemNew) => {
+        await itemOld.save((err, itemNew) => {
           if (err) {
             throw (new Error(`error saving new item: ${err}`));
           }
@@ -668,9 +772,9 @@ const saveItem = async(item) => {
           return;
         }
         itemMerged.changedAt = itemChanged ? new Date() : null;
-        itemOld.set({...itemMerged});
+        await itemOld.set({...itemMerged});
 //logger.warn('saving item changedAt:', itemMerged.changedAt);
-        itemOld.save((err, itemNew) => {
+        await itemOld.save((err, itemNew) => {
           if (err) {
             throw (new Error(`error updating item: ${err}`));
           }
@@ -686,7 +790,7 @@ const saveItem = async(item) => {
 const removeItemImage = async(item, image) => {
   const imageUrl = image && image.url ? image.url : null;
   Items.updateOne({provider: item.provider, id: item.id}, { "$pull": { "images": { "url": imageUrl } }}/*, { safe: true }*/, (err, res) => {
-    logger.debug(`removed image which is not online anymore ${imageUrl} - result:`, err, res); // TODO: remove me
+    //logger.debug(`removed image which is not online anymore: ${imageUrl}`);
   });
 }
 
@@ -866,9 +970,9 @@ const compareItemsHistoryes = async (itemOldLean, itemNewLean, itemNew) => {
               let difference = '';
               differences.forEach((part) => {
                 // green for additions, red for deletion, grey for common parts
-                const color = part.added ? 'blue' :
-                  part.removed ? 'red' :
-                  'green'
+                const color = part.added ? 'underline' :
+                  part.removed ? 'strikethrough' :
+                  'reset'
                 ;
                 difference += part.value[color];
               });
@@ -990,8 +1094,10 @@ const objectsAreEquivalent = (a, b, ignoredProps) => {
 }
 
 const saveItemImage = async(item, imageDownloaded) => {
+//console.log('saveItemImage - item:', item);
+//console.log('saveItemImage - imageDownloaded:', imageDownloaded);
   try {
-    const image = item._doc.images.find(image => image.url === imageDownloaded.url);
+    const image = item./*_doc.*/images.find(image => image.url === imageDownloaded.url); // TODO: use _doc  only if called by scrapeProviderImages (final s)
     if (typeof image !== 'undefined') {
       //logger.debug(`updating image ${image.url}`);
       const retval = await Items.updateOne(
@@ -1005,7 +1111,6 @@ const saveItemImage = async(item, imageDownloaded) => {
   } catch (err) {
     throw (`error saving item image: ${err}`);
   }
-
 }
   
 // const deleteItemImage = async(item, image) => {

@@ -27,6 +27,7 @@ const info = {
   commentsOnly: true,
 };
 
+const { retry } = require('../utils/misc');
 const config = require('../config');
 //const logger = require('../logger');
 
@@ -39,6 +40,7 @@ async function listPageEvaluate(region, page, nextListPage) {
     }
     //logger.info(`listPageEvaluate.provider.${info.key} ${url}`);
     try {
+      //const response = await retry(() => page.goto(url, { waitUntil: 'networkidle0' })); // waitUntil: 'networkidle0' to load all scripts
       const response = await page.goto(url, { waitUntil: 'networkidle0' }); // waitUntil: 'networkidle0' to load all scripts
     } catch (err) {
       return reject(err.message);
@@ -139,7 +141,8 @@ const itemPageEvaluate = async (region, page, item) => {
     }
     const url = baseUrl + itemUrl;
     try {
-      const response = await page.goto(url);
+      //const response = await page.goto(url);
+      const response = await retry(() => page.goto(url));
     } catch (err) {
       return reject(err);
     }

@@ -19,6 +19,7 @@ const info = {
   mediumPricePerHour: 200,
 };
 
+const util = require('util');
 const config = require('../config');
 //const logger = require('../logger');
 
