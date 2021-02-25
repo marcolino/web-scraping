@@ -1,16 +1,10 @@
-const util = require('util');
-
 /**
  * clones an object (deep)
  */
-exports.clone = (obj) => {
+ exports.clone = (obj) => {
   return JSON.parse(JSON.stringify(obj));
 }
 
-/**
- * waits a number of milliseconds
- */
-exports.delay = util.promisify(setTimeout);
 // exports.delay = async(t) => {
 //   return await new Promise(resolve => setTimeout(resolve, t));
 // }
@@ -44,24 +38,6 @@ exports.mimeImage = (mime) => {
     'image/x-xwindowdump',
   ];
   return mimeImages.includes(mime);
-}
-
-/**
- * Retries a function execution after a number of milliseconds for a number of times
- * @param {function} fn 
- * @param {integer} retryDelay 
- * @param {integer} numRetries 
- */
-exports.retry = (fn, retryDelay = 1000, numRetries = 3) => async (...args) => {
-  for (let i = 0; i < numRetries; i++) {
-    try {
-      return await fn(...args); 
-    } catch (e) {
-      if (i === numRetries - 1) throw e;
-      await exports.delay(retryDelay);
-      retryDelay = retryDelay * 2;
-    }
-  }
 }
 
 /**

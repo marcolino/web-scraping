@@ -176,11 +176,11 @@ const itemPageEvaluate = async (region, page, item) => {
         //   throw(new Error(`reading url ${url} looking for subtitle: ${err.message}`));
         // }
 
-        try { // phone
-          data.phone = document.querySelector("span#content_tel").innerText.replace(/^\s+|\s+$/g, '');
-        } catch (err) {
-          throw(new Error(`reading url ${url} looking for phone: ${err.message}`));
-        }
+        // try { // subtitle
+        //   data.phone = document.querySelector("span#content_tel").innerText.replace(/^\s+|\s+$/g, '');
+        // } catch (err) {
+        //   throw(new Error(`reading url ${url} looking for phone: ${err.message}`));
+        // }
 
         try { // description
           const descriptionElement = document.querySelector("span#content_annuncioMobile");

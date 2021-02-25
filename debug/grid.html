@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <base href="http://192.168.8.113:3001">
+  <base href="http://localhost:3001">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <!--<link rel="stylesheet" href="assets/fonts/Roboto.css">-->
@@ -64,12 +64,11 @@
       padding-bottom: 2px;
     }
     .icon-phone {
-      width: 18px;
+      width: 20px;
       vertical-align: bottom;
     }
   </style>
   <script>
-    
     const size = 300;
 
     function load() {
@@ -165,7 +164,7 @@
           }
           if (result.data[i].phone) {
             overlay2.innerHTML += `&emsp;`;
-            overlay2.innerHTML += `<a href="tel:${result.data[i].phone}"><img class="icon-phone" src="assets/images/icons/phone.webp"></a>`;
+            overlay2.innerHTML += `<a href="tel:${result.data[i].phone}"><img class="icon-phone" src="assets/images/icons/phone.png"></a>`;
           }
 
           overlay.appendChild(overlay1);

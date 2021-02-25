@@ -16,8 +16,8 @@ exports.scrape = {
     duplicateImagesCache: true, // duplicate images cache before starting
   },
   onlyRegions: ["italy.torino"], // scrape only a subset of regions
-  onlyProviders: [], // scrape only a subset of providers
-  onlyItemId: [], // scrape only a subset of items id's
+  onlyProviders: ["sgi"], // scrape only a subset of providers
+  onlyItemId: ["adv7150"], // scrape only a subset of items id's
   onlyFirstPages: 0, // scrape only the first n pages (0 means all pages)
   onlyFirstItems: 0, // scrape only the first n items (0 means all items)
   alsoImmutables: false, // scrape also immutable providers (by default, scrape only added items of immutable providers)
