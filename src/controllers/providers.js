@@ -4,8 +4,8 @@ const got = require('got');
 const fs = require('fs');
 const mime = require('mime-types');
 const crypto = require('crypto');
-const uuid = require('uuid');
 const util = require('util'); 
+const url = require('url');
 const Items = require('../models/Items');
 const UserStatuses = require('../models/UserStatuses');
 const Globals = require('../models/Globals');
@@ -13,12 +13,13 @@ const Audits = require('../models/Audits');
 //const { dbConnect, dbClose } = require('../utils/db');
 const { phoneNormalize } = require('../utils/providers');
 const { browserLaunch, browserPageNew, browserPageClose, browserClose } = require('../utils/browser');
-const { mimeImage, sleep, objectsEqual, dumperr } = require('../utils/misc');
+const { getProviders, mimeImage, sleep, getRandomString, dumperr } = require('../utils/misc');
 const { calculatePerceptualHash, comparePerceptualHashes, perceptuallyEqual } = require('../utils/image');
 //const { register, login } = require('./user');
 const logger = require('../logger');
 const config = require('../config');
-const { MongooseDocument } = require('mongoose');
+const { group } = require('console');
+//const { MongooseDocument } = require('mongoose');
 
 const scrapeProviders = async(req) => {
   logger.info(`providers.scrapeProviders.starting.${req.requestId}`);
@@ -155,56 +156,210 @@ const scrapeProvidersImages = async (req) => {
 }
 
 const groupProvidersItems = async() => {
+  await groupItemsByAdUrlReference();
+}
+
+const groupItemsByAdUrlReference = async() => {
   try {
-    const lastScrapeTimestamp = await Globals.findOne({ key: `lastScrapeTimestamp` }).exec();
-    const itemsAll = await Items.find({}).exec(); // all items
-    const itemsNew = await Items.find({
-      dateCreated: { $gte: lastScrapeTimestamp.value }, // new items
-    }).exec();
-    for (var i = 0, lenI = itemsAll.length; i < lenI; i++) {
-      const itemAll = itemsAll[i];
-logger.warn(`------ i: ${i}`);
-      for (var j = 0, lenJ = itemsNew.length; j < lenJ; j++) {
-        const itemNew = itemsNew[j];
-logger.warn(`--- j: ${j}`);
-        if (itemNew.id === itemAll.id && itemNew.provider === itemAll.provider) { // skip same item
-          continue;
-        }
-        if (sameGroup(itemAll, itemNew)) { // check if the two items should be grouped
-          if (!itemAll.group) { // all item has no group
-            itemAll.group = uuid.v4();
-logger.warn(`item all:${itemAll.key} ${itemAll.title}, ${itemAll.phone} group: ${itemAll.group}`);
-            await Items.updateOne(
-              { id: itemAll.id, provider: itemAll.provider },
-              { group: itemAll.group }
-            );
-          } else { // all item has already a group
-logger.warn(`item all ${itemAll.key} ${itemAll.title}, ${itemAll.phone} has a group: ${itemAll.group}`);
-          }
-          if (!itemNew.group) {
-            itemNew.group = itemAll.group;
-logger.warn(`item new ${itemNew.key} ${itemNew.title}, ${itemNew.phone} group: ${itemNew.group}`);
-            await Items.updateOne(
-              { id: itemNew.id, provider: itemNew.provider },
-              { group: itemNew.group }
-            );
-          } else { // item new has a group already
-logger.warn(`item new ${itemNew.key} ${itemNew.title}, ${itemNew.phone} has a group: ${itemNew.group}`);
-          }
+    const providers = getProviders();
+    const immutableProviders = Object.keys(providers).filter(p => providers[p].immutable === true);
+    const lastScrapeTimestamp = await Globals.findOne({ key: 'lastScrapeTimestamp' }).exec();
+    const commentsOnlyProviders = Object.keys(providers).filter(p => providers[p].commentsOnly === true);
+    const filterNoMissing = { onHoliday: { $ne: true }, $or: [ { updatedAt: { $gte: lastScrapeTimestamp.value } }, { provider: { $in: immutableProviders } } ] }; // ignore missing items
+    const filterNoCommentsOnly = { provider: { $nin: commentsOnlyProviders } }; // ignore comments-only providers
+    const filterCommentsOnly = { provider: { $in: commentsOnlyProviders } }; // include comments-only providers
+
+  // console.log('providers:', providers);
+  // console.log('lastScrapeTimestamp:', lastScrapeTimestamp.value);
+  // console.log('immutableProviders:', immutableProviders);
+  // console.log('filterNoCommentsOnly:', filterNoCommentsOnly);
+  // console.log('filterCommentsOnly:', filterCommentsOnly);
+  // console.log('filterNoMissing:', util.inspect(filterNoMissing));
+
+    const region = "italy.torino"; // TODO...
+
+    let itemsAD = null;
+    let itemsCO = null;
+    try {
+      //const lastScrapeTimestamp = await Globals.findOne({ key: `lastScrapeTimestamp` }).exec();
+      itemsAD = await Items.find({
+        ...filterNoCommentsOnly,
+        ...filterNoMissing,
+      }).exec(); // all active items from ad providers
+
+      itemsCO = await Items.find({
+        ...filterCommentsOnly,
+      }).exec(); // all items from comments-only providers
+    } catch (err) {
+      logger.error(`error grouping providers items: ${dumperr(err)}`);
+    }
+    logger.info(`groupItemsByAdUrlReference - itemsAD.length: ${itemsAD.length}`);
+    logger.info(`groupItemsByAdUrlReference - itemsCO.length: ${itemsCO.length}`);
+
+    // build list of known providers urls (only host)
+    const providersHosts = Object.keys(providers).filter(p => !providers[p].commentsOnly).map(p => url.parse(providers[p].url).host);
+    
+    // build adUrlReferences array
+    const adUrlReferences = [];
+    for (var i in itemsCO) { // loop through all items from comments-only providers
+      const itemCO = itemsCO[i];
+      for (var j in itemCO.adUrlReferences) { // loop through all ad url references of this item
+        const urlCO = itemCO.adUrlReferences[j];
+        const urlCOParsed = url.parse(urlCO);
+        // check (comparing only last part, to include all first level domains) ad url reference host is one we know about
+        const host = providersHosts.find(url => urlCOParsed.host.substr(-(url.length)) === url);
+        if (host) { // push this known ad url reference to list
+          adUrlReferences.push({provider: itemCO.provider, id: itemCO.id, url: `${host}${urlCOParsed.path}`, group: itemCO.group});
         }
       }
     }
+
+    //console.dir(adUrlReferences.map(a => a.url).sort(), {'maxArrayLength': null});
+    //console.log(`adUrlReferences in all CO providers items length: ${adUrlReferences.length}`);
+
+    for (var i in itemsAD) { // loop through all items from ad providers
+      const itemAD = itemsAD[i];
+      const urlAD = itemAD.url;
+      // console.log('urlAD:', urlAD);
+      const providerAD = itemAD.provider;
+      //console.log('providerAD:', providerAD);
+      const urlFullAD = providers[providerAD].regions[region].itemUrl;
+      //console.log('urlFullAD:', urlFullAD);
+      const urlFullADParsed = url.parse(urlFullAD);
+      const hostAD = urlFullADParsed.host;
+      const pathAD = urlFullADParsed.path;
+      //console.log('hostAD:', hostAD);
+      //console.log('pathAD:', pathAD);
+      //urlADParsed.host;
+      //console.log('hostAD:', hostAD);
+      //console.log(`hostAD/pathAD/urlAD:`, `${hostAD}${pathAD}${urlAD}`);
+      const references = adUrlReferences.filter(ad => // filter because adUrlReferences can contain multiple urls references for any ad item
+        ad.url.startsWith(`${hostAD}${pathAD}${urlAD}`)
+      ); // find this item ad url references in comments-only provider item (?)
+      if (references.length) {
+        references.forEach(ref => {
+          grouper(itemAD, ref);
+        });
+      }
+    }
+    console.log('done');
   } catch (err) {
-    throw (new Error(`error grouping providers items: ${err}`));
+    logger.error('error while groupItemsByAdUrlReference:', err);
+  }
+
+return;
+let n = 0;
+    for (var i = 0, lenI = itemsAll.length; i < lenI; i++) {
+      const itemAll = itemsAll[i];
+logger.info(` - i: ${i}/${lenI}`);
+      for (var j = 0, lenJ = itemsCO.length; j < lenJ; j++) {
+        const itemNew = itemsCO[j];
+logger.info(`   - j: ${i} ${j}`);
+        if (itemNew.provider === itemAll.provider && itemNew.id === itemAll.id) { // skip same item
+          continue;
+        }
+        if (sameGroup(itemAll, itemNew)) { // check if the two items should be grouped
+n++;
+logger.warn(`      itemAll ${i} ${itemAll.key} ${itemAll.title} and itemNew ${j} ${itemNew.key} ${itemNew.title} should be in the same group`);
+          if (!itemAll.group) { // all item has no group
+            itemAll.group = getRandomString();
+logger.info(`      itemAll ${itemAll.key} ${itemAll.title} new group: ${itemAll.group}`);
+            // await Items.updateOne(
+            //   { id: itemAll.id, provider: itemAll.provider },
+            //   { group: itemAll.group }
+            // );
+          } else { // all item already has a group
+logger.error(`      itemAll ${itemAll.key} ${itemAll.title} already has a group: ${itemAll.group}`);
+          }
+          if (!itemNew.group) {
+            itemNew.group = itemAll.group;
+logger.info(`      itemNew ${itemNew.key} ${itemNew.title} new group: ${itemNew.group}`);
+            // await Items.updateOne(
+            //   { id: itemNew.id, provider: itemNew.provider },
+            //   { group: itemNew.group }
+            // );
+          } else { // item new has a group already
+            if (itemNew.group === itemAll.group) {
+              logger.info(`      itemNew ${itemNew.key} ${itemNew.title} already has the same group of itemAll: ${itemNew.group}, fine.`);
+            } else {
+              logger.warn(`      itemNew ${itemNew.key} ${itemNew.title} already has a different group of itemAll: ${itemNew.group}, bad!`);
+            }
+          }
+        } else {
+//logger.info(`      itemAll ${i} ${itemAll.key} ${itemAll.title} and itemNew ${j} ${itemNew.key} ${itemAll.title} should NOT be in the same group`);
+        }
+      }
+//break; //////////////////
+    }
+  logger.info(`done`, n);
+}
+
+
+const grouper = async (item1, item2) => {
+  try {
+    console.log('GROUPING items:', item1.provider+'+'+item1.id, item2.provider+'+'+item2.id, item1.url, item2.url);
+    const groupLabel = getRandomString();
+    if (!item1.group && !item2.group) { // all items has no group yet
+      item1.group = item2.group = groupLabel;
+      Items.updateOne(
+        {provider: item1.provider, id: item1.id}, 
+        {group: item1.group},
+        (err, res) => {
+          if (err) {
+            logger.error(`error updating item 1 group: ${err}`);
+          } else {
+            logger.debug(`updated item 1 group`);
+          }
+        }
+      );
+      Items.updateOne(
+        {provider: item2.provider, id: item2.id}, 
+        {group: item2.group},
+        (err, res) => {
+          if (err) {
+            logger.error(`error updating item 2 group: ${err}`);
+          } else {
+            logger.debug(`updated item 2 group`);
+          }
+        }
+      );    
+    }
+    if (!item1.group && item2.group) { // item 1 has no group yet
+      item1.group = item2.group;
+      Items.updateOne(
+        {provider: item1.provider, id: item1.id}, 
+        {group: item1.group},
+        (err, res) => {
+          if (err) {
+            logger.error(`error updating item 1 group: ${err}`);
+          } else {
+            logger.debug(`updated item 1 group`);
+          }
+        }
+      );
+    }
+    if (item1.group && !item2.group) { // item 2 has no group yet
+      item2.group = item1.group;
+      Items.updateOne(
+        {provider: item2.provider, id: item2.id}, 
+        {group: item2.group},
+        (err, res) => {
+          if (err) {
+            logger.error(`error updating item 2 group: ${err}`);
+          } else {
+            logger.debug(`updated item 2 group`);
+          }
+        }
+      );
+    }
+    if (item1.group && item2.group) { // all items has a group already - TODO...
+      console.log('GROUPING items - warning - both items have a group already');
+    }
+  } catch (err) {
+    logger.error('error grouping:', err);
   }
 }
 
-/**
- * Decide if two items should belong to the same group (they are "aliases")
- */
-const sameGroup = (a, b) => {
-  return (a.phone && b.phone && a.phone === b.phone);
-}
 
 /**
  * Decide if two items should belong to the same group (they are "aliases") (version 2.0)
@@ -363,7 +518,11 @@ const scrapeItems = async (provider, region, page, list, pageNum) => {
             } else {
               itemFull.phone = phoneNormalize(itemFull.phone).number; // can't do it in provider.itemPageEvaluate() because can't pass functions into puppeteer evaluation...
               itemFull.presentAt = new Date();
-              await saveItem(itemFull); // TODO: we could run saveItem asynchronously...
+
+              await saveItem(itemFull);
+
+              await scrapeProviderImage(provider, region, itemFull); // TODO: we could run scrapeProviderImage asynchronously...
+
               itemsFull.push(itemFull);
             }
           } else {
@@ -378,13 +537,114 @@ const scrapeItems = async (provider, region, page, list, pageNum) => {
     }
     return itemsFull;
   } catch (err) {
-    logger.warn(`error scraping items: ${dumperr(err)}`);
+    logger.warn(`error scraping items for provider ${provider.info.key}: ${dumperr(err)}`);
+  }
+}
+
+scrapeProviderImage = async (provider, region, item) => {
+  try {
+    // avoid scraping images of items on holiday
+    if (item.onHoliday) {
+      logger.debug(`${item.provider} ${item.id} is on holiday, avoid scraping images`);
+      return;
+    }
+
+    const itemImages = await Items.findOne({ // find all items, will filter programmatically
+      provider: provider.info.key,
+      id: item.id,
+    }, {
+      images: true,
+    });
+    if (!itemImages) { // no images in db, should happen only for new items
+      logger.warn(`item ${item.provider} ${item.id} ${item.title} images not found in db, should not happen...`);
+      return;
+    }
+//console.log('scrapeProviderImage - itemImages.images.length:', itemImages.images.length);
+
+    let count = 0;
+    const images = itemImages.images;
+    for (let i = 0; i < images.length; i++) {
+      //let image = item.images[i];
+//console.log(`scrapeProviderImage - downloading image ${i} at ${item.images[i].url}, ${provider.info.key}, ${item.id}`);
+//console.log('scrapeProviderImage - item.images:', item.images);
+//console.log(`scrapeProviderImage - found images: ${images}`);
+      const image = images[i]; 
+      const outputFile = image.localName;
+      const outputPath = `${config.images.baseFolder}${item.provider}`;
+      image.cached = fs.existsSync(`${outputPath}/${outputFile}`); // check if file is already cached on fs - TODO: check why next test passes, and thed we have warning "downloaded image ... file already present, skipped" ***********************
+//console.log('downloadImage ??', (!image.localName || !image.cached), image.cached, image.category, item.provider, item.id, outputPath, outputFile);
+      if (!image.localName || !image.cached) { // only download images with no localName, or missing file image
+        logger.info(`providers.scrapeProvidersImage ${item.provider.paddingRight('     ')} ${item.id.paddingRight('       ')} [image ${(1+i).toString().paddingLeft('    ')}/${(item.images.length).toString().paddingLeft('    ')}]`);
+        const response = await downloadImage(provider, region, item, image);
+// console.log('downloadImage =>', response);
+        if (!response || !response.success) {
+          continue;
+        }
+// console.log('downloadImage =>', 1);
+        const imageDownloaded = response.image;
+        if (response.notFound) { // image not found (and not cached): remove this image from item's images
+          await removeItemImage(item, imageDownloaded);
+          continue;
+        }
+// console.log('downloadImage =>', 2);
+       
+        // copy downloaded image props to items image
+        delete imageDownloaded.success;
+        for (var prop in imageDownloaded) image[prop] = imageDownloaded[prop];
+
+        // calculate image perceptual hash
+        image.phash = await calculatePerceptualHash(`${config.images.baseFolder}${item.provider}`, image.localName);
+// console.log('downloadImage =>', 3);
+
+        // compare downloaded image phash with other images phashes (of the same item) to detect duplicates
+        let foundSimilarImage = -1;
+        let image2 = null;
+        for (let j = 0; j < item.images.length; j++) {
+          image2 = item.images[j];
+          if (j == i) continue; // do not compare the an image to itself
+          if (image2.duplicate) continue; // do not compare an image which is for sure a duplicate
+          if (image2.phash) { // check images being compared has a phash already
+            if (perceptuallyEqual(image.phash, image2.phash)) {
+              foundSimilarImage = j;
+              break;                 
+            } else { // this is the common case, two images do not match
+              //logger.warn(`Item ${item.key} ${item.title} image n. ${j} category ${item.images[j].category} image is different by image n. ${i}`);
+            }
+          } else { // image of new item has no phash, yet
+            if (image2.localName) { // no phash should not happen on images already downloaded...
+              logger.warn(`item ${item.provider} ${item.key} ${item.title} image n. ${j} category ${image2.category} has no phash, should not happen...`);
+            }
+          }
+        }
+// console.log('downloadImage =>', 4);
+        if (foundSimilarImage >= 0) {
+          if (!image2.duplicate) {
+            logger.debug(`two perceptually equal images for person ${item.key} ${item.url}, images ${i} and ${foundSimilarImage}, marking it as duplicate`);
+            image.duplicate = true;
+          }
+        }
+// console.log('downloadImage =>', 5);
+
+        // save item image
+        try {
+// console.log('saving image', image);
+          await saveItemImage(item, image); // TODO: we could save asynchrounously, without await...
+// console.log('saved image');
+        } catch (err) {
+          logger.error(`error saving item image in scrapeProviderImage: ${dumperr(err)}`);
+        }
+        count++;
+      }
+    }
+    return count; 
+  } catch (err) {
+    logger.error(`error scraping item images: ${dumperr(err)}`);
   }
 }
 
 scrapeProviderImages = async (provider, region) => {
   try {
-    const items = await Items.find({ // find all items, wil lfilgter programmatically
+    const items = await Items.find({ // find all items, will filter programmatically
       provider: provider.info.key,
       region: region,
     });
@@ -414,7 +674,6 @@ scrapeProviderImages = async (provider, region) => {
 //console.log('3a');
 
       item.provider = provider.info.key;
-      item.type = provider.info.type;
       item.region = region;
 
 //console.log('3aa images len:', item.images.length);
@@ -479,7 +738,7 @@ scrapeProviderImages = async (provider, region) => {
                 //logger.warn(`Item ${item.key} ${item.title} image n. ${k} category ${item.images[k].category} image is different by image n. ${j}`);
               }
             } else { // image of new item has no phash, yet
-              if (image2.localName) { // no phsh should not happen on images already downloaded...
+              if (image2.localName) { // no phash should not happen on images already downloaded...
                 logger.warn(`item ${item.key} ${item.title} image n. ${k} category ${image2.category} has no phash, should not happen...`);
               }
             }
@@ -515,7 +774,6 @@ const showCommonImages = (providers, items, commonImages) => {
   const url2 = encodeURIComponent(providers[items[1].provider].regions[items[1].region].imagesUrl + items[1].url);
   const url = `http://localhost:${config.defaultServerPort}/debug/sci/?img1=${commonImages[0]}&img2=${commonImages[1]}&url1=${url1}&url2=${url2}`;
   return url;
-
 }
 
 const downloadImage = async (provider, region, item, image) => {
@@ -539,7 +797,7 @@ const downloadImage = async (provider, region, item, image) => {
       case 404:
         // if not cached already, remove this image from db
         if (!image.cached) {
-          logger.warn(`image ${imageUrl} not found and not cached, giving up and removing it`);
+          logger.debug(`image ${imageUrl} not found and not cached, giving up and removing it`);
           retval.success = true; // to allow post processing and removing from db
           retval.notFound = true; // parent (scrapeProviderImages) will handle this flag and remove this image from item's images, to avoid retrying forever
           retval.image = {};
@@ -603,7 +861,8 @@ const downloadImage = async (provider, region, item, image) => {
     const buffer = await response.rawBody;
 
     if (fs.existsSync(`${outputPath}/${outputFile}`)) {
-      logger.info(`downloaded image ${imageUrl} file already present, skipped`, item.key, image); // TODO: why this happens often? (FORCEDOWNLOAD WAS TRUE...)
+//console.log('yyy:', outputPath, outputFile);
+      logger.info(`downloaded image ${imageUrl} file already present, skipped`, image); // TODO: why this happens often? (FORCEDOWNLOAD WAS TRUE...)
       retval.already = true;
     } else { // image does not exist, save it to filesystem
       try {
@@ -643,50 +902,48 @@ const itemExists = async(item) => {
 }
 
 const saveItem = async(item) => {
-  Items.findOne(
-    { id: item.id, provider: item.provider/*, region: item.region*/ },
-    (err, itemOld) => {
-      if (err) {
-        throw (new Error(`error finding item to save: ${err}`));
-      }
-      if (!itemOld) { // a new item
-        itemOld = new Items(item);
-        itemOld.save((err, itemNew) => {
-          if (err) {
-            throw (new Error(`error saving new item: ${err}`));
-          }
-          compareItemsHistoryes(null, itemNew, itemNew); // we run compareItemsHistoryes asynchronously, it will debug log out of sync...
-          //logger.debug(`item ${itemNew.title} inserted`);
-        });
-      } else { // an existing item
-        const itemOldLean = JSON.parse(JSON.stringify(itemOld));
-        const result = itemsMerge(itemOldLean, item);
-        const itemMerged = result.merged;
-        const itemChanged = result.changed;
-//logger.warn('merge result changed:', itemChanged);
-        if (!itemMerged) {
-          return;
+  try {
+    await Items.findOne(
+      { id: item.id, provider: item.provider/*, region: item.region*/ },
+      async (err, itemOld) => {
+        if (err) {
+          throw (new Error(`error finding item to save: ${err}`));
         }
-        itemMerged.changedAt = itemChanged ? new Date() : null;
-        itemOld.set({...itemMerged});
-//logger.warn('saving item changedAt:', itemMerged.changedAt);
-        itemOld.save((err, itemNew) => {
-          if (err) {
-            throw (new Error(`error updating item: ${err}`));
+        if (!itemOld) { // a new item
+          itemOld = new Items(item);
+          const itemNew = await itemOld.save();
+logger.debug(`item ${itemNew.title} inserted`);
+          compareItemsHistoryes(null, itemNew, itemNew); // we run compareItemsHistoryes asynchronously, it will debug log out of sync...
+        } else { // an existing item
+          const itemOldLean = JSON.parse(JSON.stringify(itemOld));
+          const result = itemsMerge(itemOldLean, item);
+          const itemMerged = result.merged;
+          const itemChanged = result.changed;
+          if (!itemMerged) {
+            return;
           }
-          const itemNewLean = JSON.parse(JSON.stringify(itemNew._doc));
-          compareItemsHistoryes(itemOldLean, itemNewLean, itemNew); // we run compareItemsHistoryes asynchronously, it will debug log out of sync...
-          //logger.debug(`item ${itemNew.title} updated`);
-        });
+          itemMerged.changedAt = itemChanged ? new Date() : null;
+          await itemOld.set({...itemMerged});
+          await itemOld.save((err, itemNew) => {
+            if (err) {
+              throw (new Error(`error updating item: ${err}`));
+            }
+            const itemNewLean = JSON.parse(JSON.stringify(itemNew._doc));
+            compareItemsHistoryes(itemOldLean, itemNewLean, itemNew); // we run compareItemsHistoryes asynchronously, it will debug log out of sync...
+            //logger.debug(`item ${itemNew.title} updated`);
+          });
+        }
       }
-    }
-  );
+    );
+  } catch (err) {
+    throw (new Error(`error saving item: ${dumperr(err)}`));
+  }
 }
 
 const removeItemImage = async(item, image) => {
   const imageUrl = image && image.url ? image.url : null;
   Items.updateOne({provider: item.provider, id: item.id}, { "$pull": { "images": { "url": imageUrl } }}/*, { safe: true }*/, (err, res) => {
-    logger.debug(`removed image which is not online anymore ${imageUrl} - result:`, err, res); // TODO: remove me
+    //logger.debug(`removed image which is not online anymore: ${imageUrl}`);
   });
 }
 
@@ -762,29 +1019,22 @@ const itemsMerge = (o, n) => {
         break;
       case 'images': // array of objects (url, category, date, etag, phash, localName)
         if (!n[prop]) n[prop] = [];
-      // console.log('images old:', o[prop].map(x=>x.url));
-// console.log('images new:', n[prop].map(x=>x.url));
-        if (o[prop]) o[prop] = o[prop].map(p => { p.active = false; return p; }); // set active to false on all items of old prop array
-        if (n[prop]) n[prop] = n[prop].map(p => { p.active = true; return p; }); // set active to true on all items of old prop array
-//console.log('before images arrays merge - o[prop]:', o[prop]);
-//console.log('before images arrays merge - n[prop]:', n[prop]);
+        if (o[prop]) o[prop] = o[prop].map(p => ({ ...p, active: false })); // set active to false on all items of old prop array
+        if (n[prop]) n[prop] = n[prop].map(p => ({ ...p, active: true })); // set active to true on all items of new prop array
         if (n[prop])
           merged[prop] = arraysMerge(o[prop], n[prop], [ 'url' ]); // merge old and new arrays, excluding objects with a common set of props
         else
           merged[prop] = o[prop];
-//console.log('after  images arrays merge - merged[prop]:', merged[prop]);
         break;
       case 'comments': // array of objects (author, authorCommentsCount, text, date, vote)
         if (!n[prop]) n[prop] = [];
-//console.log('before comments arrays merge - o[prop]:', o[prop]);
-//console.log('before comments arrays merge - n[prop]:', n[prop]);
-        if (n.prop) o[prop] = o[prop].map(p => { p.active = false; return p; }); // set active to false on all items of old prop array
-        if (n.prop) n[prop] = n[prop].map(p => { p.active = true; return p; }); // set active to true on all items of old prop array
-        if (n.prop)
+        if (o[prop]) o[prop] = o[prop].map(p => ({ ...p, active: false })); // set active to false on all items of old prop array
+        if (n[prop]) n[prop] = n[prop].map(p => ({ ...p, active: true })); // set active to true on all items of new prop array
+        if (n[prop])
           merged[prop] = arraysMerge(o[prop], n[prop], [ 'author', 'text', 'date' ]); // merge old and new arrays, excluding objects with a common set of props
         else
           merged[prop] = o[prop];
-        break;
+          break;
       default:
         logger.debug('itemsMerge unforeseen prop', prop, n[prop], typeof n[prop]);
         if (!n[prop]) n[prop] = null;
@@ -863,12 +1113,12 @@ const compareItemsHistoryes = async (itemOldLean, itemNewLean, itemNew) => {
               let o = itemOldLean[prop]; o = o ? o.toString() : '';
               let n = itemNewLean[prop]; n = n ? n.toString() : '';
               const differences = diff.diffSentences(o, n);
-              let difference = '';
+              let difference = ''.reset;
               differences.forEach((part) => {
                 // green for additions, red for deletion, grey for common parts
-                const color = part.added ? 'blue' :
-                  part.removed ? 'red' :
-                  'green'
+                const color = part.added ? 'bold' :
+                  part.removed ? 'dim' :
+                  'reset'
                 ;
                 difference += part.value[color];
               });
@@ -990,8 +1240,10 @@ const objectsAreEquivalent = (a, b, ignoredProps) => {
 }
 
 const saveItemImage = async(item, imageDownloaded) => {
+//console.log('saveItemImage - item:', item);
+//console.log('saveItemImage - imageDownloaded:', imageDownloaded);
   try {
-    const image = item._doc.images.find(image => image.url === imageDownloaded.url);
+    const image = item./*_doc.*/images.find(image => image.url === imageDownloaded.url); // TODO: use _doc  only if called by scrapeProviderImages (final s)
     if (typeof image !== 'undefined') {
       //logger.debug(`updating image ${image.url}`);
       const retval = await Items.updateOne(
@@ -1005,7 +1257,6 @@ const saveItemImage = async(item, imageDownloaded) => {
   } catch (err) {
     throw (`error saving item image: ${err}`);
   }
-
 }
   
 // const deleteItemImage = async(item, image) => {

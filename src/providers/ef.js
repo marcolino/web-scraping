@@ -40,7 +40,7 @@ async function listPageEvaluate(region, page) {
 
     try {
       //await page.goto(url);
-      let response = await page.goto(url, { waitUntil: 'networkidle0' }); // waitUntil: 'networkidle0' to load all scripts
+      let response = await page.goto(url, { waitUntil: 'networkidle2' }); // waitUntil: 'networkidle2' to load all scripts
 
     } catch (err) {
       return reject(err.message);

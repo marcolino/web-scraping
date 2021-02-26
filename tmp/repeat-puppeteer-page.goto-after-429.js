@@ -1,7 +1,7 @@
 
     try {
       const repeat = (async() => {
-        const response = await page.goto(url, { waitUntil: 'networkidle0' }); // waitUntil: 'networkidle0' to load all scripts (we need it for address lat/lon)
+        const response = await page.goto(url, { waitUntil: 'networkidle2' }); // waitUntil: 'networkidle2' to load all scripts (we need it for address lat/lon)
 console.log('status: ', response.status());
         if (response.status() === 200) {
           ; // everything's fine

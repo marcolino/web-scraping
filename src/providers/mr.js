@@ -6,6 +6,7 @@ const info = {
     "italy.torino": {
       listUrl: "https://www.moscarossa.biz/escort-torino-1.html",
       itemUrl: "https://www.moscarossa.biz/",
+      imagesUrlPrefix: "https://www.moscarossa.biz/", // this provider uses a cgi on itemUrl to provide images...
       imagesUrl: "https://foto.moscarossa.biz/",
     },
   },
@@ -19,7 +20,7 @@ const config = require('../config');
 async function listPageEvaluate(region, page) {
   return new Promise(async (resolve, reject) => {
     const url = info.regions[region].listUrl;
-    const imagesUrl = info.regions[region].itemUrl; // this provider uses a cgi on itemUrl to provide images...
+    const imagesUrl = info.regions[region].imagesUrlPrefix ? info.regions[region].imagesUrlPrefix : info.regions[region].imagesUrl;
     if (!url) {
       throw (new Error(`region ${region} for provider ${info.key} has no list url`));
     }

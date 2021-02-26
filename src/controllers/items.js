@@ -2,8 +2,8 @@
 const { ObjectID } = require('mongodb');
 const logger = require('../logger');
 const { getProviders } = require('../utils/misc');
-const globals = require('../models/Globals');
-const items = require('../models/Items');
+const Globals = require('../models/Globals');
+const Items = require('../models/Items');
 
 async function getItems(req, res, next) {
   try {
@@ -18,7 +18,7 @@ async function getItems(req, res, next) {
     const providers = getProviders();
     const immutableProviders = Object.keys(providers).filter(p => providers[p].immutable === true);
     const commentsOnlyProviders = Object.keys(providers).filter(p => providers[p].commentsOnly === true);
-    const lastScrapeTimestamp = await globals.findOne({ key: 'lastScrapeTimestamp' }).exec();
+    const lastScrapeTimestamp = await Globals.findOne({ key: 'lastScrapeTimestamp' }).exec();
 console.log('lastScrapeTimestamp:', lastScrapeTimestamp.value);
 
     const filterOnlyNew = flags && flags.onlyNew ? { createdAt: { $gte: lastScrapeTimestamp.value } } : {}; // select only new items, if requested
@@ -30,7 +30,7 @@ console.log('lastScrapeTimestamp:', lastScrapeTimestamp.value);
     let hrstart = hrend = null;
 hrstart = process.hrtime();
 
-    let itemsList = await items.
+    let itemsList = await Items.
       find(
         {
           ...filter,
@@ -83,7 +83,7 @@ hrend = process.hrtime(hrstart); logger.info(` * call(find) execution time (hr):
 
 //     // populate missing prop
 //     const providers = getProviders();
-//     const timestamp = await globals.findOne({ key: 'lastScrapeTimestamp' }).exec();
+//     const timestamp = await Globals.findOne({ key: 'lastScrapeTimestamp' }).exec();
 //     itemsList = itemsList.filter(item => {
 //       const provider = Object.keys(providers).find(p => p === item.provider);
 //       const immutable = providers[provider].immutable;
@@ -167,7 +167,7 @@ function groupBy(list, keyGetter) {
 async function insertItem(req, res, next) {
   try {
     const item = req.body.item;
-    const { insertedId } = await items.insertOne(item);
+    const { insertedId } = await Items.insertOne(item);
     res.status(200).json({ message: `item inserted`, data: { id: insertedId } });
   } catch (err) {
     res.status(500).json({ message: `can't insert item: ${err}` });
@@ -201,7 +201,7 @@ async function deleteItemById(req, res, next) {
 async function updateItem(req, res, next) {
   try {
     const item = req.body.item;
-    await items.updateOne(
+    await Items.updateOne(
       { provider: item.provider, id: item.id },
       {
         $set: {

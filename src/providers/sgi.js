@@ -133,9 +133,9 @@ async function listPageEvaluate(region, page) {
             } else {
               data.warnings.onHoliday = false;
             }
-            if (data.onHoliday) {
-              delete data.phone; // avoid returning a phone of a missing person (to avoid overwriting old value, possibly a better one)
-            }
+            // if (data.onHoliday) {
+            //   delete data.phone; // avoid returning a phone of a missing person (to avoid overwriting old value, possibly a better one)
+            // }
           } catch (err) {
             throw(new Error(`reading url ${url} looking for title: ${err.message}`));
           }
@@ -176,11 +176,14 @@ const itemPageEvaluate = async (region, page, item) => {
         //   throw(new Error(`reading url ${url} looking for subtitle: ${err.message}`));
         // }
 
-        // try { // subtitle
-        //   data.phone = document.querySelector("span#content_tel").innerText.replace(/^\s+|\s+$/g, '');
-        // } catch (err) {
-        //   throw(new Error(`reading url ${url} looking for phone: ${err.message}`));
-        // }
+        try { // phone
+          const phone = document.querySelector("span#content_tel").innerText.replace(/^\s+|\s+$/g, '');
+          if (phone && phone.length > 0) {
+            data.phone = phone;
+          }
+        } catch (err) {
+          throw(new Error(`reading url ${url} looking for phone: ${err.message}`));
+        }
 
         try { // description
           const descriptionElement = document.querySelector("span#content_annuncioMobile");

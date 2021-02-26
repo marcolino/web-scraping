@@ -1,16 +1,14 @@
+const uuid = require('uuid');
+
 /**
- * clones an object (deep)
+ * Clones an object (deeply)
  */
  exports.clone = (obj) => {
   return JSON.parse(JSON.stringify(obj));
 }
 
-// exports.delay = async(t) => {
-//   return await new Promise(resolve => setTimeout(resolve, t));
-// }
-
 /**
- * detects te mime type of an image
+ * Detects te mime type of an image
  */
 exports.mimeImage = (mime) => {
   mimeImages = [
@@ -41,7 +39,24 @@ exports.mimeImage = (mime) => {
 }
 
 /**
- * dump an error according to environment
+ * Gets a random string
+ */
+exports.getRandomString = () => {
+    let hexString = uuid.v4();
+    //console.log("hex:   ", hexString);
+    
+    // remove decoration
+    hexString = hexString.replace("-", "");
+    
+    // convert to base64
+    let base64String = Buffer.from(hexString, 'hex').toString('base64')
+    //console.log("base64:", base64String);
+    
+    return base64String;
+}
+
+/**
+ * Dumps an error according to environment
  */
 exports.dumperr = (error) => {
   if (process.env.NODE_ENV === "production") {
@@ -95,7 +110,7 @@ exports.fuzzyTimeDistanceFromNow = (date) => {
 }
 
 /**
- * Returns an array with all providers information
+ * Gets an array with all providers information
  */
 exports.getProviders = () => {
   const glob = require('glob');

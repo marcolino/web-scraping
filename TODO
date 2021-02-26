@@ -27,6 +27,7 @@
   - remove moment module if not requested anymore
   - when avoiding building w300 image, find a way to use the main one, or otherwise copy it...
   - avoid showing new items which do not have yet a cached image (or show image on site...)
+  - clean code from commented-out lines of code
   - test:
     V login with password unselectable in model
     V what happens if an item has no main image in getItems (should be returned nonetheless)

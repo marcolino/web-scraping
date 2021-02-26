@@ -222,7 +222,7 @@ schema.index({ id: 1, provider: 1/*, region: 1*/ }, { unique: true });
 
 // virtual methods
 schema.virtual('key').get(function() {
-  return `${this.provider}•${this.id}•${this.title}`;
+  return `${this.provider}•${this.id}`;
 });
 
 // pre hooks
